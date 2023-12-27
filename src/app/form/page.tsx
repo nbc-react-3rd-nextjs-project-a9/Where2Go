@@ -29,7 +29,7 @@ const FormPage = () => {
   //   insertData();
   // }, []);
   return (
-    <>
+    <div className="container m-auto">
       <h2>사진 선택</h2>
       <ImageUploader onUpload={handleUpload} />
       <h2>설명</h2>
@@ -40,7 +40,7 @@ const FormPage = () => {
       />
       <h2>방문날짜</h2>
       <DatePicker selected={selectedDate} onChange={handleDateChange} dateFormat="yyyy/MM/dd" todayButton="오늘" />
-    </>
+    </div>
   );
 };
 
