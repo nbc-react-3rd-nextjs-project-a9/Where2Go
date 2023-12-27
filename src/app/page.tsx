@@ -1,5 +1,12 @@
-import Image from "next/image";
+import Carousel from "@/components/Carousel";
+import Section from "@/components/layout/Section";
 
 export default function Home() {
-  return <div className="">메인 페이지 입니다.</div>;
+  return (
+    <div className="">
+      <Carousel></Carousel>
+      <Section title="Editor's Pick">{<></>}</Section>
+      <Section title="내 근처 핫플">{<></>}</Section>
+    </div>
+  );
 }
