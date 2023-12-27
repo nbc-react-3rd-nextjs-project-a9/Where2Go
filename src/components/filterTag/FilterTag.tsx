@@ -5,13 +5,6 @@ interface FilterTagProps {
   tag: keyof typeof enumCategory | keyof typeof enumFilter;
 }
 
-interface FilterTagListProps {
-  tagType: "category" | "filter";
-  className?: string;
-}
-
-enum FilterTagPeer {}
-
 const FilterTag = ({ tag }: FilterTagProps) => {
   const tagValue =
     tag in enumCategory ? enumCategory[tag as keyof typeof enumCategory] : enumFilter[tag as keyof typeof enumFilter];
@@ -27,18 +20,4 @@ const FilterTag = ({ tag }: FilterTagProps) => {
     </>
   );
 };
-
-const FilterTagList = ({ tagType, className }: FilterTagListProps) => {
-  const enumCategoryList = Object.keys(enumCategory) as Array<keyof typeof enumCategory>;
-  const enumFilterList = Object.keys(enumFilter) as Array<keyof typeof enumFilter>;
-
-  return (
-    <div className={`${tagType === "filter" && "ml-auto"} inline-block`}>
-      {tagType === "category"
-        ? enumCategoryList.map((n) => <FilterTag tag={n} key={n} />)
-        : enumFilterList.map((n) => <FilterTag tag={n} key={n} />)}
-    </div>
-  );
-};
-
-export default FilterTagList;
+export default FilterTag;

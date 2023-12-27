@@ -1,5 +1,5 @@
 import Carousel from "@/components/Carousel";
-import FilterTagList from "@/components/FilterTagList";
+import FilterTagList from "@/components/filterTag/FilterTagList";
 import PostCardList from "@/components/PostCardList";
 import Section from "@/components/layout/Section";
 
