@@ -13,7 +13,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="ko">
       <body>
         <Header />
-        <main className="container m-auto">{children}</main>
+        <main className="">{children}</main>
         <Footer />
       </body>
     </html>

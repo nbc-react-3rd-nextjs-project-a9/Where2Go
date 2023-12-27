@@ -1,7 +1,6 @@
 export enum enumFilter {
   distance = "거리순",
-  latest = "최신순",
-  like = "좋아요순"
+  like = "리뷰순"
 }
 
 export enum enumCategory {

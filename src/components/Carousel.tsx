@@ -20,11 +20,11 @@ const Carousel = () => {
       }}
       navigation={true}
       modules={[Pagination, Navigation]}
-      className="h-96"
+      className="h-[400px]"
     >
       {testArr.map((n, i) => (
         <SwiperSlide style={{ display: "flex" }} className="justify-center items-center" key={`slide-${i}`}>
-          <div className="w-full h-full bg-center object-cover  bg-[url(https://dummyimage.com/1200x400/616161/fff&text=image)]"></div>
+          <div className="w-full h-full bg-center object-cover  bg-[url(https://dummyimage.com/1700x400/616161/fff&text=image)]"></div>
         </SwiperSlide>
       ))}
     </Swiper>
