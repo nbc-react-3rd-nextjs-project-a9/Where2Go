@@ -4,6 +4,9 @@ import { supabase } from "@/lib/supabase";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
+import Section from "@/components/layout/Section";
+import FilterTag from "@/components/filterTag/FilterTag";
+import FilterTagList from "@/components/filterTag/FilterTagList";
 
 const FormPage = () => {
   const [text, setText] = useState("");
@@ -30,16 +33,20 @@ const FormPage = () => {
   // }, []);
   return (
     <div className="container m-auto">
-      <h2>사진 선택</h2>
-      <ImageUploader onUpload={handleUpload} />
-      <h2>설명</h2>
-      <textarea
-        placeholder="경험이나 정보를 자세히 작성할수록 다른 사용자들에게 큰 도움이 됩니다."
-        className="container border-black border-2 rounded resize-none"
-        onChange={handleTextChange}
-      />
-      <h2>방문날짜</h2>
-      <DatePicker selected={selectedDate} onChange={handleDateChange} dateFormat="yyyy/MM/dd" todayButton="오늘" />
+      <Section title="사진 선택">
+        <ImageUploader onUpload={handleUpload} />
+      </Section>
+      <Section title="설명">
+        <textarea
+          placeholder="경험이나 정보를 자세히 작성할수록 다른 사용자들에게 큰 도움이 됩니다."
+          className="container border-black border-2 rounded resize-none"
+          onChange={handleTextChange}
+        />
+      </Section>
+      <Section title="방문 날짜">
+        <DatePicker selected={selectedDate} onChange={handleDateChange} dateFormat="yyyy/MM/dd" todayButton="오늘" />
+      </Section>
+      <FilterTagList tagType="category" />
     </div>
   );
 };
