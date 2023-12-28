@@ -1,12 +1,12 @@
 // "use client";
 import React from "react";
 import { signInWithKakao } from "@/components/auth/authService";
-import Login from "@/components/auth/Login";
+import SignUp from "@/components/auth/SignUp";
 
 const authPage = () => {
   return (
     <div>
-      <Login />
+      <SignUp />
     </div>
   );
 };
