@@ -4,7 +4,7 @@ import React from "react";
 const Header = () => {
   return (
     <header className="bg-purple-900 py-4 text-white font-bold mb-8">
-      <div className="container m-auto flex flex-row">
+      <div className="container m-auto flex flex-row max-w-[1200px] w-[90%]">
         <nav className="flex flex-row gap-2">
           <Link href={"/"} className="mr-8">
             로고
