@@ -2,6 +2,7 @@
 import React, { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import Button from "@/components/Button";
+import { User } from "@supabase/supabase-js";
 
 const SignUp = () => {
   //입력받은 이메일, 패스워드, 닉네임

@@ -6,7 +6,7 @@ async function signInWithKakao() {
   const { data, error } = await supabase.auth.signInWithOAuth({
     provider: "kakao"
   });
-  sessionStorage.setItem("test", JSON.stringify(data));
+  // sessionStorage.setItem("test", JSON.stringify(data));
 }
 
 //로그아웃

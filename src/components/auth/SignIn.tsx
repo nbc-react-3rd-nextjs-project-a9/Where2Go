@@ -70,18 +70,20 @@ const SignIn = () => {
                 </div>
               </div>
 
-              <div>
-                <Button size="md" className="sm:mx-auto sm:w-full sm:max-w-sm mb-4 mt-2">
+              <div className="flex flex-col">
+                <Button type="submit" size="md" className="sm:mx-auto sm:w-full sm:max-w-sm mb-4 mt-2">
                   login
                 </Button>
+
+                <button type="button" className="text-center">
+                  <img src="/images/kakao_login.png" className="w-full" />
+                </button>
               </div>
             </form>
 
-            <div>
-              <Button size="md" className="sm:mx-auto sm:w-full sm:max-w-sm" onClick={signInWithKakao}>
+            {/* <Button size="md" className="sm:mx-auto sm:w-full sm:max-w-sm" onClick={signInWithKakao}>
                 카카오 계정으로 로그인
-              </Button>
-            </div>
+              </Button> */}
 
             <div>
               <p className="mt-8 text-center text-sm text-gray-500">회원가입 하기</p>
