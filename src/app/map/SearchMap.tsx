@@ -1,5 +1,6 @@
 "use client";
 
+import useMapStore from "@/store/store";
 import React, { useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 
@@ -13,11 +14,13 @@ interface markers {
 }
 
 const SearchMap = () => {
-  const [info, setInfo] = useState<any>();
+  // const [info, setInfo] = useState<any>();
   const [markers, setMarkers] = useState<markers[]>([]);
   const [map, setMap] = useState<kakao.maps.Map>();
   const [searchLocation, setSearchLocation] = useState<string>("");
   const [addressName, setAddressName] = useState<string>("");
+  const setInfo = useMapStore((state) => state.setInfo);
+  const info = useMapStore((state) => state.info);
 
   const searchBtnHandler = () => {
     if (!map) return;
@@ -46,10 +49,12 @@ const SearchMap = () => {
 
         // 검색된 장소 위치를 기준으로 지도 범위를 재설정합니다
         map.setBounds(bounds);
+        // Zustand store를 통해 전역 상태 업데이트
+        setInfo(null); // 초기화
       }
     });
   };
-  console.log("info", info);
+  // console.log("info", info);
   return (
     <div>
       <form
