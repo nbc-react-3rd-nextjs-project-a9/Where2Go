@@ -1,7 +1,7 @@
 import React from "react";
 
 interface Props {
-  children: string;
+  children: any;
   onClick?: React.MouseEventHandler<HTMLButtonElement>;
   type?: "button" | "submit";
   className?: string;
