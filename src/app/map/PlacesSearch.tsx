@@ -1,6 +1,7 @@
 "use client";
 
 import { supabase } from "@/lib/supabase";
+import useMapStore from "@/store/store";
 import React, { useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 
@@ -27,7 +28,8 @@ const PlacesSearch = () => {
 
   const [addressName, setAddressName] = useState<string>("");
   const [placeName, setPlaceName] = useState<string>("");
-
+  const setInfo = useMapStore((state) => state.setInfo);
+  const info = useMapStore((state) => state.info);
   // search keyword를 받아 키워드에 맞는 marker array를 반환
 
   const searchLocations = () => {
@@ -108,7 +110,7 @@ const PlacesSearch = () => {
             key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
             position={marker.position}
             onClick={() => {
-              // setInfo(marker);
+              setInfo(marker);
               markerClickHandler(marker.address, marker.placeName);
             }}
           >
