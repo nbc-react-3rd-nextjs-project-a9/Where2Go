@@ -31,10 +31,10 @@ const SignUp = () => {
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 ">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm p-8 border-solid border-2 ">
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-            <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">회원가입</h2>
+            <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">회원가입</h2>
           </div>
 
-          <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
+          <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-sm">
             <form className="space-y-6" onSubmit={signUpNewUser}>
               <div>
                 <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
@@ -118,7 +118,7 @@ const SignUp = () => {
             </form>
 
             <div>
-              <p className="mt-4 text-center text-sm text-gray-500">로그인 하기</p>
+              <p className="text-center text-sm text-gray-500">로그인 하기</p>
             </div>
           </div>
         </div>
