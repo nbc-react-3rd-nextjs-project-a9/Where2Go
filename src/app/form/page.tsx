@@ -9,7 +9,7 @@ import FilterTag from "@/components/filterTag/FilterTag";
 import FilterTagList from "@/components/filterTag/FilterTagList";
 import useTag from "@/hooks/useTag";
 import { categoryTagList } from "@/data/tagData";
-import SearchMap from "../map/SearchMap";
+import PlacesSearch from "../map/PlacesSearch";
 import MapContainer from "../map/MapContainer";
 import Script from "next/script";
 import Button from "@/components/Button";
@@ -133,12 +133,7 @@ const FormPage = () => {
       </Section>
       <Section title="장소 선택">
         <div className="container m-auto">
-          <Script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js" />
-          <Script
-            src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_API_KEY}&libraries=services,clusterer&autoload=false`}
-            strategy="beforeInteractive"
-          />
-          <SearchMap />
+          <PlacesSearch />
         </div>
       </Section>
       <Button onClick={submitForm}>제출</Button>
