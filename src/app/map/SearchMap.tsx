@@ -49,7 +49,7 @@ const SearchMap = () => {
       }
     });
   };
-
+  console.log("info", info);
   return (
     <div>
       <form
