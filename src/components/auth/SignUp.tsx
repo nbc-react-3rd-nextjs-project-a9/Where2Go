@@ -6,26 +6,26 @@ import { signInWithKakao, signOut } from "./authService";
 
 const SignUp = () => {
   //입력받은 이메일, 패스워드, 닉네임
-  const [id, setId] = useState<string>("");
-  const [pw, setPw] = useState<string>("");
-  const [nickname, setNickname] = useState<string>("");
+  const [id, setId] = useState("");
+  const [pw, setPw] = useState("");
+  const [nickname, setNickname] = useState("");
 
   async function signUpNewUser(e: React.FormEvent) {
     e.preventDefault();
     const { data, error } = await supabase.auth.signUp({
       email: id,
-      password: pw
-      //  options: {
-      //    emailRedirectTo: "https//example.com/welcome"
-      //  }
+      password: pw,
+      options: {
+        // emailRedirectTo: "https//example.com/welcome"
+      }
     });
     console.log(data || error);
   }
 
   return (
     <div>
-      {/* <button onClick={signInWithKakao}>Login</button>
-      <button onClick={signOut}>Logout</button> */}
+      <button onClick={signInWithKakao}>카카오로그인하기</button>
+      <button onClick={signOut}>로그아웃</button>
       <form onSubmit={signUpNewUser}>
         <p>회원가입</p>
         <input type="text" onChange={(e) => setId(e.target.value)} placeholder="아이디를 입력하세요." />
