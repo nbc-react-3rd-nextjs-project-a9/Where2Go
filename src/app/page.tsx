@@ -7,10 +7,21 @@ import Section from "@/components/layout/Section";
 import { mockPlaceData } from "@/data/mockPlace";
 import useTag from "@/hooks/useTag";
 import { categoryTagList, filterTagList } from "@/data/tagData";
+import { supabase } from "@/lib/supabase";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const [categoryValue, onChangeCategory] = useTag();
   const [filterTagListValue, onChangefilterTag] = useTag();
+  const [placeData, setPlaceData] = useState<Place[]>();
+  useEffect(() => {
+    const fetchPlaceData = async () => {
+      const { data, error } = await supabase.from("place").select();
+      console.log(data);
+      setPlaceData(data ? (data as Place[]) : []); // 널 체크 후 할당
+    };
+    fetchPlaceData();
+  }, []);
 
   return (
     <>
@@ -25,7 +36,7 @@ export default function Home() {
                 <FilterTagList list={categoryTagList} onChange={onChangeCategory} />
                 <FilterTagList list={filterTagList} onChange={onChangefilterTag} className={"ml-auto"} />
               </div>
-              <PostCardList placeList={mockPlaceData} />
+              <PostCardList placeList={placeData} />
             </>
           }
         </Section>
