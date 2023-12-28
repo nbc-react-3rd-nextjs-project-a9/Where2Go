@@ -18,7 +18,7 @@ const PostCard = ({ data }: PostCardProps) => {
         style={{ backgroundImage: `url(${data.imageUrl.url})` }}
       >
         <div className="absolute h-[5rem]  w-full bottom-0 px-4 py-4  text-white bg-black bg-opacity-25 backdrop-blur-sm">
-          <h4 className="font-bold text-lg">{data.placeName}</h4>
+          <p className="font-bold text-lg">{data.placeName}</p>
           <p className=" text-sm mt-1">{data.address}</p>
         </div>
         카드
