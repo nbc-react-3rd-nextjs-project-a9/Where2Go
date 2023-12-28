@@ -13,11 +13,12 @@ import { useEffect, useState } from "react";
 export default function Home() {
   const [categoryValue, onChangeCategory] = useTag();
   const [filterTagListValue, onChangefilterTag] = useTag();
-  // const [placeData, setPlaceData] = useState<Place[]>();
+  const [placeData, setPlaceData] = useState<Place[]>();
   useEffect(() => {
     const fetchPlaceData = async () => {
       const { data, error } = await supabase.from("place").select();
       console.log(data);
+      setPlaceData(data ? (data as Place[]) : []); // 널 체크 후 할당
     };
     fetchPlaceData();
   }, []);
@@ -35,7 +36,7 @@ export default function Home() {
                 <FilterTagList list={categoryTagList} onChange={onChangeCategory} />
                 <FilterTagList list={filterTagList} onChange={onChangefilterTag} className={"ml-auto"} />
               </div>
-              <PostCardList placeList={mockPlaceData} />
+              <PostCardList placeList={placeData} />
             </>
           }
         </Section>

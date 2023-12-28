@@ -44,10 +44,11 @@ const FormPage = () => {
       const uploadedImageUrls: string[] = [];
       // 각 이미지 파일을 Supabase Storage에 업로드
       for (const imageFile of imageFiles) {
-        const encodedFileName = encodeURIComponent(imageFile.name);
+        // const encodedFileName = encodeURIComponent(imageFile.name);
+
         const { data: fileData, error: fileError } = await supabase.storage
           .from("placeReviewImg")
-          .upload(`${encodedFileName}`, imageFile);
+          .upload(`${imageFile.name}`, imageFile);
 
         if (fileError) {
           console.error("이미지 업로드 중 오류 발생:", fileError.message);
