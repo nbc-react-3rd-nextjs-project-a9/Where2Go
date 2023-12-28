@@ -1,21 +1,20 @@
-import { enumCategory, enumFilter } from "@/types/enum";
+"use client";
+
 import React from "react";
 import FilterTag from "./FilterTag";
 
 interface FilterTagListProps {
-  tagType: "category" | "filter";
+  list: string[];
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
 }
 
-const FilterTagList = ({ tagType }: FilterTagListProps) => {
-  const enumCategoryList = Object.keys(enumCategory) as Array<keyof typeof enumCategory>;
-  const enumFilterList = Object.keys(enumFilter) as Array<keyof typeof enumFilter>;
-
+const FilterTagList = ({ list, onChange, className }: FilterTagListProps) => {
   return (
-    <div className={`${tagType === "filter" && "ml-auto"} inline-block`}>
-      {tagType === "category"
-        ? enumCategoryList.map((n) => <FilterTag tag={n} key={n} />)
-        : enumFilterList.map((n) => <FilterTag tag={n} key={n} />)}
+    <div className={`whitespace-nowrap ${className}`}>
+      {list.map((n) => (
+        <FilterTag value={n} key={n} onChange={onChange} />
+      ))}
     </div>
   );
 };
