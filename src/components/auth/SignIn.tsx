@@ -4,7 +4,14 @@ import { supabase } from "@/lib/supabase";
 import { signInWithKakao, signOut } from "./authService";
 import Button from "@/components/Button";
 
-const SignIn = () => {
+interface Props {
+  login: boolean;
+  setLogin: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const SignIn = ({ login, setLogin }: Props) => {
+  // console.log(login, setLogin);
+  // setLogin(!login);
   const [id, setId] = useState<string>("");
   const [pw, setPw] = useState<string>("");
 
@@ -86,7 +93,9 @@ const SignIn = () => {
               </Button> */}
 
             <div>
-              <p className="mt-8 text-center text-sm text-gray-500">회원가입 하기</p>
+              <p onClick={() => setLogin(!login)} className="mt-8 text-center text-sm text-gray-500">
+                회원가입 하기
+              </p>
             </div>
           </div>
         </div>
