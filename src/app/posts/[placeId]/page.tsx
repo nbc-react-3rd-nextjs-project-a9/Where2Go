@@ -69,8 +69,11 @@ const PostPage = () => {
             <></>
           )}
         </Section>
-        <Section title="위치">
-          <></>
+        <Section title="주소">
+          <>address 넣기</>
+        </Section>
+        <Section title="지도">
+          <>지도 넣기</>
         </Section>
       </div>
     </>
