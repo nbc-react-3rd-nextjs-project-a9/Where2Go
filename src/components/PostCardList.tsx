@@ -20,7 +20,7 @@ const PostCard = ({ data }: PostCardProps) => {
   const publicUrl = imageUrl.data.publicUrl;
   console.log("imageUrl", imageUrl);
   return (
-    <Link href={`/posts/${data.placeId}`}>
+    <Link href={`/posts/${data.placeId}/`}>
       <div
         className={`w-[18rem] h-[24rem] border-purple-900  border-2 rounded-lg bg-center relative overflow-hidden`}
         style={{ backgroundImage: `url(${publicUrl})` }}
