@@ -1,5 +1,4 @@
 "use client";
-
 import Carousel from "@/components/Carousel";
 import FilterTagList from "@/components/filterTag/FilterTagList";
 import PostCardList from "@/components/PostCardList";
@@ -9,6 +8,12 @@ import useTag from "@/hooks/useTag";
 import { categoryTagList, filterTagList } from "@/data/tagData";
 import { supabase } from "@/lib/supabase";
 import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
+import { getPlaceData } from "@/api/place";
+
+// type Props = {
+//   placeData: Place[];
+// };
 
 export default function Home() {
   const [categoryValue, onChangeCategory] = useTag();
@@ -16,13 +21,12 @@ export default function Home() {
   const [placeData, setPlaceData] = useState<Place[]>();
   useEffect(() => {
     const fetchPlaceData = async () => {
-      const { data, error } = await supabase.from("place").select();
-      console.log(data);
+      const { data, error } = await supabase.from("places").select();
+      console.log("data!!", data);
       setPlaceData(data ? (data as Place[]) : []); // 널 체크 후 할당
     };
     fetchPlaceData();
   }, []);
-
   return (
     <>
       <Carousel />

@@ -72,11 +72,11 @@ const FormPage = () => {
           category: categoryValue
         }
       ]);
-      const { data: existingPlaceData } = await supabase.from("place").select().eq("placeName", placeName);
+      const { data: existingPlaceData } = await supabase.from("places").select().eq("placeName", placeName);
       console.log("existingPlaceData", existingPlaceData);
       if (!existingPlaceData || existingPlaceData.length === 0) {
         // placeId에 해당하는 데이터가 없다면 place 데이터 삽입
-        const { data: placeData, error: placeError } = await supabase.from("place").insert([
+        const { data: placeData, error: placeError } = await supabase.from("places").insert([
           {
             placeName: info.content,
             address: info.address,

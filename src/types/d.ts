@@ -35,6 +35,6 @@ interface PlaceReview {
   imageUrlList: Image[];
   visitedAt: Date;
   category: string;
-  placeId: string;
+  placeName: string;
   userId: string;
 }

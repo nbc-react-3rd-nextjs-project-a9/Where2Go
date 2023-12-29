@@ -9,21 +9,49 @@ import React, { useEffect, useState } from "react";
 import AvatarCarousel from "./AvatarCarousel";
 import Bookmark from "@/app/posts/[placeId]/Bookmark";
 import { CiShare2 } from "react-icons/ci";
+import { supabase } from "@/lib/supabase";
+import { useParams } from "next/navigation";
 const PostPage = () => {
   const [selectUserData, setSelectUserData] = useState<User>();
+  const [placeData, setPlaceData] = useState<Place[]>();
+  const [placeReviewData, setPlaceReviewData] = useState<PlaceReview[]>();
+  const { placeId } = useParams();
+  console.log(placeId);
+
   const onClickAvatar = (data: User) => {
     setSelectUserData(data);
   };
   useEffect(() => {
     setSelectUserData(mockUserData[0]);
   }, []);
+
+  useEffect(() => {
+    const fetchPlaceData = async () => {
+      const { data, error } = await supabase.from("places").select().eq("placeId", placeId);
+      setPlaceData(data ? (data as Place[]) : []);
+    };
+    fetchPlaceData();
+  }, []);
+
+  useEffect(() => {
+    if (placeData && placeData.length > 0) {
+      const fetchPlaceReviewData = async () => {
+        const { data, error } = await supabase.from("placeReview").select().eq("placeName", placeData[0].placeName);
+        console.log("리뷰데이터!", data);
+        setPlaceReviewData(data ? (data as PlaceReview[]) : []);
+      };
+      fetchPlaceReviewData();
+    }
+  }, [placeData]);
+  console.log("placeData", placeData);
+  console.log("placeReviewData", placeReviewData);
   return (
     <>
       <div className="relative">
         <Bookmark />
         <Carousel />
         <div className="flex w-full px-4 py-4 text-white justify-between items-center absolute bottom-0 z-10 backdrop-blur-sm  backdrop-contrast-75">
-          <h1 className="font-bold text-2xl">분위기 있는 카페</h1>
+          <h1 className="font-bold text-2xl">{placeData && placeData[0].placeName}</h1>
           <div>
             <Button size="md">
               <div className="flex items-center">
@@ -60,10 +88,7 @@ const PostPage = () => {
                   </>
                 )}
               </div>
-              <p className="">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Debitis saepe in omnis modi, laboriosam, quasi
-                facere facilis quod a, consequatur esse sit eos corrupti quaerat mollitia quae quidem quia? Temporibus.
-              </p>
+              <p className="">{placeReviewData && placeReviewData[0].content}</p>
             </>
           ) : (
             <></>
