@@ -44,9 +44,11 @@ const PostPage = () => {
     enabled: !!placeData // placeData가 존재할 때에만 쿼리 실행
   });
   console.log("플레이스 리뷰 데이타!", placeReviewData);
+
   if (isPlaceDataLoading || isPlaceReviewDataLoading) {
     return <div>로딩 중...</div>;
   }
+
   return (
     <>
       <div className="relative">
@@ -72,7 +74,7 @@ const PostPage = () => {
           {!!selectUserData ? (
             <>
               <div className="flex flex-row items-center gap-4 mb-4">
-                <Avatar size="md" src={selectUserData.imageUrl.url} />
+                <Avatar size="sm" src={selectUserData.imageUrl.url} />
                 <p className="font-bold min-w-[5rem]">{selectUserData.nickname}</p>
                 {/* TODO : 유저가 나인지 아닌지 확인하고 작업 ㄱㄱ */}
                 {true ? (
