@@ -59,27 +59,30 @@ const FormPage = () => {
         const imageUrl = fileData.path;
         uploadedImageUrls.push(imageUrl);
       }
-      const placeId = id;
+      // const placeId = id;
+      const placeName = info.content;
       //Supabase 'placeReview' 테이블에 데이터 삽입
       const { data: placeReviewData, error: placeReviewError } = await supabase.from("placeReview").insert([
         {
           content,
           visitedAt: selectedDate.toISOString(),
           imageUrlList: uploadedImageUrls, // 이미지 파일의 URL 배열을 저장
-          placeId: placeId,
+          // placeId: placeId,
+          placeName: info.content,
           category: categoryValue
         }
       ]);
-      const { data: existingPlaceData } = await supabase.from("place").select().eq("placeId", placeId);
-      if (!existingPlaceData) {
+      const { data: existingPlaceData } = await supabase.from("place").select().eq("placeName", placeName);
+      console.log("existingPlaceData", existingPlaceData);
+      if (!existingPlaceData || existingPlaceData.length === 0) {
         // placeId에 해당하는 데이터가 없다면 place 데이터 삽입
         const { data: placeData, error: placeError } = await supabase.from("place").insert([
           {
             placeName: info.content,
             address: info.address,
             latlng: info.position,
-            imageUrl: imageFiles[0],
-            placeId: placeId
+            imageUrl: imageFiles[0]
+            // placeId: placeId
           }
         ]);
 
@@ -95,7 +98,7 @@ const FormPage = () => {
       } else {
         console.log("placeReview 데이터가 성공적으로 삽입되었습니다:", placeReviewData);
       }
-      router.push("/");
+      // router.push("/");
     } catch (error) {
       console.log("예상치 못한 오류가 발생했습니다:", error);
     }
