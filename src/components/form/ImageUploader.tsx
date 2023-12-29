@@ -47,24 +47,4 @@ const ImageUploader: React.FC<ImageUploaderProps> = ({ onUpload }) => {
   );
 };
 
-// const previewContainerStyles: React.CSSProperties = {
-//   display: "flex",
-//   marginTop: "20px"
-// };
-
-// const previewImageStyles: React.CSSProperties = {
-//   width: "100px",
-//   height: "100px",
-//   objectFit: "cover",
-//   marginRight: "10px"
-// };
-
-// const dropzoneStyles: React.CSSProperties = {
-//   border: "2px dashed #d9d9d9",
-//   borderRadius: "4px",
-//   padding: "20px",
-//   textAlign: "center",
-//   cursor: "pointer"
-// };
-
 export default ImageUploader;

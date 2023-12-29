@@ -9,21 +9,46 @@ import React, { useEffect, useState } from "react";
 import AvatarCarousel from "./AvatarCarousel";
 import Bookmark from "@/app/posts/[placeId]/Bookmark";
 import { CiShare2 } from "react-icons/ci";
+import { supabase } from "@/lib/supabase";
+import { useParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { getPlaceDataByPlaceId, getPlaceReviewsDataByPlaceName } from "@/api/places";
+
 const PostPage = () => {
   const [selectUserData, setSelectUserData] = useState<User>();
+  // const [placeData, setPlaceData] = useState<Place[]>();
+  // const [placeReviewData, setPlaceReviewData] = useState<PlaceReview[]>();
+  const { placeId } = useParams();
+
+  console.log(placeId);
+  console.log("목유저데이터", mockUserData);
+
   const onClickAvatar = (data: User) => {
     setSelectUserData(data);
   };
   useEffect(() => {
     setSelectUserData(mockUserData[0]);
   }, []);
+
+  const { data: placeData } = useQuery({
+    queryKey: ["place"],
+    queryFn: () => getPlaceDataByPlaceId(placeId)
+  });
+  console.log("플레이스데이터 한개", placeData);
+
+  const { data: placeReviewData } = useQuery({
+    queryKey: ["placeReviews"],
+    queryFn: () => getPlaceReviewsDataByPlaceName(placeData.placeName),
+    enabled: !!placeData // placeData가 존재할 때에만 쿼리 실행
+  });
+  console.log("플레이스 리뷰 데이타!", placeReviewData);
   return (
     <>
       <div className="relative">
         <Bookmark />
         <Carousel />
         <div className="flex w-full px-4 py-4 text-white justify-between items-center absolute bottom-0 z-10 backdrop-blur-sm  backdrop-contrast-75">
-          <h1 className="font-bold text-2xl">분위기 있는 카페</h1>
+          <h1 className="font-bold text-2xl">{placeData?.placeName}</h1>
           <div>
             <Button size="md">
               <div className="flex items-center">
@@ -60,10 +85,7 @@ const PostPage = () => {
                   </>
                 )}
               </div>
-              <p className="">
-                Lorem ipsum dolor sit amet consectetur, adipisicing elit. Debitis saepe in omnis modi, laboriosam, quasi
-                facere facilis quod a, consequatur esse sit eos corrupti quaerat mollitia quae quidem quia? Temporibus.
-              </p>
+              <p className="">{placeReviewData && placeReviewData[0].content}</p>
             </>
           ) : (
             <></>
