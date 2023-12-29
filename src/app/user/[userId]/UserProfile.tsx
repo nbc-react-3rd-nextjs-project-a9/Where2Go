@@ -29,6 +29,7 @@ const UserProfile = () => {
   const [newNickname, setNewNickname] = useState<string>("");
   const mock = {
     nickname: "John Doe",
+    myUserId: "123",
     follower: 10,
     following: 10,
     reviews: 10,
@@ -105,7 +106,7 @@ const UserProfile = () => {
           <ProfileInfoRow title="팔로잉">{mock.following}</ProfileInfoRow>
         </div>
         <ProfileInfoRow title="리뷰 수">{mock.reviews}</ProfileInfoRow>
-        {params.userId !== "123" ? (
+        {params.userId !== mock.myUserId ? (
           <div>
             {/* TODO : Optimistic Updates 적용해서 팔로잉 여부 확인하기 */}
             {mock.팔로잉여부 ? (
