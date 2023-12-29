@@ -4,18 +4,7 @@ import SearchResultsBox from "@/components/map/SearchResultsBox";
 import useMapStore from "@/store/store";
 import React, { useEffect, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
-
-type position = {
-  lat: number;
-  lng: number;
-};
-
-interface Marker {
-  position: position;
-  content: string;
-  address: string;
-  placeName: string;
-}
+import Button from "../Button";
 
 const PlacesSearch = () => {
   const [markers, setMarkers] = useState<Marker[]>([]);
@@ -38,7 +27,7 @@ const PlacesSearch = () => {
         console.log("data", data);
         let markers = [];
 
-        for (var i = 0; i < data.length; i++) {
+        for (let i = 0; i < data.length; i++) {
           markers.push({
             position: {
               lat: Number(data[i].y),
@@ -69,10 +58,16 @@ const PlacesSearch = () => {
   }, []);
 
   return (
-    <div>
-      <form onSubmit={submitHandler}>
-        <input value={searchKeyword} onChange={(e) => setSearchKeyword(e.target.value)} />
-        <button type="submit">검색하기</button>
+    <div className="flex flex-col gap-4 pb-6">
+      <form onSubmit={submitHandler} className="flex gap-2">
+        <input
+          className={" border-black border-2 rounded"}
+          value={searchKeyword}
+          onChange={(e) => setSearchKeyword(e.target.value)}
+        />
+        <Button size="sm" type="submit">
+          검색하기
+        </Button>
       </form>
       <div className="relative">
         <Map
@@ -95,11 +90,10 @@ const PlacesSearch = () => {
           ))}
           <SearchResultsBox keywords={markers} />
         </Map>
-        <p>이름: {info.placeName}</p>
-        <p>주소: {info.address}</p>
-        {/* <button type="button" onClick={() => addData(latlng, placeName, addressName)}>
-        등록하기
-      </button> */}
+      </div>
+      <div className="w-[500px] h-[50px]">
+        <p className="text-xl font-semibold">{info.placeName !== "" ? info.placeName : ""}</p>
+        <p className="text-lg">{info.address != "" ? info.address : ""}</p>
       </div>
     </div>
   );
