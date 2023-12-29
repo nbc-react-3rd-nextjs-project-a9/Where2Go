@@ -49,7 +49,7 @@ const AvatarCarousel = ({ avatarList }: Props) => {
         {avatarList.map((data, index) => (
           <SwiperSlide key={uuidv4()} virtualIndex={index} className="py-4 px-4">
             <Avatar
-              size="sm"
+              size="md"
               src={data.imageUrl.url}
               className="hover:scale-110"
               // onClick={() => onClickAvatar(n)}
