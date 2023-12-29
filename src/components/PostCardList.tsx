@@ -21,7 +21,7 @@ const PostCard = ({ data }: PostCardProps) => {
   return (
     <Link href={`/posts/${data.placeId}`}>
       <div
-        className={`w-[18rem] h-[24rem] border-purple-900  border-2 rounded-lg bg-center relative`}
+        className={`w-[18rem] h-[24rem] border-purple-900  border-2 rounded-lg bg-center relative overflow-hidden`}
         style={{ backgroundImage: `url(${publicUrl})` }}
       >
         <div className="absolute h-[5rem]  w-full bottom-0 px-4 py-4  text-white bg-black bg-opacity-25 backdrop-blur-sm">
