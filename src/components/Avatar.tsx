@@ -16,9 +16,9 @@ enum AvatarSizeEnum {
 
 const Avatar = ({ size, src, onClick, className }: Props) => {
   return (
-    <figure className={`${AvatarSizeEnum[size]} overflow-hidden`}>
+    <figure className={`${AvatarSizeEnum[size]} overflow-hidden  ${className}`}>
       <Image
-        className={`rounded-full cursor-pointer ${AvatarSizeEnum[size]} ${className}`}
+        className={`rounded-full cursor-pointer ${AvatarSizeEnum[size]}`}
         src={src ? src : "/images/avatar_default.jpg"}
         width={size === "sm" ? 60 : 150}
         height={size === "sm" ? 60 : 150}
