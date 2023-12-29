@@ -109,7 +109,7 @@ const FormPage = () => {
   // console.log("info!!", info);
 
   return (
-    <div className="container m-auto">
+    <div className="">
       <Section title="사진 선택">
         <ImageUploader onUpload={handleUpload} />
       </Section>
@@ -125,7 +125,7 @@ const FormPage = () => {
       <Section title="설명">
         <textarea
           placeholder="경험이나 정보를 자세히 작성할수록 다른 사용자들에게 큰 도움이 됩니다."
-          className="container border-black border-2 rounded resize-none"
+          className=" border-black border-2 rounded resize-none"
           onChange={handleTextChange}
         />
       </Section>
@@ -133,7 +133,7 @@ const FormPage = () => {
         <FilterTagList list={categoryFormTagList} onChange={onChangeCategory} />
       </Section>
       <Section title="장소 선택">
-        <div className="container m-auto ">
+        <div className="">
           <PlacesSearch />
         </div>
       </Section>

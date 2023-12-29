@@ -29,7 +29,7 @@ const page = () => {
   // data별 distance[, ]
   // 거리순 카드 렌더링 시 정렬해서 렌더링
   return (
-    <div className="container m-auto">
+    <div className="">
       <MapContainer lat={geoLocation.latitude} lng={geoLocation.longitude} />
       <PlacesSearch />
     </div>

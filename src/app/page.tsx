@@ -19,9 +19,8 @@ export default function Home() {
 
   return (
     <>
-      <Carousel />
-      <div className="container m-auto" style={{ width: "90%" }}>
-        <Section title="Editor's Pick">{<></>}</Section>
+      <div className="">
+        <Section title="Editor's Pick">{<Carousel />}</Section>
 
         <Section title="내 근처 핫플">
           {
