@@ -3,14 +3,15 @@ import Image from "next/image";
 
 import React from "react";
 interface Props {
-  size: "sm" | "lg";
+  size: keyof typeof AvatarSizeEnum;
   src?: string | null;
   onClick?: React.MouseEventHandler<HTMLImageElement>;
   className?: string;
 }
 
 enum AvatarSizeEnum {
-  sm = "w-[60px] h-[60px]",
+  sm = "w-[40px] h-[40px]",
+  md = "w-[60px] h-[60px]",
   lg = "w-[150px] h-[150px]"
 }
 
