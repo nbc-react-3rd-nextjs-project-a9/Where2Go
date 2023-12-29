@@ -75,7 +75,7 @@ const SignIn = () => {
                   login
                 </Button>
 
-                <button type="button" className="text-center">
+                <button type="button" className="text-center" onClick={signInWithKakao}>
                   <img src="/images/kakao_login.png" className="w-full" />
                 </button>
               </div>

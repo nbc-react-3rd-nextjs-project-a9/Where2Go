@@ -104,6 +104,7 @@ const PlacesSearch = () => {
         }}
         level={3}
         onCreate={setMap}
+        // className="-z-10"
       >
         {markers.map((marker) => (
           <MapMarker
