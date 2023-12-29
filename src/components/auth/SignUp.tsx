@@ -22,9 +22,13 @@ const SignUp = ({ login, setLogin }: Props) => {
       email: id,
       password: pw,
       options: {
-        // emailRedirectTo: "https//example.com/welcome"
+        data: {
+          user_name: nickname,
+          avatar_url: null
+        }
       }
     });
+
     console.log(data || error);
     setId("");
     setPw("");
