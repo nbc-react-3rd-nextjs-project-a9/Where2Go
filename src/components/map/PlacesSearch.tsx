@@ -1,8 +1,8 @@
 "use client";
 
-import { supabase } from "@/lib/supabase";
+import SearchResultsBox from "@/components/map/SearchResultsBox";
 import useMapStore from "@/store/store";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
 
 type position = {
@@ -17,20 +17,15 @@ interface Marker {
   placeName: string;
 }
 
-// type info = Partial<Marker>;
-
 const PlacesSearch = () => {
-  // const [info, setInfo] = useState<info>();
   const [markers, setMarkers] = useState<Marker[]>([]);
   const [map, setMap] = useState<kakao.maps.Map>();
 
   const [searchKeyword, setSearchKeyword] = useState<string>("");
 
-  const [addressName, setAddressName] = useState<string>("");
-  const [placeName, setPlaceName] = useState<string>("");
   const setInfo = useMapStore((state) => state.setInfo);
   const info = useMapStore((state) => state.info);
-  // search keyword를 받아 키워드에 맞는 marker array를 반환
+  const initInfo = useMapStore((state) => state.initInfo);
 
   const searchLocations = () => {
     if (!map) return;
@@ -64,28 +59,14 @@ const PlacesSearch = () => {
     });
   };
 
-  const markerClickHandler = (address: string, placeName: string) => {
-    setAddressName(address);
-    setPlaceName(placeName);
-  };
-
   const submitHandler = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     searchLocations();
   };
 
-  // const addData = async (latlng: position, placeName: string, addressName: string) => {
-  //   const { error } = await supabase
-  //     .from("place")
-  //     .insert({ placeName: placeName, location: latlng, address: addressName });
-  //   if (error) {
-  //     console.log("error", error);
-  //   }
-  // };
-
-  // const infoWindowHandler = () => {
-  //   setIsInfoWindowOpen(!infoWindowHandler);
-  // };
+  useEffect(() => {
+    initInfo();
+  }, []);
 
   return (
     <div>
@@ -93,40 +74,33 @@ const PlacesSearch = () => {
         <input value={searchKeyword} onChange={(e) => setSearchKeyword(e.target.value)} />
         <button type="submit">검색하기</button>
       </form>
-      <Map
-        center={{
-          lat: 37.566826,
-          lng: 126.9786567
-        }}
-        style={{
-          width: "100%",
-          height: "350px"
-        }}
-        level={3}
-        onCreate={setMap}
-      >
-        {markers.map((marker) => (
-          <MapMarker
-            key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
-            position={marker.position}
-            onClick={() => {
-              setInfo(marker);
-              markerClickHandler(marker.address, marker.placeName);
-            }}
-          >
-            {/* {!isInfoWindowOpen && info && info.content === marker.content && (
-              <div style={{ color: "#000" }} onClick={infoWindowHandler}>
-                {marker.content}
-              </div>
-            )} */}
-          </MapMarker>
-        ))}
-      </Map>
-      <p>이름: {placeName}</p>
-      <p>주소: {addressName}</p>
-      {/* <button type="button" onClick={() => addData(latlng, placeName, addressName)}>
+      <div className="relative">
+        <Map
+          center={{ lat: info.position.lat, lng: info.position.lng }}
+          style={{
+            width: "100%",
+            height: "350px"
+          }}
+          level={3}
+          onCreate={setMap}
+        >
+          {markers.map((marker) => (
+            <MapMarker
+              key={`marker-${marker.content}-${marker.position.lat},${marker.position.lng}`}
+              position={marker.position}
+              onClick={() => {
+                setInfo(marker);
+              }}
+            />
+          ))}
+          <SearchResultsBox keywords={markers} />
+        </Map>
+        <p>이름: {info.placeName}</p>
+        <p>주소: {info.address}</p>
+        {/* <button type="button" onClick={() => addData(latlng, placeName, addressName)}>
         등록하기
       </button> */}
+      </div>
     </div>
   );
 };
