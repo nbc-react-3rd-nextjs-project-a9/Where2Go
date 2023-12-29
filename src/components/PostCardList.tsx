@@ -8,7 +8,8 @@ interface PostCardProps {
 
 // TODO : type 제대로 하기
 interface PostCardListProps {
-  placeList: Place[] | undefined;
+  // placeList: Place[] | undefined;
+  placeList: Place[] | undefined | null;
 }
 
 const PostCard = ({ data }: PostCardProps) => {

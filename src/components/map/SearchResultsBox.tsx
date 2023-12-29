@@ -1,18 +1,6 @@
 import useMapStore from "@/store/store";
 import React from "react";
 
-type position = {
-  lat: number;
-  lng: number;
-};
-
-interface Marker {
-  position: position;
-  content: string;
-  address: string;
-  placeName: string;
-}
-
 const SearchResultsBox = ({ keywords }: { keywords: Marker[] }) => {
   const setInfo = useMapStore((state) => state.setInfo);
   return (
