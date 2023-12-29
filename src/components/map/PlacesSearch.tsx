@@ -4,18 +4,7 @@ import SearchResultsBox from "@/components/map/SearchResultsBox";
 import useMapStore from "@/store/store";
 import React, { useEffect, useState } from "react";
 import { Map, MapMarker } from "react-kakao-maps-sdk";
-
-type position = {
-  lat: number;
-  lng: number;
-};
-
-interface Marker {
-  position: position;
-  content: string;
-  address: string;
-  placeName: string;
-}
+import Button from "../Button";
 
 const PlacesSearch = () => {
   const [markers, setMarkers] = useState<Marker[]>([]);
@@ -69,10 +58,16 @@ const PlacesSearch = () => {
   }, []);
 
   return (
-    <div>
-      <form onSubmit={submitHandler}>
-        <input value={searchKeyword} onChange={(e) => setSearchKeyword(e.target.value)} />
-        <button type="submit">검색하기</button>
+    <div className="flex flex-col gap-4">
+      <form onSubmit={submitHandler} className="flex gap-2">
+        <input
+          className={" border-black border-2 rounded"}
+          value={searchKeyword}
+          onChange={(e) => setSearchKeyword(e.target.value)}
+        />
+        <Button size="sm" type="submit">
+          검색하기
+        </Button>
       </form>
       <div className="relative">
         <Map

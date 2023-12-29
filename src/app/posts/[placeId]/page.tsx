@@ -9,6 +9,7 @@ import React, { useEffect, useState } from "react";
 import AvatarCarousel from "./AvatarCarousel";
 import Bookmark from "@/app/posts/[placeId]/Bookmark";
 import { CiShare2 } from "react-icons/ci";
+import MapContainer from "@/components/map/MapContainer";
 const PostPage = () => {
   const [selectUserData, setSelectUserData] = useState<User>();
   const onClickAvatar = (data: User) => {
@@ -70,7 +71,9 @@ const PostPage = () => {
           )}
         </Section>
         <Section title="위치">
-          <></>
+          <>
+            <MapContainer lat={0} lng={0} />
+          </>
         </Section>
       </div>
     </>

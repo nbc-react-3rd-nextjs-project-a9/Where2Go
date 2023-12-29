@@ -16,7 +16,7 @@ export default function Home() {
   const [placeData, setPlaceData] = useState<Place[]>();
   useEffect(() => {
     const fetchPlaceData = async () => {
-      const { data, error } = await supabase.from("place").select();
+      const { data, error } = await supabase.from("places").select();
       console.log(data);
       setPlaceData(data ? (data as Place[]) : []); // 널 체크 후 할당
     };

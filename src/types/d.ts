@@ -38,3 +38,15 @@ interface PlaceReview {
   placeId: string;
   userId: string;
 }
+
+type position = {
+  lat: number;
+  lng: number;
+};
+
+interface Marker {
+  position: position;
+  content: string;
+  address: string;
+  placeName: string;
+}
