@@ -7,7 +7,7 @@ import { supabase } from "@/lib/supabase";
 
 const authPage = () => {
   console.log(supabase.from("users").select("user_id, name"));
-  const [login, setLogin] = useState<boolean>(true);
+  const [login, setLogin] = useState<boolean>(false);
   return <div>{login ? <SignIn /> : <SignUp />}</div>;
 };
 

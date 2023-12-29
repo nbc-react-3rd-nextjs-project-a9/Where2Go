@@ -11,14 +11,17 @@ import Bookmark from "@/app/posts/[placeId]/Bookmark";
 import { CiShare2 } from "react-icons/ci";
 import { supabase } from "@/lib/supabase";
 import { useParams } from "next/navigation";
+import { useQuery } from "@tanstack/react-query";
+import { getPlaceDataByPlaceId, getPlaceReviewsDataByPlaceName } from "@/api/places";
 
 const PostPage = () => {
   const [selectUserData, setSelectUserData] = useState<User>();
-  const [placeData, setPlaceData] = useState<Place[]>();
-  const [placeReviewData, setPlaceReviewData] = useState<PlaceReview[]>();
+  // const [placeData, setPlaceData] = useState<Place[]>();
+  // const [placeReviewData, setPlaceReviewData] = useState<PlaceReview[]>();
   const { placeId } = useParams();
 
   console.log(placeId);
+  console.log("목유저데이터", mockUserData);
 
   const onClickAvatar = (data: User) => {
     setSelectUserData(data);
@@ -27,33 +30,25 @@ const PostPage = () => {
     setSelectUserData(mockUserData[0]);
   }, []);
 
-  useEffect(() => {
-    const fetchPlaceData = async () => {
-      const { data, error } = await supabase.from("places").select().eq("placeId", placeId);
-      setPlaceData(data ? (data as Place[]) : []);
-    };
-    fetchPlaceData();
-  }, []);
+  const { data: placeData } = useQuery({
+    queryKey: ["place"],
+    queryFn: () => getPlaceDataByPlaceId(placeId)
+  });
+  console.log("플레이스데이터 한개", placeData);
 
-  useEffect(() => {
-    if (placeData && placeData.length > 0) {
-      const fetchPlaceReviewData = async () => {
-        const { data, error } = await supabase.from("placeReview").select().eq("placeName", placeData[0].placeName);
-        console.log("리뷰데이터!", data);
-        setPlaceReviewData(data ? (data as PlaceReview[]) : []);
-      };
-      fetchPlaceReviewData();
-    }
-  }, [placeData]);
-  console.log("placeData", placeData);
-  console.log("placeReviewData", placeReviewData);
+  const { data: placeReviewData } = useQuery({
+    queryKey: ["placeReviews"],
+    queryFn: () => getPlaceReviewsDataByPlaceName(placeData.placeName),
+    enabled: !!placeData // placeData가 존재할 때에만 쿼리 실행
+  });
+  console.log("플레이스 리뷰 데이타!", placeReviewData);
   return (
     <>
       <div className="relative">
         <Bookmark />
         <Carousel />
         <div className="flex w-full px-4 py-4 text-white justify-between items-center absolute bottom-0 z-10 backdrop-blur-sm  backdrop-contrast-75">
-          <h1 className="font-bold text-2xl">{placeData && placeData[0].placeName}</h1>
+          <h1 className="font-bold text-2xl">{placeData?.placeName}</h1>
           <div>
             <Button size="md">
               <div className="flex items-center">
