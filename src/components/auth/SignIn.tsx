@@ -1,8 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { signInWithKakao, checkAuth, getUserInfo } from "./authService";
+import { signInWithKakao, checkAuth } from "./authService";
 import Button from "@/components/Button";
+
+import { useUserInfoStore } from "@/store/userInfoStore";
 
 interface Props {
   login: boolean;
@@ -10,8 +12,20 @@ interface Props {
 }
 
 const SignIn = ({ login, setLogin }: Props) => {
+  const { nickname, avatar_url, uid, getUID, updateName, updateAvatar } = useUserInfoStore();
+
   const [id, setId] = useState<string>("");
   const [pw, setPw] = useState<string>("");
+
+  //userinfo 테이블에서 정보 가져오기
+  async function getUserInfo(userId: string) {
+    const { data, error } = await supabase.from("userinfo").select().eq("id", userId);
+    // console.log(data![0]);
+    const fetchData = data![0];
+    getUID(userId);
+    updateAvatar(fetchData.avatar_url);
+    updateName(fetchData.username);
+  }
 
   const signInWithEmail = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -21,7 +35,9 @@ const SignIn = ({ login, setLogin }: Props) => {
     });
     // console.log(data || error);
     checkAuth();
-    getUserInfo(sessionStorage.getItem("uid") || "");
+    let userId = sessionStorage.getItem("uid") || "";
+    getUserInfo(userId);
+    console.log(nickname, avatar_url, uid);
   };
 
   return (

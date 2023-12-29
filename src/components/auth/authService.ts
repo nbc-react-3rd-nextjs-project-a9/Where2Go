@@ -1,6 +1,5 @@
 "use client";
 import { supabase } from "@/lib/supabase";
-import { useUserInfoStore } from "@/store/userInfoStore";
 
 //로그인 상태 확인
 function checkAuth() {
@@ -31,14 +30,4 @@ async function signOut() {
   checkAuth();
 }
 
-//로그인 시 정보 가져오기
-async function getUserInfo(userId: string) {
-  // const { uid, getUID } = useUserInfoStore();
-  const { data, error } = await supabase.from("userinfo").select().eq("id", userId);
-  if (data !== null) {
-    // getUID();
-  }
-  // console.log("zustand store: ", uid);
-}
-
-export { checkAuth, signInWithKakao, signOut, getUserInfo };
+export { checkAuth, signInWithKakao, signOut };
