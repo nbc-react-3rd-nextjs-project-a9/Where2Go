@@ -11,11 +11,13 @@ import Bookmark from "@/app/posts/[placeId]/Bookmark";
 import { CiShare2 } from "react-icons/ci";
 import { supabase } from "@/lib/supabase";
 import { useParams } from "next/navigation";
+
 const PostPage = () => {
   const [selectUserData, setSelectUserData] = useState<User>();
   const [placeData, setPlaceData] = useState<Place[]>();
   const [placeReviewData, setPlaceReviewData] = useState<PlaceReview[]>();
   const { placeId } = useParams();
+
   console.log(placeId);
 
   const onClickAvatar = (data: User) => {
