@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { signInWithKakao, checkAuth } from "./authService";
+import { signInWithKakao, checkAuth, getUserInfo } from "./authService";
 import Button from "@/components/Button";
 
 interface Props {
@@ -21,6 +21,7 @@ const SignIn = ({ login, setLogin }: Props) => {
     });
     // console.log(data || error);
     checkAuth();
+    getUserInfo(sessionStorage.getItem("uid") || "");
   };
 
   return (

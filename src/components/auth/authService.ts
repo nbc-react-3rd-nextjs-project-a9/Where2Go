@@ -1,5 +1,6 @@
 "use client";
 import { supabase } from "@/lib/supabase";
+import { useUserInfoStore } from "@/store/userInfoStore";
 
 //로그인 상태 확인
 function checkAuth() {
@@ -7,7 +8,7 @@ function checkAuth() {
     if (event === "SIGNED_IN") {
       //로그인 시
       console.log("SIGNED_IN", session?.user.id);
-      sessionStorage.setItem("uid", session?.user.id);
+      session ? sessionStorage.setItem("uid", session.user.id) : console.log("error");
     } else if (event === "SIGNED_OUT") {
       //로그아웃 시
       console.log("SIGNED_OUT", session);
@@ -30,4 +31,14 @@ async function signOut() {
   checkAuth();
 }
 
-export { checkAuth, signInWithKakao, signOut };
+//로그인 시 정보 가져오기
+async function getUserInfo(userId: string) {
+  // const { uid, getUID } = useUserInfoStore();
+  const { data, error } = await supabase.from("userinfo").select().eq("id", userId);
+  if (data !== null) {
+    // getUID();
+  }
+  // console.log("zustand store: ", uid);
+}
+
+export { checkAuth, signInWithKakao, signOut, getUserInfo };
