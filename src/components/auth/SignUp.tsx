@@ -4,7 +4,12 @@ import { supabase } from "@/lib/supabase";
 import Button from "@/components/Button";
 import { User } from "@supabase/supabase-js";
 
-const SignUp = () => {
+interface Props {
+  login: boolean;
+  setLogin: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const SignUp = ({ login, setLogin }: Props) => {
   //입력받은 이메일, 패스워드, 닉네임
   const [id, setId] = useState<string>("");
   const [pw, setPw] = useState<string>("");
@@ -119,7 +124,9 @@ const SignUp = () => {
             </form>
 
             <div>
-              <p className="text-center text-sm text-gray-500">로그인 하기</p>
+              <p onClick={() => setLogin(!login)} className="text-center text-sm text-gray-500">
+                로그인 하기
+              </p>
             </div>
           </div>
         </div>
