@@ -7,7 +7,7 @@ import Section from "@/components/layout/Section";
 import { mockUserData } from "@/data/mockUser";
 import React, { useEffect, useState } from "react";
 import AvatarCarousel from "./AvatarCarousel";
-import Bookmark from "@/app/posts/[placeId]/Bookmark";
+import Bookmark from "@/app/posts/[placeId]/[userId]/Bookmark";
 import { CiShare2 } from "react-icons/ci";
 import { supabase } from "@/lib/supabase";
 import { useParams } from "next/navigation";
@@ -64,7 +64,7 @@ const PostPage = () => {
           </div>
         </div>
       </div>
-      <div className="container mx-auto">
+      <div className="">
         <Section title="다녀간 사람들">
           <AvatarCarousel avatarList={mockUserData} />
         </Section>
