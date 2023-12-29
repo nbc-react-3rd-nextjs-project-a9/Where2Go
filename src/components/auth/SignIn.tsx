@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { signInWithKakao, signOut } from "./authService";
+import { signInWithKakao, checkAuth } from "./authService";
 import Button from "@/components/Button";
 
 interface Props {
@@ -10,22 +10,18 @@ interface Props {
 }
 
 const SignIn = ({ login, setLogin }: Props) => {
-  // console.log(login, setLogin);
-  // setLogin(!login);
   const [id, setId] = useState<string>("");
   const [pw, setPw] = useState<string>("");
 
-  async function signInWithEmail(e: React.FormEvent) {
+  const signInWithEmail = async (e: React.FormEvent) => {
     e.preventDefault();
     const { data, error } = await supabase.auth.signInWithPassword({
       email: id,
       password: pw
     });
-    console.log(data || error);
-
-    setId("");
-    setPw("");
-  }
+    // console.log(data || error);
+    checkAuth();
+  };
 
   return (
     <div>
@@ -40,7 +36,7 @@ const SignIn = ({ login, setLogin }: Props) => {
           </div>
 
           <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form className="space-y-6" onSubmit={signInWithEmail}>
+            <form className="space-y-6">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                   Email address
@@ -78,7 +74,12 @@ const SignIn = ({ login, setLogin }: Props) => {
               </div>
 
               <div className="flex flex-col">
-                <Button type="submit" size="md" className="sm:mx-auto sm:w-full sm:max-w-sm mb-4 mt-2">
+                <Button
+                  onClick={signInWithEmail}
+                  type="submit"
+                  size="md"
+                  className="sm:mx-auto sm:w-full sm:max-w-sm mb-4 mt-2"
+                >
                   login
                 </Button>
 
@@ -87,10 +88,6 @@ const SignIn = ({ login, setLogin }: Props) => {
                 </button>
               </div>
             </form>
-
-            {/* <Button size="md" className="sm:mx-auto sm:w-full sm:max-w-sm" onClick={signInWithKakao}>
-                카카오 계정으로 로그인
-              </Button> */}
 
             <div>
               <p onClick={() => setLogin(!login)} className="mt-8 text-center text-sm text-gray-500">
