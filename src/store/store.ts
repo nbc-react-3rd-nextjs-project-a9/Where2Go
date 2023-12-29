@@ -1,16 +1,4 @@
-import create from "zustand";
-
-type position = {
-  lat: number;
-  lng: number;
-};
-
-interface Marker {
-  position: position;
-  content: string;
-  address: string;
-  placeName: string;
-}
+import { create } from "zustand";
 
 interface MapStore {
   info: Marker;
