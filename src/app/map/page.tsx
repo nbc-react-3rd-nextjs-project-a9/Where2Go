@@ -4,15 +4,14 @@ import PlacesSearch from "@/components/map/PlacesSearch";
 import MapContainer from "@/components/map/MapContainer";
 import useGeolocation from "react-hook-geolocation";
 import { supabase } from "@/lib/supabase";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { getPlaceData } from "@/api/places";
 
 const page = () => {
-  const fetchData = async () => {
-    const { data, error } = await supabase.from("place").select();
-    console.log("data", data);
-  };
-  useEffect(() => {
-    fetchData();
-  }, []);
+  const { data } = useQuery({ queryKey: ["places"], queryFn: getPlaceData });
+
+  console.log("data", data);
+
   const geoLocation = useGeolocation();
   if (geoLocation.error) {
     alert("사용자 위치를 확인할 수 없습니다.");

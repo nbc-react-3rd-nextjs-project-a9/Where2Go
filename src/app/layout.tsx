@@ -3,6 +3,7 @@ import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import Script from "next/script";
+import ReactQueryProvider from "./ReactQueryProvider";
 
 export const metadata: Metadata = {
   title: "어디가지🍆",
@@ -11,16 +12,18 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko">
-      <body>
-        <Header />
-        <main className="max-w-[1200px] mx-auto w-[90%]">{children}</main>
-        <Footer />
-        <Script
-          src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_API_KEY}&libraries=services,clusterer&autoload=false`}
-          strategy="beforeInteractive"
-        />
-      </body>
-    </html>
+    <ReactQueryProvider>
+      <html lang="ko">
+        <body>
+          <Header />
+          <main className="max-w-[1200px] mx-auto w-[90%]">{children}</main>
+          <Footer />
+          <Script
+            src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_API_KEY}&libraries=services,clusterer&autoload=false`}
+            strategy="beforeInteractive"
+          />
+        </body>
+      </html>
+    </ReactQueryProvider>
   );
 }
