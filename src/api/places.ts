@@ -6,3 +6,13 @@ export const getPlaceData = async (): Promise<Place[] | null> => {
   if (typeof data === null) return [];
   else return data;
 };
+
+export const getPlaceDataByPlaceId = async (placeId: string | string[]) => {
+  const { data } = await supabase.from("places").select().eq("placeId", placeId).single();
+  return data;
+};
+
+export const getPlaceReviewsDataByPlaceName = async (placeName: string) => {
+  const { data } = await supabase.from("placeReview").select().eq("placeName", placeName);
+  return data;
+};
