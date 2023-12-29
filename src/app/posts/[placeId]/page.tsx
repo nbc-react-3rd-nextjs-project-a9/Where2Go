@@ -42,7 +42,7 @@ const PostPage = () => {
           {!!selectUserData ? (
             <>
               <div className="flex flex-row items-center gap-4 mb-4">
-                <Avatar size="sm" src={selectUserData.imageUrl.url} />
+                <Avatar size="md" src={selectUserData.imageUrl.url} />
                 <p className="font-bold min-w-[5rem]">{selectUserData.nickname}</p>
                 {/* TODO : 유저가 나인지 아닌지 확인하고 작업 ㄱㄱ */}
                 {true ? (
