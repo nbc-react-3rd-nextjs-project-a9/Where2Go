@@ -27,6 +27,7 @@ const page = () => {
   const y = lng - dataLng;
   const distance = Math.sqrt(x * x + y * y);
   console.log("distance", distance);
+  // data별 distance[, ]
   // 거리순 카드 렌더링 시 정렬해서 렌더링
   return (
     <div className="container m-auto">
