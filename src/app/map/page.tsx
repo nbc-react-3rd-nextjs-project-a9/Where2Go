@@ -1,7 +1,7 @@
 import Script from "next/script";
 import React from "react";
-import MapContainer from "./MapContainer";
-import PlacesSearch from "./PlacesSearch";
+import PlacesSearch from "@/components/map/PlacesSearch";
+import MapContainer from "@/components/map/MapContainer";
 
 const page = () => {
   return (
