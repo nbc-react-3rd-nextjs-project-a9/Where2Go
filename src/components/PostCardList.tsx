@@ -13,14 +13,14 @@ interface PostCardListProps {
 }
 
 const PostCard = ({ data }: PostCardProps) => {
-  console.log("data", data);
+  // console.log("data", data);
   const imagePath = data.imageUrl?.path;
   const storage = supabase.storage.from("placeReviewImg");
   const imageUrl = storage.getPublicUrl(imagePath);
   const publicUrl = imageUrl.data.publicUrl;
   return (
     <Link href={`/posts/${data.placeId}`}>
-      <div className="relative w-[12rem] h-[16rem]  mx-auto transition-all ring-2 ring-black rounded-lg  overflow-hidden shadow-lg hover:-translate-y-2">
+      <div className="relative w-[12rem] h-[16rem]  mx-auto transition-all ring-2 ring-gray-100 rounded-lg  overflow-hidden shadow-md hover:ring-4 hover:ring-purple-500 ">
         <Image src={publicUrl} alt="Picture of the author" fill={true} sizes="12rem" />
         <div className="absolute h-[4rem]  w-full bottom-0 p-2  text-white bg-black bg-opacity-25 backdrop-blur-sm">
           <p className="font-bold text-md whitespace-nowrap text-ellipsis overflow-hidden">{data.placeName}</p>
