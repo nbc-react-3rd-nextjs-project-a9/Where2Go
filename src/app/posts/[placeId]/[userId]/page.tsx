@@ -12,17 +12,20 @@ import { CiShare2 } from "react-icons/ci";
 import { supabase } from "@/lib/supabase";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { getPlaceDataByPlaceId, getPlaceReviewsDataByPlaceName } from "@/api/places";
+import { getPlaceDataByPlaceId, getPlaceReviewsDataByPlaceName, getUserDataByUserIds } from "@/api/places";
 import MapContainer from "@/components/map/MapContainer";
 
 const PostPage = () => {
   const [selectUserData, setSelectUserData] = useState<User>();
+  const params = useParams();
+  console.log("params", params);
+  // const [userData, setUserData] = useState<User[]>([]);
   // const [placeData, setPlaceData] = useState<Place[]>();
   // const [placeReviewData, setPlaceReviewData] = useState<PlaceReview[]>();
-  const { placeId } = useParams();
+  const { placeId, userId } = useParams();
 
   console.log(placeId);
-  console.log("목유저데이터", mockUserData);
+  // console.log("목유저데이터", mockUserData);
 
   const onClickAvatar = (data: User) => {
     setSelectUserData(data);
@@ -39,11 +42,24 @@ const PostPage = () => {
   console.log("플레이스데이터 한개", placeData);
 
   const { data: placeReviewData, isLoading: isPlaceReviewDataLoading } = useQuery({
-    queryKey: ["placeReviews"],
+    queryKey: ["placeReview"],
     queryFn: () => getPlaceReviewsDataByPlaceName(placeData.placeName),
     enabled: !!placeData // placeData가 존재할 때에만 쿼리 실행
   });
   console.log("플레이스 리뷰 데이타!", placeReviewData);
+  const userIds = placeReviewData?.map((data) => data.userId) || [];
+  console.log("userIds", userIds);
+
+  const { data: userData } = useQuery({
+    queryKey: ["users"],
+    queryFn: () => getUserDataByUserIds(userIds),
+    enabled: !!userIds
+  });
+  console.log("유저데이터에용", userData);
+
+  const placeReviewDataByUserId = placeReviewData?.filter((data) => data.userId === userId);
+  console.log("플레이스 리뷰데이터 바이 유저아이디", placeReviewDataByUserId);
+
   if (isPlaceDataLoading || isPlaceReviewDataLoading) {
     return <div>로딩 중...</div>;
   }
@@ -66,7 +82,7 @@ const PostPage = () => {
       </div>
       <div className="">
         <Section title="다녀간 사람들">
-          <AvatarCarousel avatarList={mockUserData} />
+          <AvatarCarousel avatarList={userData} />
         </Section>
         <Section title="리뷰">
           {!!selectUserData ? (
@@ -90,7 +106,7 @@ const PostPage = () => {
                   </>
                 )}
               </div>
-              <p className="">{placeReviewData && placeReviewData[0]?.content}</p>
+              <p className="">{placeReviewDataByUserId && placeReviewDataByUserId[0]?.content}</p>
             </>
           ) : (
             <></>

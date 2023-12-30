@@ -1,6 +1,9 @@
+"use client";
+import { getPlaceReviewsDataByPlaceName, getUserIdInPlaceReviewsDataByPlaceName } from "@/api/places";
 import { supabase } from "@/lib/supabase";
+import { useQuery } from "@tanstack/react-query";
 import Link from "next/link";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 interface PostCardProps {
   data: Place;
@@ -18,9 +21,21 @@ const PostCard = ({ data }: PostCardProps) => {
   const storage = supabase.storage.from("placeReviewImg");
   const imageUrl = storage.getPublicUrl(imagePath);
   const publicUrl = imageUrl.data.publicUrl;
-  console.log("imageUrl", imageUrl);
+  const [firstUser, setFirstUser] = useState();
+
+  useEffect(() => {
+    const fetchFirstUserData = async () => {
+      const result = await getPlaceReviewsDataByPlaceName(data.placeName);
+      const userIds = result?.map((review) => review.userId);
+      if (userIds) {
+        setFirstUser(userIds[0]);
+      }
+    };
+    fetchFirstUserData();
+  }, []);
+  console.log("첫번째유저", firstUser);
   return (
-    <Link href={`/posts/${data.placeId}`}>
+    <Link href={`/posts/${data.placeId}/${firstUser}`}>
       <div
         className={`w-[18rem] h-[24rem] border-purple-900  border-2 rounded-lg bg-center relative overflow-hidden`}
         style={{ backgroundImage: `url(${publicUrl})` }}
