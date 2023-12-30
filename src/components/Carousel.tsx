@@ -6,9 +6,12 @@ import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { Pagination, Navigation } from "swiper/modules";
-
-const Carousel = () => {
+type Props = {
+  urls?: string[];
+};
+const Carousel = ({ urls }: Props) => {
   // TODO : 이미지 넣기
+  console.log("캐러셀유알엘", urls);
   const testArr = [1, 2, 3, 4, 5];
   return (
     <Swiper
@@ -22,9 +25,9 @@ const Carousel = () => {
       modules={[Pagination, Navigation]}
       className="h-[400px]"
     >
-      {testArr.map((n, i) => (
+      {urls?.map((n, i) => (
         <SwiperSlide style={{ display: "flex" }} className="justify-center items-center" key={`slide-${i}`}>
-          <div className="w-full h-full bg-center object-cover  bg-[url(https://dummyimage.com/1700x400/616161/fff&text=image)]"></div>
+          <div style={{ backgroundImage: `url(${n})` }} className="w-full h-full bg-center object-cover"></div>
         </SwiperSlide>
       ))}
     </Swiper>

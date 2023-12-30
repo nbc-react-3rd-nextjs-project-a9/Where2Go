@@ -19,9 +19,6 @@ const PostPage = () => {
   const [selectUserData, setSelectUserData] = useState<User>();
   const params = useParams();
   console.log("params", params);
-  // const [userData, setUserData] = useState<User[]>([]);
-  // const [placeData, setPlaceData] = useState<Place[]>();
-  // const [placeReviewData, setPlaceReviewData] = useState<PlaceReview[]>();
   const { placeId, userId } = useParams();
 
   console.log(placeId);
@@ -34,7 +31,6 @@ const PostPage = () => {
     setSelectUserData(mockUserData[0]);
   }, []);
 
-  // lat, lng 데이터 받아오는 부분
   const { data: placeData, isLoading: isPlaceDataLoading } = useQuery({
     queryKey: ["place"],
     queryFn: () => getPlaceDataByPlaceId(placeId)
@@ -44,7 +40,7 @@ const PostPage = () => {
   const { data: placeReviewData, isLoading: isPlaceReviewDataLoading } = useQuery({
     queryKey: ["placeReview"],
     queryFn: () => getPlaceReviewsDataByPlaceName(placeData.placeName),
-    enabled: !!placeData // placeData가 존재할 때에만 쿼리 실행
+    enabled: !!placeData
   });
   console.log("플레이스 리뷰 데이타!", placeReviewData);
   const userIds = placeReviewData?.map((data) => data.userId) || [];
@@ -59,6 +55,16 @@ const PostPage = () => {
 
   const placeReviewDataByUserId = placeReviewData?.filter((data) => data.userId === userId);
   console.log("플레이스 리뷰데이터 바이 유저아이디", placeReviewDataByUserId);
+  let publicUrls = [];
+
+  if (placeReviewDataByUserId !== undefined && placeReviewDataByUserId[0]?.imageUrlList) {
+    console.log("이미지유알엘", placeReviewDataByUserId[0]?.imageUrlList);
+    for (const url of placeReviewDataByUserId[0]?.imageUrlList) {
+      console.log("url", url);
+      const { data } = supabase.storage.from("placeReviewImg").getPublicUrl(url);
+      publicUrls.push(data.publicUrl);
+    }
+  }
 
   if (isPlaceDataLoading || isPlaceReviewDataLoading) {
     return <div>로딩 중...</div>;
@@ -67,7 +73,7 @@ const PostPage = () => {
     <>
       <div className="relative">
         <Bookmark />
-        <Carousel />
+        <Carousel urls={publicUrls} />
         <div className="flex w-full px-4 py-4 text-white justify-between items-center absolute bottom-0 z-10 backdrop-blur-sm  backdrop-contrast-75">
           <h1 className="font-bold text-2xl">{placeData?.placeName}</h1>
           <div>
