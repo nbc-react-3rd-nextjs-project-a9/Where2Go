@@ -18,13 +18,12 @@ export const getPlaceReviewsDataByPlaceName = async (placeName: string) => {
 };
 
 export const getPlaceReviewsDataByUserId = async (userId: string | string[]) => {
-  const { data } = await supabase.from("placeReview").select().eq("userId", userId).single();
+  const { data } = await supabase.from("placeReview").select().eq("userId", userId);
   return data;
 };
 
 export const getUserIdInPlaceReviewsDataByPlaceName = async (placeName: string) => {
   const { data } = await supabase.from("placeReview").select("userId").eq("plcaeName", placeName);
-  console.log("유저데이터", data);
   return data;
 };
 

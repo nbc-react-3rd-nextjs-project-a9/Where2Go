@@ -14,13 +14,19 @@ import { getPlaceData } from "@/api/places";
 export default function Home() {
   const [categoryValue, onChangeCategory] = useTag();
   const [filterTagListValue, onChangefilterTag] = useTag();
-  const [placeData, setPlaceData] = useState<Place[]>();
   const { data } = useQuery({ queryKey: ["places"], queryFn: getPlaceData });
 
+  const filteredData = data?.filter((item) => item.category === categoryValue);
+
+  const urls = [
+    "https://dummyimage.com/1700x400/616161/fff&text=image",
+    "https://dummyimage.com/170x400/616161/fff&text=image,"
+  ];
   return (
     <>
+      0
       <div className="">
-        <Section title="Editor's Pick">{<Carousel />}</Section>
+        <Section title="Editor's Pick">{<Carousel urls={urls} />}</Section>
 
         <Section title="내 근처 핫플">
           {
@@ -29,7 +35,11 @@ export default function Home() {
                 <FilterTagList list={categoryTagList} onChange={onChangeCategory} />
                 <FilterTagList list={filterTagList} onChange={onChangefilterTag} className={"ml-auto"} />
               </div>
-              <PostCardList placeList={data} />
+              {categoryValue === "전체" || categoryValue === null ? (
+                <PostCardList placeList={data} />
+              ) : (
+                <PostCardList placeList={filteredData} />
+              )}
             </>
           }
         </Section>

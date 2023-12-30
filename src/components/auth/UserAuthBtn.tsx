@@ -4,14 +4,28 @@ import { useEffect, useState } from "react";
 import Avatar from "../Avatar";
 import Button from "../Button";
 import Link from "next/link";
+import { supabase } from "@/lib/supabase";
 
 interface Props {
   logout: () => void;
 }
 
 const AuthMenu = ({ logout }: Props) => {
-  const userId = "123";
+  // const userId = "123";
   const liClassName = "px-4 py-2 text-sm hover:bg-gray-300";
+  const [userId, setUserId] = useState("");
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const {
+        data: { user }
+      } = await supabase.auth.getUser();
+      if (user) {
+        setUserId(user.id);
+      }
+    };
+    fetchUser();
+  }, []);
   return (
     <ul className="absolute mt-4 text-black text-start w-full z-20 top-full  right-0 bg-white rounded-md divide-y divide-divide-solid border-2 border-gray-300 cursor-pointer">
       <li className={`${liClassName}`}>

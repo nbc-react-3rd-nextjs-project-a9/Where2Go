@@ -17,8 +17,6 @@ import MapContainer from "@/components/map/MapContainer";
 
 const PostPage = () => {
   const [selectUserData, setSelectUserData] = useState<User>();
-  const params = useParams();
-  console.log("params", params);
   const { placeId, userId } = useParams();
 
   console.log(placeId);

@@ -27,6 +27,7 @@ interface Place {
    * supabase 구조 확정 후 삭제 여부 결정
    */
   placeId?: string;
+  category: string;
 }
 
 interface PlaceReview {

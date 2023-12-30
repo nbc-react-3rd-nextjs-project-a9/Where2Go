@@ -16,7 +16,6 @@ interface PostCardListProps {
 }
 
 const PostCard = ({ data }: PostCardProps) => {
-  console.log("data", data);
   const imagePath = data.imageUrl?.path;
   const storage = supabase.storage.from("placeReviewImg");
   const imageUrl = storage.getPublicUrl(imagePath);
@@ -33,7 +32,7 @@ const PostCard = ({ data }: PostCardProps) => {
     };
     fetchFirstUserData();
   }, []);
-  console.log("첫번째유저", firstUser);
+  // console.log("첫번째유저", firstUser);
   return (
     <Link href={`/posts/${data.placeId}/${firstUser}`}>
       <div
