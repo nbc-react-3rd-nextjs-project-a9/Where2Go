@@ -1,8 +1,11 @@
 "use client";
 
+import { getUserDataByUserId } from "@/api/users";
 import Avatar from "@/components/Avatar";
 import Button from "@/components/Button";
+import { supabase } from "@/lib/supabase";
 import { cleanObj } from "@/utils/cleanseData";
+import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { MdPhotoCameraBack } from "react-icons/md";
@@ -23,7 +26,7 @@ const ProfileInfoRow = ({ title, children }: ProfileListItemProps) => {
 
 const UserProfile = () => {
   const newNicknameInput = useRef<HTMLInputElement>(null);
-  const params = useParams();
+  const { userId } = useParams<{ userId: string }>();
   const [editMode, setEditMode] = useState(false);
   const [newProfileImage, setNewProfileImage] = useState<File | null>(null);
   const [newNickname, setNewNickname] = useState<string>("");
@@ -35,6 +38,22 @@ const UserProfile = () => {
     reviews: 10,
     팔로잉여부: false
   };
+  console.log(userId);
+
+  const { data: userData } = useQuery({
+    queryKey: ["user"],
+    queryFn: () => getUserDataByUserId(userId)
+  });
+  console.log("유저데이터", userData);
+  // useEffect(() => {
+  //   const fetchUserData = async () => {
+  //     const {
+  //       data: { user }
+  //     } = await supabase.auth.getUser();
+  //     console.log("유저데이터", user);
+  //   };
+  //   fetchUserData();
+  // }, []);
 
   useEffect(() => {
     if (!editMode) return;
@@ -92,21 +111,24 @@ const UserProfile = () => {
             <input
               ref={newNicknameInput}
               type="text"
-              placeholder={mock.nickname}
+              placeholder={userData?.username}
               value={newNickname}
               onChange={(e) => setNewNickname(e.target.value)}
               className="rounded-md ring-2 ring-purple-100 outline-none px-2 focus:ring-purple-500"
             />
           </ProfileInfoRow>
         ) : (
-          <ProfileInfoRow title="닉네임">{mock.nickname}</ProfileInfoRow>
+          <>
+            <ProfileInfoRow title="닉네임">{userData?.username}</ProfileInfoRow>
+            <ProfileInfoRow title="이메일">{userData?.email}</ProfileInfoRow>
+          </>
         )}
         <div className="flex gap-8">
           <ProfileInfoRow title="팔로워">{mock.follower}</ProfileInfoRow>
           <ProfileInfoRow title="팔로잉">{mock.following}</ProfileInfoRow>
         </div>
         <ProfileInfoRow title="리뷰 수">{mock.reviews}</ProfileInfoRow>
-        {params.userId !== mock.myUserId ? (
+        {userId !== mock.myUserId ? (
           <div>
             {/* TODO : Optimistic Updates 적용해서 팔로잉 여부 확인하기 */}
             {mock.팔로잉여부 ? (
