@@ -56,7 +56,6 @@ const PostPage = () => {
   let publicUrls = [];
 
   if (placeReviewDataByUserId !== undefined && placeReviewDataByUserId[0]?.imageUrlList) {
-    console.log("이미지유알엘", placeReviewDataByUserId[0]?.imageUrlList);
     for (const url of placeReviewDataByUserId[0]?.imageUrlList) {
       console.log("url", url);
       const { data } = supabase.storage.from("placeReviewImg").getPublicUrl(url);

@@ -35,16 +35,7 @@ const PostCard = ({ data }: PostCardProps) => {
     };
     fetchFirstUserData();
   }, []);
-  // console.log("첫번째유저", firstUser);
-  // return (
-  //   <Link href={`/posts/${data.placeId}/${firstUser}`}>
-  //     <div
-  //       className={`w-[18rem] h-[24rem] border-purple-900  border-2 rounded-lg bg-center relative overflow-hidden`}
-  //       style={{ backgroundImage: `url(${publicUrl})` }}
-  //     >
-  //       <div className="absolute h-[5rem]  w-full bottom-0 px-4 py-4  text-white bg-black bg-opacity-25 backdrop-blur-sm">
-  //         <p className="font-bold text-lg">{data.placeName}</p>
-  //         <p className=" text-sm mt-1">{data.address}</p>
+
   return (
     <Link href={`/posts/${data.placeId}/${firstUser}`}>
       <div className="relative w-[12rem] h-[16rem]  mx-auto transition-all ring-2 ring-gray-100 rounded-lg  overflow-hidden shadow-md hover:ring-4 hover:ring-purple-500 ">

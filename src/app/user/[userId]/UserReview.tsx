@@ -5,6 +5,7 @@ import { mockPlaceData } from "@/data/mockPlace";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import { getPlaceReviewsDataByUserId } from "@/api/places";
+import PostReviewCardList from "@/components/PostReviewCardList";
 const UserReview = () => {
   const { userId } = useParams<{ userId: string }>();
   const { data: placeReviewList } = useQuery({
@@ -12,7 +13,7 @@ const UserReview = () => {
     queryFn: () => getPlaceReviewsDataByUserId(userId)
   });
   console.log("유저리뷰", placeReviewList);
-  return <PostCardList placeList={placeReviewList} />;
+  return <PostReviewCardList placeReviewList={placeReviewList} />;
 };
 
 export default UserReview;
