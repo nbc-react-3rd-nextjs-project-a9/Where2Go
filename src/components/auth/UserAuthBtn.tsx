@@ -12,7 +12,7 @@ interface Props {
 
 const AuthMenu = ({ logout }: Props) => {
   // const userId = "123";
-  const liClassName = "px-4 py-2 text-sm hover:bg-gray-300";
+  // const liClassName = "px-4 py-2 text-sm hover:bg-gray-300";
   const [userId, setUserId] = useState("");
 
   useEffect(() => {
@@ -26,16 +26,22 @@ const AuthMenu = ({ logout }: Props) => {
     };
     fetchUser();
   }, []);
+
+  const liClassName = "text-sm hover:bg-gray-300";
   return (
     <ul className="absolute mt-4 text-black text-start w-full z-20 top-full  right-0 bg-white rounded-md divide-y divide-divide-solid border-2 border-gray-300 cursor-pointer">
       <li className={`${liClassName}`}>
-        <Link href={`/user/${userId}`}>마이페이지</Link>
+        <Link href={`/user/${userId}`} className="block px-4 py-2 ">
+          마이페이지
+        </Link>
       </li>
       <li className={`${liClassName}`}>
-        <Link href={"/form"}>리뷰 작성하기</Link>
+        <Link href={"/form"} className="block px-4 py-2 ">
+          리뷰 작성하기
+        </Link>
       </li>
       <li
-        className={`${liClassName}`}
+        className={`${liClassName} block px-4 py-2 `}
         onClick={() => {
           console.log("로그아웃 동작");
           logout();
@@ -60,7 +66,7 @@ const UserAuthBtn = () => {
 
     const closeMenuTimer = setTimeout(() => {
       window.addEventListener("click", closeMenu);
-    });
+    }, 200);
 
     return () => {
       clearTimeout(closeMenuTimer);
