@@ -2,20 +2,23 @@
 import { getPlaceReviewsDataByPlaceName, getUserIdInPlaceReviewsDataByPlaceName } from "@/api/places";
 import { supabase } from "@/lib/supabase";
 import { useQuery } from "@tanstack/react-query";
-import Link from "next/link";
+
 import React, { useEffect, useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 
 interface PostCardProps {
   data: Place;
+  selectCaregory?: string | null;
 }
 
-// TODO : type 제대로 하기
 interface PostCardListProps {
-  // placeList: Place[] | undefined;
   placeList: Place[] | undefined | null;
+  selectCaregory?: string | null;
 }
 
 const PostCard = ({ data }: PostCardProps) => {
+  // console.log("data", data);
   const imagePath = data.imageUrl?.path;
   const storage = supabase.storage.from("placeReviewImg");
   const imageUrl = storage.getPublicUrl(imagePath);
@@ -33,33 +36,41 @@ const PostCard = ({ data }: PostCardProps) => {
     fetchFirstUserData();
   }, []);
   // console.log("첫번째유저", firstUser);
+  // return (
+  //   <Link href={`/posts/${data.placeId}/${firstUser}`}>
+  //     <div
+  //       className={`w-[18rem] h-[24rem] border-purple-900  border-2 rounded-lg bg-center relative overflow-hidden`}
+  //       style={{ backgroundImage: `url(${publicUrl})` }}
+  //     >
+  //       <div className="absolute h-[5rem]  w-full bottom-0 px-4 py-4  text-white bg-black bg-opacity-25 backdrop-blur-sm">
+  //         <p className="font-bold text-lg">{data.placeName}</p>
+  //         <p className=" text-sm mt-1">{data.address}</p>
   return (
     <Link href={`/posts/${data.placeId}/${firstUser}`}>
-      <div
-        className={`w-[18rem] h-[24rem] border-purple-900  border-2 rounded-lg bg-center relative overflow-hidden`}
-        style={{ backgroundImage: `url(${publicUrl})` }}
-      >
-        <div className="absolute h-[5rem]  w-full bottom-0 px-4 py-4  text-white bg-black bg-opacity-25 backdrop-blur-sm">
-          <p className="font-bold text-lg">{data.placeName}</p>
-          <p className=" text-sm mt-1">{data.address}</p>
+      <div className="relative w-[12rem] h-[16rem]  mx-auto transition-all ring-2 ring-gray-100 rounded-lg  overflow-hidden shadow-md hover:ring-4 hover:ring-purple-500 ">
+        <Image src={publicUrl} alt="Picture of the author" fill={true} sizes="12rem" />
+        <div className="absolute h-[4rem]  w-full bottom-0 p-2  text-white bg-black bg-opacity-25 backdrop-blur-sm">
+          <p className="font-bold text-md whitespace-nowrap text-ellipsis overflow-hidden">{data.placeName}</p>
+          <p className=" text-xs mt-1 whitespace-nowrap text-ellipsis overflow-hidden">{data.address}</p>
         </div>
-        카드
       </div>
     </Link>
   );
 };
 
-const PostCardList = ({ placeList }: PostCardListProps) => {
-  // TODO : post card List 목데이터 만들어서 추가하기
-  // TODO : 미디어 쿼리 적용해서 1개 남았을 땐 li 태그에 mx-auto 붙여주기
-  const testData = ["1", "2", "3", "4"];
-
+const PostCardList = ({ placeList, selectCaregory }: PostCardListProps) => {
+  const filteredPlaceList = (): Place[] | undefined | null => {
+    if (selectCaregory === "전체" || selectCaregory === null) return placeList;
+    else {
+      return placeList?.filter((n) => n.category === selectCaregory);
+    }
+  };
   return (
     <div>
-      <ul className="flex flex-wrap justify-between gap-12">
-        {placeList?.map((n, i) => (
-          <li key={`testPostCard-${i}`} className="">
-            <PostCard data={n} />
+      <ul className="grid xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6  grid-cols-2  gap-y-4 ">
+        {filteredPlaceList()?.map((n) => (
+          <li key={`postCard-${n.placeId}`} className={``}>
+            <PostCard data={n} selectCaregory={selectCaregory} />
           </li>
         ))}
       </ul>

@@ -7,6 +7,12 @@ const nextConfig = {
         hostname: "dummyimage.com",
         port: "",
         pathname: "/**"
+      },
+      {
+        protocol: "https",
+        hostname: "cojgljiqpitvuwdvnmgf.supabase.co",
+        port: "",
+        pathname: "/**"
       }
     ]
   }
