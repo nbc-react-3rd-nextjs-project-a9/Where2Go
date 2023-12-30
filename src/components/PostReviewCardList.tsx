@@ -46,9 +46,9 @@ const PostReviewCard = ({ placeData }: PostReviewCardProps) => {
 const PostReviewCardList = ({ placeReviewList }: Props) => {
   return (
     <div>
-      <ul className="flex flex-wrap justify-between gap-12">
+      <ul className="grid xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6  grid-cols-2  gap-y-4">
         {placeReviewList?.map((n, i) => (
-          <li key={`testPostCard-${i}`} className="">
+          <li key={`PostReviewCard-${i}`} className="">
             <PostReviewCard placeData={n} />
           </li>
         ))}
