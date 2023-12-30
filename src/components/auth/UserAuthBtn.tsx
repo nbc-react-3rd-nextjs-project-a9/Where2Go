@@ -55,7 +55,7 @@ const UserAuthBtn = () => {
   }, [openMenu]);
   return (
     <>
-      <div className="relative min-w-[10rem]">
+      <div className="relative min-w-[10rem] flex justify-end">
         {login ? (
           <Avatar size="sm" onClick={() => setOpenMenu(true)} />
         ) : (
