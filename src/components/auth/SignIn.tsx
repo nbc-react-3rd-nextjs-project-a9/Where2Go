@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import { signInWithKakao, checkAuth } from "./authService";
 import Button from "@/components/Button";
+import { VscChromeClose } from "react-icons/vsc";
 
 import { useUserInfoStore } from "@/store/userInfoStore";
 
@@ -46,6 +47,9 @@ const SignIn = ({ login, setLogin }: Props) => {
     <div>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 ">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm p-8 border-solid border-2 ">
+          <div className="mb-2">
+            <VscChromeClose className="ml-[300px]" />
+          </div>
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
             <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
               로그인하고
@@ -109,7 +113,7 @@ const SignIn = ({ login, setLogin }: Props) => {
             </form>
 
             <div>
-              <p onClick={() => setLogin(!login)} className="mt-8 text-center text-sm text-gray-500">
+              <p onClick={() => setLogin(!login)} className="mb-6 mt-8 text-center text-sm text-gray-500">
                 회원가입 하기
               </p>
             </div>

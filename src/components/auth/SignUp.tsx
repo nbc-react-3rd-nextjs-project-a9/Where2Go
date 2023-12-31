@@ -2,7 +2,8 @@
 import React, { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import Button from "@/components/Button";
-import { User } from "@supabase/supabase-js";
+import { VscChromeClose } from "react-icons/vsc";
+import { useUserInfoStore } from "@/store/userInfoStore";
 
 interface Props {
   login: boolean;
@@ -14,7 +15,28 @@ const SignUp = ({ login, setLogin }: Props) => {
   const [id, setId] = useState<string>("");
   const [pw, setPw] = useState<string>("");
   const [pwCheck, setPwCheck] = useState<string>("");
-  const [nickname, setNickname] = useState<string>("");
+  const [name, setName] = useState<string>("");
+
+  const { nickname, avatar_url, uid, getUID, updateName, updateAvatar } = useUserInfoStore();
+
+  //이메일 형식 유효성 체크
+  const pattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;
+  const emailValidChk = () => {
+    if (pattern.test(id) === false) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  //supabase userinfo 테이블에서 정보 가져와서 userInfoStore에 저장
+  async function getUserInfo(userId: string) {
+    const { data, error } = await supabase.from("userinfo").select().eq("id", userId);
+    const fetchData = data![0];
+    getUID(userId);
+    updateAvatar(fetchData.avatar_url);
+    updateName(fetchData.username);
+  }
 
   async function signUpNewUser(e: React.FormEvent) {
     e.preventDefault();
@@ -23,20 +45,28 @@ const SignUp = ({ login, setLogin }: Props) => {
       password: pw,
       options: {
         data: {
-          user_name: nickname,
+          user_name: name,
           avatar_url: null
         }
       }
     });
 
     console.log(data || error);
-    setLogin(!login);
+    // setLogin(!login);
+    let userInfo = JSON.parse(localStorage.getItem("sb-fatcfzssyzoiskrplehv-auth-token") || "");
+    // console.log(userInfo.user.id);
+
+    //userInfoStore에 유저 정보 저장
+    getUserInfo(userInfo.user.id);
   }
 
   return (
     <div>
       <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 ">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm p-8 border-solid border-2 ">
+          <div className="mb-2">
+            <VscChromeClose className="ml-[300px]" />
+          </div>
           <div className="sm:mx-auto sm:w-full sm:max-w-sm">
             <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">회원가입</h2>
           </div>
@@ -45,7 +75,12 @@ const SignUp = ({ login, setLogin }: Props) => {
             <form className="space-y-6" onSubmit={signUpNewUser}>
               <div>
                 <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-                  Email address
+                  Email address{" "}
+                  {emailValidChk() ? (
+                    <span>✅</span>
+                  ) : (
+                    <span className="text-xs text-red-600"> 이메일 형식이 유효하지 않습니다.</span>
+                  )}
                 </label>
                 <div className="mt-2">
                   <input
@@ -63,7 +98,12 @@ const SignUp = ({ login, setLogin }: Props) => {
               <div>
                 <div className="flex items-center justify-between">
                   <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
-                    Password
+                    Password{" "}
+                    {pw.length < 6 ? (
+                      <span className="text-xs text-red-600"> 6자리 이상 입력하세요</span>
+                    ) : (
+                      <span> ✅</span>
+                    )}
                   </label>
                 </div>
                 <div className="mt-2">
@@ -82,7 +122,12 @@ const SignUp = ({ login, setLogin }: Props) => {
               <div>
                 <div className="flex items-center justify-between">
                   <label htmlFor="pwConfirm" className="block text-sm font-medium leading-6 text-gray-900">
-                    Password 확인
+                    Password 확인{" "}
+                    {pw !== pwCheck ? (
+                      <span className="text-xs text-red-600">비밀번호가 일치하지 않습니다.</span>
+                    ) : (
+                      <span>✅</span>
+                    )}
                   </label>
                 </div>
                 <div className="mt-2">
@@ -100,18 +145,18 @@ const SignUp = ({ login, setLogin }: Props) => {
 
               <div>
                 <div className="flex items-center justify-between">
-                  <label htmlFor="nickname" className="block text-sm font-medium leading-6 text-gray-900">
+                  <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
                     Username
                   </label>
                 </div>
                 <div className="mt-2">
                   <input
-                    id="nickname"
-                    name="nickname"
-                    type="nickname"
+                    id="name"
+                    name="name"
+                    type="name"
                     required
                     className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                    onChange={(e) => setNickname(e.target.value)}
+                    onChange={(e) => setName(e.target.value)}
                     placeholder="  where2go에서 사용할 이름을 입력하세요"
                   />
                 </div>
@@ -119,13 +164,13 @@ const SignUp = ({ login, setLogin }: Props) => {
 
               <div>
                 <Button type="submit" size="md" className="sm:mx-auto sm:w-full sm:max-w-sm mb-8 mt-2">
-                  SignUp
+                  SignUp & Login
                 </Button>
               </div>
             </form>
 
             <div>
-              <p onClick={() => setLogin(!login)} className="text-center text-sm text-gray-500">
+              <p onClick={() => setLogin(!login)} className="mb-6 text-center text-sm text-gray-500">
                 로그인 하기
               </p>
             </div>
