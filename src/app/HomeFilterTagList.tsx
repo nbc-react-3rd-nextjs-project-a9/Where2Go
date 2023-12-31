@@ -17,6 +17,15 @@ interface FilterTagListProps {
 }
 
 const FilterTag = ({ value, category, onChange }: FilterTagProps) => {
+  const defaultChecked = () => {
+    const checkCategory = (value: string | null): boolean => {
+      const categories: CategoryType[] = ["카페", "아웃도어", "레스토랑", "미술관", "공원", "기타"];
+      return categories.includes(value as CategoryType);
+    };
+    if (!category || !checkCategory(category)) {
+      return value === "전체";
+    } else return value === category;
+  };
   return (
     <>
       <label
@@ -29,7 +38,7 @@ const FilterTag = ({ value, category, onChange }: FilterTagProps) => {
           type="radio"
           name={`filterTag`}
           id={`filterTag-${value}`}
-          defaultChecked={value === category}
+          defaultChecked={defaultChecked()}
           value={value}
           onChange={onChange}
         />
