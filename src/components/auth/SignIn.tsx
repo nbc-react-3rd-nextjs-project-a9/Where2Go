@@ -1,8 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { signInWithKakao, signOut } from "./authService";
+import { signInWithKakao, checkAuth } from "./authService";
 import Button from "@/components/Button";
+
+import { useUserInfoStore } from "@/store/userInfoStore";
 
 interface Props {
   login: boolean;
@@ -10,22 +12,35 @@ interface Props {
 }
 
 const SignIn = ({ login, setLogin }: Props) => {
-  // console.log(login, setLogin);
-  // setLogin(!login);
+  const { nickname, avatar_url, uid, getUID, updateName, updateAvatar } = useUserInfoStore();
+
   const [id, setId] = useState<string>("");
   const [pw, setPw] = useState<string>("");
 
-  async function signInWithEmail(e: React.FormEvent) {
+  //supabase userinfo 테이블에서 정보 가져와서 userInfoStore에 저장
+  async function getUserInfo(userId: string) {
+    const { data, error } = await supabase.from("userinfo").select().eq("id", userId);
+    const fetchData = data![0];
+    getUID(userId);
+    updateAvatar(fetchData.avatar_url);
+    updateName(fetchData.username);
+  }
+
+  const signInWithEmail = async (e: React.FormEvent) => {
     e.preventDefault();
     const { data, error } = await supabase.auth.signInWithPassword({
       email: id,
       password: pw
     });
-    console.log(data || error);
 
-    setId("");
-    setPw("");
-  }
+    checkAuth();
+    //로컬스토리지에 저장되는 user 정보에서 uid 가져오기
+    let userInfo = JSON.parse(localStorage.getItem("sb-fatcfzssyzoiskrplehv-auth-token") || "");
+    // console.log(userInfo.user.id);
+
+    //userInfoStore에 유저 정보 저장
+    getUserInfo(userInfo.user.id);
+  };
 
   return (
     <div>
@@ -40,7 +55,7 @@ const SignIn = ({ login, setLogin }: Props) => {
           </div>
 
           <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-sm">
-            <form className="space-y-6" onSubmit={signInWithEmail}>
+            <form className="space-y-6">
               <div>
                 <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                   Email address
@@ -78,7 +93,12 @@ const SignIn = ({ login, setLogin }: Props) => {
               </div>
 
               <div className="flex flex-col">
-                <Button type="submit" size="md" className="sm:mx-auto sm:w-full sm:max-w-sm mb-4 mt-2">
+                <Button
+                  onClick={signInWithEmail}
+                  type="submit"
+                  size="md"
+                  className="sm:mx-auto sm:w-full sm:max-w-sm mb-4 mt-2"
+                >
                   login
                 </Button>
 
@@ -87,10 +107,6 @@ const SignIn = ({ login, setLogin }: Props) => {
                 </button>
               </div>
             </form>
-
-            {/* <Button size="md" className="sm:mx-auto sm:w-full sm:max-w-sm" onClick={signInWithKakao}>
-                카카오 계정으로 로그인
-              </Button> */}
 
             <div>
               <p onClick={() => setLogin(!login)} className="mt-8 text-center text-sm text-gray-500">
