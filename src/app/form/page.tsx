@@ -81,8 +81,8 @@ const FormPage = () => {
             placeName: info.content,
             address: info.address,
             latlng: info.position,
-            imageUrl: imageFiles[0]
-            // placeId: placeId
+            imageUrl: imageFiles[0],
+            category: categoryValue
           }
         ]);
 

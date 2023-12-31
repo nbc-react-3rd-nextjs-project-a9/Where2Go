@@ -30,7 +30,7 @@ interface Place {
 interface PlaceReview {
   placeReviewId: string;
   content: string;
-  imageUrlList: Image[];
+  imageUrlList: string[];
   visitedAt: Date;
   category: string;
   placeName: string;
