@@ -7,11 +7,11 @@ function checkAuth() {
     if (event === "SIGNED_IN") {
       //로그인 시
       console.log("SIGNED_IN", session?.user.id);
-      session ? sessionStorage.setItem("uid", session.user.id) : console.log("error");
+      // session ? sessionStorage.setItem("uid", session.user.id) : console.log("error");
     } else if (event === "SIGNED_OUT") {
       //로그아웃 시
       console.log("SIGNED_OUT", session);
-      sessionStorage.removeItem("uid");
+      // sessionStorage.removeItem("uid");
     }
   });
 }

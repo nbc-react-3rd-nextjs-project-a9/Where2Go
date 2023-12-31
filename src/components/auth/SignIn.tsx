@@ -17,10 +17,9 @@ const SignIn = ({ login, setLogin }: Props) => {
   const [id, setId] = useState<string>("");
   const [pw, setPw] = useState<string>("");
 
-  //userinfo 테이블에서 정보 가져오기
+  //supabase userinfo 테이블에서 정보 가져와서 userInfoStore에 저장
   async function getUserInfo(userId: string) {
     const { data, error } = await supabase.from("userinfo").select().eq("id", userId);
-    // console.log(data![0]);
     const fetchData = data![0];
     getUID(userId);
     updateAvatar(fetchData.avatar_url);
@@ -33,11 +32,14 @@ const SignIn = ({ login, setLogin }: Props) => {
       email: id,
       password: pw
     });
-    // console.log(data || error);
+
     checkAuth();
-    let userId = sessionStorage.getItem("uid") || "";
-    getUserInfo(userId);
-    console.log(nickname, avatar_url, uid);
+    //로컬스토리지에 저장되는 user 정보에서 uid 가져오기
+    let userInfo = JSON.parse(localStorage.getItem("sb-fatcfzssyzoiskrplehv-auth-token") || "");
+    // console.log(userInfo.user.id);
+
+    //userInfoStore에 유저 정보 저장
+    getUserInfo(userInfo.user.id);
   };
 
   return (

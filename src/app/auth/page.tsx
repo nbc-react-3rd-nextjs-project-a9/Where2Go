@@ -8,18 +8,25 @@ import { useUserInfoStore } from "@/store/userInfoStore";
 import { signOut, checkAuth } from "@/components/auth/authService";
 
 const authPage = () => {
-  const { uid, nickname, updateName, updateAvatar, resetUser, getUID } = useUserInfoStore();
+  const { uid, nickname, avatar_url, updateName, updateAvatar, resetUser, getUID } = useUserInfoStore();
 
   const [login, setLogin] = useState<boolean>(true);
 
   return (
     <div>
       {login ? <SignIn login={login} setLogin={setLogin} /> : <SignUp login={login} setLogin={setLogin} />}
-      <button onClick={signOut}>logout</button>
+      <button
+        onClick={() => {
+          signOut();
+          resetUser();
+        }}
+      >
+        logout
+      </button>
       <br />
       <button onClick={checkAuth}>check</button>
       <br />
-      <button onClick={() => console.log(uid)}>store</button>
+      <button onClick={() => console.log(uid, nickname, avatar_url)}>store</button>
     </div>
   );
 };
