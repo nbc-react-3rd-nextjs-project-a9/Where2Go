@@ -5,18 +5,20 @@ import { Virtual, Navigation, Pagination } from "swiper/modules";
 import { Swiper, SwiperSlide, useSwiperSlide } from "swiper/react";
 import { v4 as uuidv4 } from "uuid";
 import Avatar from "@/components/Avatar";
-import { useSearchParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
+import Link from "next/link";
 
 interface Props {
-  avatarList: User[];
+  avatarList: any[] | null | undefined;
 }
 
 const AvatarCarousel = ({ avatarList }: Props) => {
   const [swiperRef, setSwiperRef] = useState<any>(null);
   const swiperSlide = useSwiperSlide();
+  const { placeId } = useParams();
 
   const slideTo = (index: number) => {
     swiperRef.slideTo(index - 1, 0);
@@ -46,15 +48,18 @@ const AvatarCarousel = ({ avatarList }: Props) => {
         navigation={true}
         virtual
       >
-        {avatarList.map((data, index) => (
+        {avatarList?.map((data, index) => (
           <SwiperSlide key={uuidv4()} virtualIndex={index} className="py-4 px-4">
-            <Avatar
-              size="md"
-              src={data.imageUrl.url}
-              className="hover:scale-110"
-              // onClick={() => onClickAvatar(n)}
-              onClick={() => console.log(1)}
-            />
+            <Link href={`/posts/${placeId}/${data.id}`}>
+              <Avatar
+                size="md"
+                // src={data.imageUrl.url}
+                className="hover:scale-110"
+                // onClick={() => onClickAvatar(n)}
+                onClick={() => console.log(1)}
+              />
+              <p>{data.username}</p>
+            </Link>
           </SwiperSlide>
         ))}
       </Swiper>

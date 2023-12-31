@@ -7,22 +7,20 @@ import Section from "@/components/layout/Section";
 import { mockUserData } from "@/data/mockUser";
 import React, { useEffect, useState } from "react";
 import AvatarCarousel from "./AvatarCarousel";
-import Bookmark from "@/app/posts/[placeId]/Bookmark";
+import Bookmark from "@/app/posts/[placeId]/[userId]/Bookmark";
 import { CiShare2 } from "react-icons/ci";
 import { supabase } from "@/lib/supabase";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { getPlaceDataByPlaceId, getPlaceReviewsDataByPlaceName } from "@/api/places";
+import { getPlaceDataByPlaceId, getPlaceReviewsDataByPlaceName, getUserDataByUserIds } from "@/api/places";
 import MapContainer from "@/components/map/MapContainer";
 
 const PostPage = () => {
   const [selectUserData, setSelectUserData] = useState<User>();
-  // const [placeData, setPlaceData] = useState<Place[]>();
-  // const [placeReviewData, setPlaceReviewData] = useState<PlaceReview[]>();
-  const { placeId } = useParams();
+  const { placeId, userId } = useParams();
 
   console.log(placeId);
-  console.log("목유저데이터", mockUserData);
+  // console.log("목유저데이터", mockUserData);
 
   const onClickAvatar = (data: User) => {
     setSelectUserData(data);
@@ -31,7 +29,6 @@ const PostPage = () => {
     setSelectUserData(mockUserData[0]);
   }, []);
 
-  // lat, lng 데이터 받아오는 부분
   const { data: placeData, isLoading: isPlaceDataLoading } = useQuery({
     queryKey: ["place"],
     queryFn: () => getPlaceDataByPlaceId(placeId)
@@ -39,11 +36,33 @@ const PostPage = () => {
   console.log("플레이스데이터 한개", placeData);
 
   const { data: placeReviewData, isLoading: isPlaceReviewDataLoading } = useQuery({
-    queryKey: ["placeReviews"],
+    queryKey: ["placeReview"],
     queryFn: () => getPlaceReviewsDataByPlaceName(placeData.placeName),
-    enabled: !!placeData // placeData가 존재할 때에만 쿼리 실행
+    enabled: !!placeData
   });
   console.log("플레이스 리뷰 데이타!", placeReviewData);
+  const userIds = placeReviewData?.map((data) => data.userId) || [];
+  console.log("userIds", userIds);
+
+  const { data: userData } = useQuery({
+    queryKey: ["users"],
+    queryFn: () => getUserDataByUserIds(userIds),
+    enabled: !!userIds
+  });
+  console.log("유저데이터에용", userData);
+
+  const placeReviewDataByUserId = placeReviewData?.filter((data) => data.userId === userId);
+  console.log("플레이스 리뷰데이터 바이 유저아이디", placeReviewDataByUserId);
+  let publicUrls = [];
+
+  if (placeReviewDataByUserId !== undefined && placeReviewDataByUserId[0]?.imageUrlList) {
+    for (const url of placeReviewDataByUserId[0]?.imageUrlList) {
+      console.log("url", url);
+      const { data } = supabase.storage.from("placeReviewImg").getPublicUrl(url);
+      publicUrls.push(data.publicUrl);
+    }
+  }
+
   if (isPlaceDataLoading || isPlaceReviewDataLoading) {
     return <div>로딩 중...</div>;
   }
@@ -51,7 +70,7 @@ const PostPage = () => {
     <>
       <div className="relative">
         <Bookmark />
-        <Carousel />
+        <Carousel urls={publicUrls} />
         <div className="flex w-full px-4 py-4 text-white justify-between items-center absolute bottom-0 z-10 backdrop-blur-sm  backdrop-contrast-75">
           <h1 className="font-bold text-2xl">{placeData?.placeName}</h1>
           <div>
@@ -64,9 +83,9 @@ const PostPage = () => {
           </div>
         </div>
       </div>
-      <div className="container mx-auto">
+      <div className="">
         <Section title="다녀간 사람들">
-          <AvatarCarousel avatarList={mockUserData} />
+          <AvatarCarousel avatarList={userData} />
         </Section>
         <Section title="리뷰">
           {!!selectUserData ? (
@@ -90,7 +109,7 @@ const PostPage = () => {
                   </>
                 )}
               </div>
-              <p className="">{placeReviewData && placeReviewData[0]?.content}</p>
+              <p className="">{placeReviewDataByUserId && placeReviewDataByUserId[0]?.content}</p>
             </>
           ) : (
             <></>
