@@ -30,10 +30,7 @@ const SignUp = ({ login, setLogin }: Props) => {
     });
 
     console.log(data || error);
-    setId("");
-    setPw("");
-    setPwCheck("");
-    setNickname("");
+    setLogin(!login);
   }
 
   return (
