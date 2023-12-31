@@ -1,19 +1,22 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import React from "react";
 
 interface FilterTagProps {
   value: string;
+  category: string | null;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 interface FilterTagListProps {
   list: string[];
+  category: string | null;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   className?: string;
 }
 
-const FilterTag = ({ value, onChange }: FilterTagProps) => {
+const FilterTag = ({ value, category, onChange }: FilterTagProps) => {
   return (
     <>
       <label
@@ -26,7 +29,7 @@ const FilterTag = ({ value, onChange }: FilterTagProps) => {
           type="radio"
           name={`filterTag`}
           id={`filterTag-${value}`}
-          defaultChecked={value === "전체"}
+          defaultChecked={value === category}
           value={value}
           onChange={onChange}
         />
@@ -35,14 +38,18 @@ const FilterTag = ({ value, onChange }: FilterTagProps) => {
   );
 };
 
-const FilterTagList = ({ list, onChange, className }: FilterTagListProps) => {
+const HomeFilterTagList = ({ list, category, className }: FilterTagListProps) => {
+  const router = useRouter();
+  const onChange = (category: string) => {
+    router.push(`?category=${category}`, { scroll: false });
+  };
   return (
     <div className={`flex flex-row gap-2 flex-wrap ${className}`}>
       {list.map((n) => (
-        <FilterTag value={n} key={n} onChange={onChange} />
+        <FilterTag value={n} key={n} category={category} onChange={() => onChange(n)} />
       ))}
     </div>
   );
 };
 
-export default FilterTagList;
+export default HomeFilterTagList;
