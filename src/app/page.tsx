@@ -1,39 +1,57 @@
-"use client";
 import Carousel from "@/components/Carousel";
-import FilterTagList from "@/components/filterTag/FilterTagList";
 import PostCardList from "@/components/PostCardList";
 import Section from "@/components/layout/Section";
-import { mockPlaceData } from "@/data/mockPlace";
-import useTag from "@/hooks/useTag";
-import { categoryTagList, filterTagList } from "@/data/tagData";
-import { supabase } from "@/lib/supabase";
-import { useEffect, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import { getPlaceData } from "@/api/places";
+import { categoryTagList } from "@/data/tagData";
+import HomeFilterTagList from "./HomeFilterTagList";
 
-export default function Home() {
-  const [categoryValue, onChangeCategory] = useTag();
-  const [filterTagListValue, onChangefilterTag] = useTag();
-  const [placeData, setPlaceData] = useState<Place[]>();
-  const { data } = useQuery({ queryKey: ["places"], queryFn: getPlaceData });
+interface Props {
+  searchParams: {
+    category: string | null;
+  };
+}
 
+const getPlaceData = async (category: string | null = null) => {
+  /**
+   * 쿼리스트링의 category가 CategoryType에 있는지 확인하는 함수
+   * @param value 쿼리스트링
+   * @returns 쿼리스트링이 CategoryType이 맞는지 확인
+   */
+  const checkCategory = (value: string | null): boolean => {
+    const categories: CategoryType[] = ["카페", "아웃도어", "레스토랑", "미술관", "공원", "기타"];
+    return categories.includes(value as CategoryType);
+  };
+
+  let api = "http://localhost:3000/api/places";
+  if (checkCategory(category)) {
+    api += `?category=${category}`;
+  }
+  const res = await fetch(api);
+  const data = await res.json();
+  return data;
+};
+
+const Home = async ({ searchParams }: Props) => {
+  const { category } = searchParams;
+  const placesData: Place[] = await getPlaceData(category);
+  // const filteredData = data?.filter((item) => item.category === categoryValue);
+
+  const urls = [
+    "https://dummyimage.com/1700x400/616161/fff&text=image",
+    "https://dummyimage.com/170x400/616161/fff&text=image,"
+  ];
   return (
     <>
-      <div className="">
-        <Section title="Editor's Pick">{<Carousel />}</Section>
-
-        <Section title="내 근처 핫플">
-          {
-            <>
-              <div className="flex my-4">
-                <FilterTagList list={categoryTagList} onChange={onChangeCategory} />
-                <FilterTagList list={filterTagList} onChange={onChangefilterTag} className={"ml-auto"} />
-              </div>
-              <PostCardList placeList={data} />
-            </>
-          }
-        </Section>
-      </div>
+      <Section title="Editor's Pick">
+        <Carousel urls={urls} />
+      </Section>
+      <Section title="내 근처 핫플">
+        <div>
+          <HomeFilterTagList list={categoryTagList} category={category} className="my-4" />
+          <PostCardList placeList={placesData} />
+        </div>
+      </Section>
     </>
   );
-}
+};
+
+export default Home;

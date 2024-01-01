@@ -1,5 +1,3 @@
-"use client";
-
 type ReturnType = [string | null, (e: React.ChangeEvent<HTMLInputElement>) => void];
 
 import { useState } from "react";
