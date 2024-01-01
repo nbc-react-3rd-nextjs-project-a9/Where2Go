@@ -58,6 +58,10 @@ const PostPage = () => {
   const placeReviewDataByUserId = placeReviewData?.filter((data) => data.userId === userId);
   console.log("플레이스 리뷰데이터 바이 유저아이디", placeReviewDataByUserId);
 
+  // 같은 장소에 리뷰를 쓴 유저들 중 현재 페이지에 맞는 user 정보
+  const selectedUser = userData?.find((user) => user.id === userId);
+  console.log("selected User", selectedUser);
+
   let publicUrls = [];
 
   if (placeReviewDataByUserId !== undefined && placeReviewDataByUserId[0]?.imageUrlList) {
@@ -98,8 +102,8 @@ const PostPage = () => {
           {!!selectUserData ? (
             <>
               <div className="flex flex-row items-center gap-4 mb-4">
-                <Avatar size="sm" src={selectUserData.imageUrl.url} />
-                <p className="font-bold min-w-[5rem]">{selectUserData.nickname}</p>
+                <Avatar size="sm" src={selectedUser.avatar_url} />
+                <p className="font-bold min-w-[5rem]">{selectedUser.username}</p>
                 {/* TODO : 유저가 나인지 아닌지 확인하고 작업 ㄱㄱ */}
                 {true ? (
                   <Button size="sm" onClick={() => console.log(1)}>
