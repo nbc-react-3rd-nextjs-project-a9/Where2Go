@@ -35,6 +35,7 @@ const PostPage = () => {
     queryFn: () => getPlaceDataByPlaceId(placeId)
   });
   console.log("플레이스데이터 한개", placeData);
+
   // queryKey 추가
   const { data: placeReviewData, isLoading: isPlaceReviewDataLoading } = useQuery({
     queryKey: ["placeReview", placeData],
@@ -42,8 +43,10 @@ const PostPage = () => {
     enabled: !!placeData
   });
   console.log("플레이스 리뷰 데이타!", placeReviewData);
+
   const userIds = placeReviewData?.map((data) => data.userId) || [];
   console.log("userIds", userIds);
+
   // isLoading 옵션 추가, queryKey 추가
   const { data: userData, isLoading: isUserDataLoading } = useQuery({
     queryKey: ["users", placeReviewData],
@@ -51,6 +54,7 @@ const PostPage = () => {
     enabled: !!userIds
   });
   console.log("유저데이터에용", userData);
+
   const placeReviewDataByUserId = placeReviewData?.filter((data) => data.userId === userId);
   console.log("플레이스 리뷰데이터 바이 유저아이디", placeReviewDataByUserId);
 
@@ -64,6 +68,7 @@ const PostPage = () => {
     }
   }
   console.log("publicUrls", publicUrls);
+
   if (isPlaceDataLoading || isPlaceReviewDataLoading || isUserDataLoading) {
     return <div>로딩 중...</div>;
   }
