@@ -4,7 +4,7 @@ import React from "react";
 const SearchResultsBox = ({ keywords }: { keywords: Marker[] }) => {
   const setInfo = useMapStore((state) => state.setInfo);
   return (
-    <div className="absolute top-[5px] left-[5px] z-10 w-[250px] h-[300px] overflow-auto bg-slate-50/70 cursor-pointer flex flex-col gap-1">
+    <div className="absolute top-[5px] left-[5px] z-10 w-[250px] h-[300px] overflow-auto bg-slate-50/70 flex flex-col gap-1">
       {keywords.map((keyword) => {
         return (
           <div

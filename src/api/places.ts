@@ -12,7 +12,7 @@ export const getPlaceDataByPlaceId = async (placeId: string | string[]) => {
   return data;
 };
 
-export const getPlaceReviewsDataByPlaceName = async (placeName: string) => {
+export const getPlaceReviewsDataByPlaceName = async (placeName: string): Promise<any[] | null> => {
   const { data } = await supabase.from("placeReview").select().eq("placeName", placeName);
   return data;
 };
@@ -32,7 +32,7 @@ export const getUserIdInPlaceReviewsDataByPlaceName = async (placeName: string) 
   return data;
 };
 
-export const getUserDataByUserIds = async (userIds: any[]) => {
+export const getUserDataByUserIds = async (userIds: any[]): Promise<any[] | null> => {
   const { data } = await supabase.from("userinfo").select().in("id", userIds);
   return data;
 };
