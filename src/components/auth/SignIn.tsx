@@ -23,8 +23,8 @@ const SignIn = ({ login, setLogin, setOpen }: Props) => {
     const { data, error } = await supabase.from("userinfo").select().eq("id", userId);
     const fetchData = data![0];
     sessionStorage.setItem("uid", userId);
-    sessionStorage.setItem("username", fetchData.username);
-    sessionStorage.setItem("nickname", fetchData.avatar_url);
+    sessionStorage.setItem("nickname", fetchData.username);
+    sessionStorage.setItem("avatar_url", fetchData.avatar_url);
   }
 
   const signInWithEmail = async (e: React.FormEvent) => {

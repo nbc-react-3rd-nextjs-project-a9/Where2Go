@@ -52,6 +52,7 @@ const UserProfile = () => {
     queryFn: () => getUserDataByUserId(userId)
   });
   console.log("유저데이터", userData);
+
   // useEffect(() => {
   //   const fetchUserData = async () => {
   //     const {
@@ -81,24 +82,64 @@ const UserProfile = () => {
     setEditMode(false);
   };
 
-  const updateProfile = () => {
+  const updateProfile = async () => {
     const data = cleanObj({
+      // const newData = cleanObj({
       image: newProfileImage,
       nickname: newNickname
     });
 
     // TODO : supabase로 업로드하기
     console.log("❗supabase로 업로드하기");
-    // const { data, error } = await supabase.auth.updateUser({
-    //   data: { hello: "world" }
-    // });
-    console.log(data);
+    //프로필 이미지 수정 시
+    if (newProfileImage !== null) {
+      //이미지 파일 스토리지(newProfileImage)에 업로드
+      const { data: fileData, error: fileError } = await supabase.storage
+        .from("userProfileImg")
+        .upload(`${newProfileImage.name}`, newProfileImage);
+      if (fileError) {
+        console.error("이미지 업로드 중 오류 발생:", fileError.message);
+        return;
+      }
+      const newAvatarUrl = fileData.path;
+      console.log(newAvatarUrl);
+      // userInfo 테이블 업데이트
+      const { error } = await supabase.from("userinfo").update({ avatar_url: newAvatarUrl }).eq("id", curUserId);
+      console.log(error);
+      // 세션스토리지 업데이트
+      sessionStorage.setItem("avatar_url", newAvatarUrl);
+      setEditMode(false);
+    }
+
+    //닉네임 수정 시
+    if (newNickname !== "") {
+      const { error: nameError } = await supabase
+        .from("userinfo")
+        .update({ username: newNickname })
+        .eq("id", curUserId);
+      console.log(nameError);
+      // 세션스토리지 업데이트
+      sessionStorage.setItem("nickname", newNickname);
+    }
+
+    // cancelEditMode();
+  };
+
+  const avatarUrl = (): null | string => {
+    const imagePath = userData?.avatar_url;
+    if (imagePath === null) return null;
+    const storage = supabase.storage.from("userProfileImg");
+    const imageUrl = storage.getPublicUrl(imagePath);
+    const publicUrl = imageUrl.data.publicUrl;
+    return publicUrl;
   };
 
   return (
     <div className="flex flex-row items-center gap-8">
       <div className="relative">
-        <Avatar size="lg" src={newProfileImage && URL.createObjectURL(newProfileImage)} />
+        {/* <Avatar size="lg" src={newProfileImage && URL.createObjectURL(newProfileImage)} /> */}
+        <Avatar size="lg" src={(newProfileImage && URL.createObjectURL(newProfileImage)) || avatarUrl()} />
+
         {editMode && (
           <>
             <label className="absolute top-0 w-full h-full flex flex-col justify-center items-center text-white transition-opacity cursor-pointer rounded-full backdrop-blur-sm backdrop-brightness-50 opacity-0 hover:opacity-100">
