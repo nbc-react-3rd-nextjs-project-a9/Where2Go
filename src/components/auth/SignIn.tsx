@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { supabase } from "@/lib/supabase";
-import { signInWithKakao, checkAuth, getUserInfo } from "./authService";
+import { signInWithKakao, checkAuth, getUserInfo, emailValidChk } from "./authService";
 import Button from "@/components/Button";
 import { VscChromeClose } from "react-icons/vsc";
 import useLogedInStore from "@/store/logedInStore";
@@ -15,6 +15,7 @@ interface Props {
 const SignIn = ({ login, setLogin, setOpen }: Props) => {
   const [id, setId] = useState<string>("");
   const [pw, setPw] = useState<string>("");
+  const isValid = emailValidChk(id) && pw.length > 5 ? false : true;
 
   const { setLogedIn } = useLogedInStore();
 
@@ -95,6 +96,7 @@ const SignIn = ({ login, setLogin, setOpen }: Props) => {
                 type="submit"
                 size="md"
                 className="sm:mx-auto sm:w-full sm:max-w-sm mb-4 mt-2"
+                disabled={isValid}
               >
                 login
               </Button>
