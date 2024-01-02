@@ -8,7 +8,6 @@ interface LogedIn {
 }
 
 const useLogedInStore = create<LogedIn>((set) => ({
-  //   logedIn: sessionStorage.length === 3 ? true : false,
   logedIn: false,
   setLogedIn: (state) => set({ logedIn: state })
 }));

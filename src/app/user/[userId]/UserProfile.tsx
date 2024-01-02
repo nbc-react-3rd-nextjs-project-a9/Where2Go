@@ -137,7 +137,6 @@ const UserProfile = () => {
   return (
     <div className="flex flex-row items-center gap-8">
       <div className="relative">
-        {/* <Avatar size="lg" src={newProfileImage && URL.createObjectURL(newProfileImage)} /> */}
         <Avatar size="lg" src={(newProfileImage && URL.createObjectURL(newProfileImage)) || avatarUrl()} />
 
         {editMode && (

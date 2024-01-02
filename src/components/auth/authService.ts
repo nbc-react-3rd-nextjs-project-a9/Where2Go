@@ -29,4 +29,13 @@ async function signOut() {
   checkAuth();
 }
 
-export { checkAuth, signInWithKakao, signOut };
+//supabase userinfo 테이블에서 정보 가져와서 userInfoStore에 저장
+async function getUserInfo(userId: string) {
+  const { data, error } = await supabase.from("userinfo").select().eq("id", userId);
+  const fetchData = data![0];
+  sessionStorage.setItem("uid", userId);
+  sessionStorage.setItem("nickname", fetchData.username);
+  sessionStorage.setItem("avatar_url", fetchData.avatar_url);
+}
+
+export { checkAuth, signInWithKakao, signOut, getUserInfo };
