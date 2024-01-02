@@ -12,7 +12,6 @@ const Header = () => {
             <Image src="/images/where2go_logo.jpeg" width={180} height={100} alt="logo" />
           </Link>
           <Link href={"/map"}>지도</Link>
-          <Link href={"/auth"}>로그인</Link>
           <Link href={"/form"}>폼</Link>
         </nav>
 

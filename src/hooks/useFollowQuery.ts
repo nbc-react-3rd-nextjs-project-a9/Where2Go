@@ -6,6 +6,7 @@ export const useFollowQuery = () => {
   const queryClient = useQueryClient();
   const id = sessionStorage.getItem("uid");
 
+  // const { data: followId, isLoading: isFollwIdLoading } = useQuery({});
   const { data: followingList, isLoading: isFollowingListLoading } = useQuery({
     queryKey: ["followingUser", id],
     queryFn: () => getFollowListByUserId(id)
@@ -13,13 +14,32 @@ export const useFollowQuery = () => {
 
   const addFollowMutation = useMutation({
     mutationFn: addFollow,
-    onSuccess: () => {
+    onMutate: async (newFollow: Follow) => {
+      await queryClient.cancelQueries({ queryKey: ["followingUser", id] });
+      const previousTodos = queryClient.getQueryData(["followingUser", id]);
+      queryClient.setQueryData(["followingUser", id], (old: Follow[]) => [...old, newFollow]);
+      return { previousTodos };
+    },
+    onError: (err, newFollow, context: any) => {
+      queryClient.setQueryData(["followingUser", id], context.previousTodos);
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["followingUser", id] });
     }
   });
+
   const deleteFollowMutation = useMutation({
     mutationFn: deleteFollow,
-    onSuccess: () => {
+    onMutate: async (newFollow: Follow) => {
+      await queryClient.cancelQueries({ queryKey: ["followingUser", id] });
+      const previousTodos = queryClient.getQueryData(["followingUser", id]);
+      queryClient.setQueryData(["followingUser", id], (old: Follow[]) => [...old, newFollow]);
+      return { previousTodos };
+    },
+    onError: (err, newFollow, context: any) => {
+      queryClient.setQueryData(["followingUser", id], context.previousTodos);
+    },
+    onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["followingUser", id] });
     }
   });

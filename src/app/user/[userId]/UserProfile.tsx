@@ -48,8 +48,6 @@ const UserProfile = () => {
     팔로잉여부: false
   };
 
-  const id = sessionStorage.getItem("uid");
-
   // const queryClient = useQueryClient();
   const { data: userData, refetch: userRefetch } = useQuery({
     queryKey: ["user"],
@@ -69,12 +67,16 @@ const UserProfile = () => {
     queryKey: ["followingList", userId],
     queryFn: () => getFollowListByUserId(userId)
   });
+
+  console.log("followingList", followingList);
+
   const { data: followedList } = useQuery({
     queryKey: ["followedUser", userId],
     queryFn: () => getFollowedListByUserId(userId)
   });
 
-  console.log("followedUser", followedList?.length);
+  console.log("followedList", followedList);
+
   useEffect(() => {
     if (!editMode) return;
     newNicknameInput.current?.focus();
@@ -133,7 +135,6 @@ const UserProfile = () => {
       sessionStorage.setItem("nickname", newNickname);
     }
 
-    // setEditMode(false);
     cancelEditMode();
     userRefetch();
   };
@@ -141,7 +142,6 @@ const UserProfile = () => {
   return (
     <div className="flex flex-row items-center gap-8">
       <div className="relative">
-        {/* <Avatar size="lg" src={newProfileImage && URL.createObjectURL(newProfileImage)} /> */}
         <Avatar size="lg" src={(newProfileImage && URL.createObjectURL(newProfileImage)) || userData?.avatar_url} />
 
         {editMode && (
