@@ -8,6 +8,7 @@ import { supabase } from "@/lib/supabase";
 import LoginModal from "./LoginModal";
 
 import useModalStore from "@/store/modalStore";
+import useLogedInStore from "@/store/logedInStore";
 import { signOut } from "./authService";
 
 interface Props {
@@ -58,6 +59,12 @@ const AuthMenu = ({ logout }: Props) => {
   );
 };
 
+const logedInCheck = async (setLogedIn: (state: boolean) => void) => {
+  const { data, error } = await supabase.auth.getSession();
+  console.log(data.session === null);
+  if (data.session !== null) setLogedIn(true);
+};
+
 const UserAuthBtn = () => {
   const [login, setLogin] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
@@ -65,10 +72,13 @@ const UserAuthBtn = () => {
   //모달상태 store
   const { open, setOpen } = useModalStore();
 
+  const { logedIn, setLogedIn } = useLogedInStore();
   const handleLogOut = () => {
-    setLogin(false);
+    setLogedIn(false);
   };
   useEffect(() => {
+    logedInCheck(setLogedIn);
+
     if (!openMenu) return;
     const closeMenu = () => setOpenMenu(false);
 
@@ -85,12 +95,12 @@ const UserAuthBtn = () => {
     <>
       <LoginModal />
       <div className="relative min-w-[10rem] flex justify-end">
-        {login ? (
+        {logedIn ? (
           <Avatar size="sm" onClick={() => setOpenMenu(true)} />
         ) : (
           <Button
             onClick={() => {
-              setLogin(true);
+              // setLogin(true);
               setOpen(true);
             }}
           >
