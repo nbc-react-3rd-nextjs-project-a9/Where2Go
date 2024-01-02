@@ -134,7 +134,6 @@ const PostPage = () => {
         onCancel={handleCancelEdit}
         placeId={placeId}
         setIsEditing={setIsEditing}
-        placeData={placeData}
       />
     );
   }

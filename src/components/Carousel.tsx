@@ -26,7 +26,7 @@ const Carousel = ({ urls }: Props) => {
     >
       {urls?.map((n, i) => (
         <SwiperSlide style={{ display: "flex" }} className="justify-center items-center" key={`slide-${i}`}>
-          <div style={{ backgroundImage: `url(${n})` }} className="w-full h-full bg-center object-cover"></div>
+          <div style={{ backgroundImage: `url(${n})` }} className="w-full h-full bg-center object-cover "></div>
         </SwiperSlide>
       ))}
     </Swiper>
