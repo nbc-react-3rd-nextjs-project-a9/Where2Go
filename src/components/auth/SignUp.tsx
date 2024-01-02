@@ -33,6 +33,7 @@ const SignUp = ({ login, setLogin, setOpen }: Props) => {
   //supabase userinfo 테이블에서 정보 가져와서 userInfoStore에 저장
   async function getUserInfo(userId: string) {
     const { data, error } = await supabase.from("userinfo").select().eq("id", userId);
+    console.log(data);
     const fetchData = data![0];
     getUID(userId);
     updateAvatar(fetchData.avatar_url);
@@ -52,13 +53,14 @@ const SignUp = ({ login, setLogin, setOpen }: Props) => {
       }
     });
 
-    console.log(data || error);
+    console.log(data.user || error);
     // setLogin(!login);
-    let userInfo = JSON.parse(localStorage.getItem("sb-fatcfzssyzoiskrplehv-auth-token") || "");
-    // console.log(userInfo.user.id);
+    // let userInfo = JSON.parse(localStorage.getItem("sb-fatcfzssyzoiskrplehv-auth-token") || "");
+    // // console.log(userInfo.user.id);
 
-    //userInfoStore에 유저 정보 저장
-    getUserInfo(userInfo.user.id);
+    // //userInfoStore에 유저 정보 저장
+    console.log(data.user?.id);
+    getUserInfo(data.user?.id || "");
   }
 
   return (
