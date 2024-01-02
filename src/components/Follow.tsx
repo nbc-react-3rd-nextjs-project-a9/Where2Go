@@ -11,7 +11,7 @@ import useLogedInStore from "@/store/logedInStore";
 const Follow = ({ userId, userNickname }: { userId: string; userNickname: string }) => {
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
 
-  const id = sessionStorage.getItem("uid");
+  const id = sessionStorage.getItem("uid") as string;
 
   const { followingList, isFollowingListLoading, addFollowMutation, deleteFollowMutation } = useFollowQuery();
   const { logedIn, setLogedIn } = useLogedInStore();

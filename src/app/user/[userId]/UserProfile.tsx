@@ -47,7 +47,6 @@ const UserProfile = () => {
     reviews: 10,
     팔로잉여부: false
   };
-
   const { data: userData } = useQuery({
     queryKey: ["user"],
     queryFn: () => getUserDataByUserId(userId)
