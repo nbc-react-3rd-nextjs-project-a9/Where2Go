@@ -1,8 +1,9 @@
 "use client";
 
 import useBookmark from "@/hooks/useBookmark";
+import { supabase } from "@/lib/supabase";
 import useLogedInStore from "@/store/logedInStore";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 interface Props {
   placeId: string;
@@ -14,12 +15,11 @@ enum BookmarkEnum {
 
 const Bookmark = ({ placeId }: Props) => {
   const { logedIn } = useLogedInStore();
-  if (!logedIn) return;
   const userId = sessionStorage.getItem("uid");
-  if (!userId) return;
-
-  const { addBookmark, isBookmark, deleteBookmark } = useBookmark({ placeId: placeId, userId: userId });
-
+  if (!userId) {
+    return;
+  }
+  const { addBookmark, isBookmark, deleteBookmark } = useBookmark({ placeId, userId });
   return (
     <div className="absolute left-4 top-0 translate-y-[-3px] z-10" onClick={!isBookmark ? addBookmark : deleteBookmark}>
       <div
