@@ -6,6 +6,7 @@ import useGeolocation from "react-hook-geolocation";
 import { supabase } from "@/lib/supabase";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getPlaceData } from "@/api/places";
+import Follow from "@/components/Follow";
 
 const page = () => {
   const { data } = useQuery({ queryKey: ["places"], queryFn: getPlaceData });
@@ -32,6 +33,7 @@ const page = () => {
     <div className="">
       <MapContainer lat={geoLocation.latitude} lng={geoLocation.longitude} />
       <PlacesSearch />
+      <Follow />
     </div>
   );
 };

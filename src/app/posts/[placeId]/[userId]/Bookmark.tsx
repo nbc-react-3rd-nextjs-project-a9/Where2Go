@@ -9,7 +9,7 @@ enum BookmarkEnum {
 
 const Bookmark = () => {
   const params = useParams();
-  console.log(params.placeId);
+  // console.log(params.placeId);
 
   return (
     <div className="absolute left-4 top-0 translate-y-[-3px] z-10">

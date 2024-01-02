@@ -12,15 +12,25 @@ import { CiShare2 } from "react-icons/ci";
 import { supabase } from "@/lib/supabase";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { getPlaceDataByPlaceId, getPlaceReviewsDataByPlaceName, getUserDataByUserIds } from "@/api/places";
+import {
+  getFollowListByUserId,
+  getPlaceDataByPlaceId,
+  getPlaceReviewsDataByPlaceName,
+  getUserDataByUserIds
+} from "@/api/places";
 import MapContainer from "@/components/map/MapContainer";
+import { useUserInfoStore } from "@/store/userInfoStore";
 
 const PostPage = () => {
   const [selectUserData, setSelectUserData] = useState<User>();
   const { placeId, userId } = useParams();
-
   console.log(placeId);
   // console.log("목유저데이터", mockUserData);
+  const [loginUserId, setLoginUserId] = useState<string>("");
+  const [isFollowing, setIsFollowing] = useState<boolean>(false);
+  const { uid } = useUserInfoStore();
+
+  console.log("uid", uid);
 
   const onClickAvatar = (data: User) => {
     setSelectUserData(data);
@@ -28,13 +38,22 @@ const PostPage = () => {
 
   useEffect(() => {
     setSelectUserData(mockUserData[0]);
+    const fetchUser = async () => {
+      const {
+        data: { user }
+      } = await supabase.auth.getUser();
+      if (user) {
+        setLoginUserId(user.id);
+      }
+    };
+    fetchUser();
   }, []);
 
   const { data: placeData, isLoading: isPlaceDataLoading } = useQuery({
     queryKey: ["place"],
     queryFn: () => getPlaceDataByPlaceId(placeId)
   });
-  console.log("플레이스데이터 한개", placeData);
+  // console.log("플레이스데이터 한개", placeData);
 
   // queryKey 추가
   const { data: placeReviewData, isLoading: isPlaceReviewDataLoading } = useQuery({
@@ -42,10 +61,10 @@ const PostPage = () => {
     queryFn: () => getPlaceReviewsDataByPlaceName(placeData.placeName),
     enabled: !!placeData
   });
-  console.log("플레이스 리뷰 데이타!", placeReviewData);
+  // console.log("플레이스 리뷰 데이타!", placeReviewData);
 
   const userIds = placeReviewData?.map((data) => data.userId) || [];
-  console.log("userIds", userIds);
+  // console.log("userIds", userIds);
 
   // isLoading 옵션 추가, queryKey 추가
   const { data: userData, isLoading: isUserDataLoading } = useQuery({
@@ -53,27 +72,47 @@ const PostPage = () => {
     queryFn: () => getUserDataByUserIds(userIds),
     enabled: !!userIds
   });
-  console.log("유저데이터에용", userData);
+  // console.log("유저데이터에용", userData);
 
   const placeReviewDataByUserId = placeReviewData?.filter((data) => data.userId === userId);
-  console.log("플레이스 리뷰데이터 바이 유저아이디", placeReviewDataByUserId);
+  // console.log("플레이스 리뷰데이터 바이 유저아이디", placeReviewDataByUserId);
 
   // 같은 장소에 리뷰를 쓴 유저들 중 현재 페이지에 맞는 user 정보
   const selectedUser = userData?.find((user) => user.id === userId);
-  console.log("selected User", selectedUser);
+  // console.log("selected User", selectedUser);
 
   let publicUrls = [];
 
   if (placeReviewDataByUserId !== undefined && placeReviewDataByUserId[0]?.imageUrlList) {
     for (const url of placeReviewDataByUserId[0]?.imageUrlList) {
-      console.log("url", url);
+      // console.log("url", url);
       const { data } = supabase.storage.from("placeReviewImg").getPublicUrl(url);
       publicUrls.push(data.publicUrl);
     }
   }
-  console.log("publicUrls", publicUrls);
+  // console.log("publicUrls", publicUrls);
 
-  if (isPlaceDataLoading || isPlaceReviewDataLoading || isUserDataLoading) {
+  const { data: followingList, isLoading: isFollowingListLoading } = useQuery({
+    queryKey: ["followingUser"],
+    queryFn: () => getFollowListByUserId(loginUserId)
+  });
+
+  console.log("user", loginUserId);
+  console.log("followinglist", followingList);
+
+  const followBtnHandler = async () => {
+    const { error: followError } = await supabase.from("follow").insert([
+      {
+        follower: loginUserId,
+        following: userId
+      }
+    ]);
+    if (followError) {
+      alert("follow error");
+    }
+  };
+
+  if (isPlaceDataLoading || isPlaceReviewDataLoading || isUserDataLoading || isFollowingListLoading) {
     return <div>로딩 중...</div>;
   }
 
@@ -102,11 +141,11 @@ const PostPage = () => {
           {!!selectUserData ? (
             <>
               <div className="flex flex-row items-center gap-4 mb-4">
-                <Avatar size="sm" src={selectedUser.avatar_url} />
-                <p className="font-bold min-w-[5rem]">{selectedUser.username}</p>
+                <Avatar size="sm" src={selectedUser?.avatar_url} />
+                <p className="font-bold min-w-[5rem]">{selectedUser?.username}</p>
                 {/* TODO : 유저가 나인지 아닌지 확인하고 작업 ㄱㄱ */}
                 {true ? (
-                  <Button size="sm" onClick={() => console.log(1)}>
+                  <Button size="sm" onClick={() => followBtnHandler()}>
                     {true ? "팔로우" : "팔로우 중"}
                   </Button>
                 ) : (
