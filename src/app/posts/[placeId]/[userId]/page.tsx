@@ -20,11 +20,19 @@ import {
 } from "@/api/places";
 import MapContainer from "@/components/map/MapContainer";
 import Swal from "sweetalert2";
+// import { useUserInfoStore } from "@/store/userInfoStore";
+import { useRouter } from "next/navigation";
 
 const PostPage = () => {
   // const [selectUserData, setSelectUserData] = useState<User>();
   const { placeId, userId } = useParams();
   const [currentUserId, setCurrentUserId] = useState("");
+  const router = useRouter();
+  // const { uid } = useUserInfoStore();
+  // console.log("uid", uid);
+  const uid = sessionStorage.getItem("uid");
+  console.log("uid", uid);
+
   // console.log("목유저데이터", mockUserData);
 
   // const onClickAvatar = (data: User) => {
@@ -46,7 +54,7 @@ const PostPage = () => {
     queryFn: () => getPlaceReviewsDataByPlaceName(placeData.placeName),
     enabled: !!placeData
   });
-
+  console.log("플레이스리뷰데이터", placeReviewData);
   const userIds = placeReviewData?.map((data) => data.userId) || [];
   // isLoading 옵션 추가, queryKey 추가
 
@@ -55,28 +63,26 @@ const PostPage = () => {
     queryFn: () => getUserDataByUserIds(userIds),
     enabled: !!userIds
   });
+  const firstUser = userData && userData[0]?.id;
 
-  const { data: placeReviewDataByUserId } = useQuery({
-    queryKey: ["placeReviewData", placeReviewData],
-    queryFn: () => getPlaceReviewsDataByPlaceNameAndUserId(placeData.placeName, userId)
-  });
-  // console.log("플로에스리뷰데이터바이유저아이디@", placeReviewDataByUserIdD);
-
-  // const placeReviewDataByUserId = placeReviewData?.filter((data) => data.userId === userId);
+  const placeReviewDataByUserId = placeReviewData?.filter((data) => data.userId === userId);
   console.log("플레이스리뷰데이터바이유저아이디", placeReviewDataByUserId);
-  // const placeReviewId = placeReviewDataByUserId[0].placeReviewId
+  const placeReviewId = placeReviewDataByUserId && placeReviewDataByUserId[0]?.placeReviewId;
+  console.log("placeReviewId", placeReviewId);
+  const imageUrlList = placeReviewDataByUserId && placeReviewDataByUserId[0]?.imageUrlList;
+  console.log("imageUrlList", imageUrlList);
   // 같은 장소에 리뷰를 쓴 유저들 중 현재 페이지에 맞는 user 정보
   const selectedUser = userData?.find((user) => user.id === userId);
 
   let publicUrls = [];
 
-  if (placeReviewDataByUserId !== undefined && placeReviewDataByUserId?.imageUrlList) {
-    for (const url of placeReviewDataByUserId?.imageUrlList) {
+  if (placeReviewDataByUserId !== undefined && placeReviewDataByUserId[0]?.imageUrlList) {
+    for (const url of placeReviewDataByUserId[0]?.imageUrlList) {
       const { data } = supabase.storage.from("placeReviewImg").getPublicUrl(url);
       publicUrls.push(data.publicUrl);
     }
   }
-
+  /*
   useEffect(() => {
     const fetchUser = async () => {
       const {
@@ -89,11 +95,11 @@ const PostPage = () => {
     };
     fetchUser();
   }, []);
-
+*/
   console.log("현재유저", currentUserId);
   console.log("userId", userId);
 
-  const deletePost = async () => {
+  const deletePost = () => {
     Swal.fire({
       title: "정말 삭제하시겠습니까?",
       text: "한 번 삭제하면 되돌릴 수 없습니다.",
@@ -103,10 +109,28 @@ const PostPage = () => {
       cancelButtonText: "취소"
     }).then((result) => {
       if (result.isConfirmed) {
-        // const { error } = await supabase.from("placeReview").delete().eq("placeReviewId", d);
+        (async () => {
+          if (placeReviewData?.length === 1) {
+            await supabase.from("places").delete().eq("placeId", placeId);
+            await supabase.from("placeReview").delete().eq("placeReviewId", placeReviewId);
+            // 스토리지에서 이미지 파일 삭제
+            for (const imageUrl of imageUrlList) {
+              await supabase.storage.from("placeReviewImg").remove([imageUrl]);
+            }
+            router.push("/");
+          } else {
+            await supabase.from("placeReview").delete().eq("placeReviewId", placeReviewId);
+            // 스토리지에서 이미지 파일 삭제
+            for (const imageUrl of imageUrlList) {
+              await supabase.storage.from("placeReviewImg").remove([imageUrl]);
+            }
+            router.push(`/posts/${placeId}/${firstUser}`);
+          }
+        })();
       }
     });
   };
+
   if (isPlaceDataLoading || isPlaceReviewDataLoading || isUserDataLoading) {
     return <div>로딩 중...</div>;
   }
@@ -138,8 +162,7 @@ const PostPage = () => {
               <div className="flex flex-row items-center gap-4 mb-4">
                 <Avatar size="sm" src={selectedUser?.avatar_url} />
                 <p className="font-bold min-w-[5rem]">{selectedUser?.username}</p>
-                {/* TODO : 유저가 나인지 아닌지 확인하고 작업 ㄱㄱ */}
-                {currentUserId !== userId ? (
+                {uid !== userId ? (
                   <Button size="sm" onClick={() => console.log(1)}>
                     {true ? "팔로우" : "팔로우 중"}
                   </Button>

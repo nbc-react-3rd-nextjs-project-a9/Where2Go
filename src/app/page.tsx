@@ -25,7 +25,7 @@ const getPlaceData = async (category: string | null = null) => {
   if (checkCategory(category)) {
     api += `?category=${category}`;
   }
-  const res = await fetch(api);
+  const res = await fetch(api, { cache: "no-store" });
   const data = await res.json();
   return data;
 };
@@ -33,6 +33,7 @@ const getPlaceData = async (category: string | null = null) => {
 const Home = async ({ searchParams }: Props) => {
   const { category } = searchParams;
   const placesData: Place[] = await getPlaceData(category);
+  console.log("플레이스데이터", placesData);
   // const filteredData = data?.filter((item) => item.category === categoryValue);
 
   const urls = [

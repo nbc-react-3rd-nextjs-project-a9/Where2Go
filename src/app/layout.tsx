@@ -5,6 +5,8 @@ import Footer from "@/components/layout/Footer";
 import Script from "next/script";
 import ReactQueryProvider from "./ReactQueryProvider";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const metadata: Metadata = {
   title: "어디가지🍆",
@@ -23,6 +25,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_API_KEY}&libraries=services,clusterer&autoload=false`}
             strategy="beforeInteractive"
           />
+          <ToastContainer />
           <ReactQueryDevtools initialIsOpen={false} />
         </body>
       </html>
