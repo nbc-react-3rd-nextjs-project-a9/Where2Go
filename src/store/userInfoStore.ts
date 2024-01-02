@@ -14,14 +14,17 @@ interface UpdateFunctions {
 }
 
 // let rawData = localStorage.getItem("sb-fatcfzssyzoiskrplehv-auth-token") || "";
-let rawData = localStorage.getItem("sb-cojgljiqpitvuwdvnmgf-auth-token") || "";
+// let rawData = localStorage.getItem("sb-cojgljiqpitvuwdvnmgf-auth-token") || "";
 
-let userInfo = rawData.length ? JSON.parse(rawData) : "";
+// let userInfo = rawData.length ? JSON.parse(rawData) : "";
 
 export const useUserInfoStore = create<UserInfo & UpdateFunctions>((set) => ({
-  uid: userInfo === "" ? "" : userInfo.user.id,
-  nickname: userInfo === "" ? "" : userInfo.user.user_metadata.user_name,
-  avatar_url: userInfo === "" ? "" : userInfo.user.user_metadata.avatar_url,
+  // uid: userInfo === "" ? "" : userInfo.user.id,
+  // nickname: userInfo === "" ? "" : userInfo.user.user_metadata.user_name,
+  // avatar_url: userInfo === "" ? "" : userInfo.user.user_metadata.avatar_url,
+  uid: "",
+  nickname: "",
+  avatar_url: "",
   updateName: (newName) => set({ nickname: newName }),
   updateAvatar: (newAvatar) => set({ avatar_url: newAvatar }),
   resetUser: () => set({ uid: "", nickname: "", avatar_url: "" }),

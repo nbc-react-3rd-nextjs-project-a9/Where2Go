@@ -20,9 +20,10 @@ const Follow = ({ userId }: { userId: string | string[] }) => {
     queryFn: () => getFollowListByUserId(uid)
   });
   // following 리스트에 userId가 있다면
-  if (followingList?.find((data) => data.to === userId)) {
-    // setIsFollowing(true);
-  }
+  // if (followingList?.find((data) => data.to === userId)) {
+  // }
+  console.log("followingList", followingList);
+
   const followBtnHandler = async () => {
     // followinglist에 userid가 없을 때 추가 있으면 팔로우 중 버튼으로 변경
     if (!followingList?.find((data) => data.to === userId)) {
@@ -36,12 +37,16 @@ const Follow = ({ userId }: { userId: string | string[] }) => {
         alert("follow error");
         console.log("error", followError);
       }
-      //   setIsFollowing(true);
+      setIsFollowing(true);
     } else {
-      //   setIsFollowing(false);
+      const { error: deleteFollowError } = await supabase.from("follow").delete().eq("to", userId);
+      setIsFollowing(false);
     }
   };
-  const deleteFollowBtnHandler = () => {};
+
+  if (isFollowingListLoading) {
+    return <div>로딩 중...</div>;
+  }
 
   return (
     <>
