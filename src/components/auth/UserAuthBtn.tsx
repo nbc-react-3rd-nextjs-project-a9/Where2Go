@@ -95,17 +95,17 @@ const UserAuthBtn = () => {
     };
   }, [openMenu]);
 
-  const avatar = sessionStorage.getItem("avatar_url");
+  // const avatar = sessionStorage.getItem("avatar_url");
 
   return (
     <>
       <LoginModal />
       <div className="relative min-w-[10rem] flex justify-end">
         {logedIn ? (
-          avatar === "null" ? (
+          sessionStorage.getItem("avatar_url") === "null" ? (
             <Avatar size="sm" onClick={() => setOpenMenu(true)} />
           ) : (
-            <Avatar src={avatar} size="sm" onClick={() => setOpenMenu(true)} />
+            <Avatar src={sessionStorage.getItem("avatar_url")} size="sm" onClick={() => setOpenMenu(true)} />
           )
         ) : (
           <Button
