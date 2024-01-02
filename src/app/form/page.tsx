@@ -15,6 +15,7 @@ import Button from "@/components/Button";
 import useMapStore from "@/store/store";
 import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 const FormPage = () => {
   const [content, setContent] = useState("");
@@ -59,7 +60,6 @@ const FormPage = () => {
         const imageUrl = fileData.path;
         uploadedImageUrls.push(imageUrl);
       }
-      // const placeId = id;
       const placeName = info.content;
       //Supabase 'placeReview' 테이블에 데이터 삽입
       const { data: placeReviewData, error: placeReviewError } = await supabase.from("placeReview").insert([
@@ -67,7 +67,6 @@ const FormPage = () => {
           content,
           visitedAt: selectedDate.toISOString(),
           imageUrlList: uploadedImageUrls, // 이미지 파일의 URL 배열을 저장
-          // placeId: placeId,
           placeName: info.content,
           category: categoryValue
         }
@@ -98,15 +97,12 @@ const FormPage = () => {
       } else {
         console.log("placeReview 데이터가 성공적으로 삽입되었습니다:", placeReviewData);
       }
-      // router.push("/");
+      toast.success("업로드 성공!");
+      router.push("/");
     } catch (error) {
       console.log("예상치 못한 오류가 발생했습니다:", error);
     }
   };
-  // console.log(selectedDate);
-  // console.log(categoryValue);
-  // console.log(imageFiles);
-  // console.log("info!!", info);
 
   return (
     <div className="">
@@ -137,7 +133,12 @@ const FormPage = () => {
           <PlacesSearch />
         </div>
       </Section>
-      <Button onClick={submitForm}>제출</Button>
+      <Button
+        onClick={submitForm}
+        disabled={!imageFiles || !selectedDate || !content || !categoryValue || !info.address}
+      >
+        제출
+      </Button>
     </div>
   );
 };
