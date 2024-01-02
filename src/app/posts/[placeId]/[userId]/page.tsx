@@ -56,12 +56,13 @@ const PostPage = () => {
     enabled: !!userIds
   });
 
-  const { data: placeReviewDataByUserIdD } = useQuery({
+  const { data: placeReviewDataByUserId } = useQuery({
     queryKey: ["placeReviewData", placeReviewData],
     queryFn: () => getPlaceReviewsDataByPlaceNameAndUserId(placeData.placeName, userId)
   });
-  console.log("플로에스리뷰데이터바이유저아이디@", placeReviewDataByUserIdD);
-  const placeReviewDataByUserId = placeReviewData?.filter((data) => data.userId === userId);
+  // console.log("플로에스리뷰데이터바이유저아이디@", placeReviewDataByUserIdD);
+
+  // const placeReviewDataByUserId = placeReviewData?.filter((data) => data.userId === userId);
   console.log("플레이스리뷰데이터바이유저아이디", placeReviewDataByUserId);
   // const placeReviewId = placeReviewDataByUserId[0].placeReviewId
   // 같은 장소에 리뷰를 쓴 유저들 중 현재 페이지에 맞는 user 정보
@@ -69,8 +70,8 @@ const PostPage = () => {
 
   let publicUrls = [];
 
-  if (placeReviewDataByUserId !== undefined && placeReviewDataByUserId[0]?.imageUrlList) {
-    for (const url of placeReviewDataByUserId[0]?.imageUrlList) {
+  if (placeReviewDataByUserId !== undefined && placeReviewDataByUserId?.imageUrlList) {
+    for (const url of placeReviewDataByUserId?.imageUrlList) {
       const { data } = supabase.storage.from("placeReviewImg").getPublicUrl(url);
       publicUrls.push(data.publicUrl);
     }
