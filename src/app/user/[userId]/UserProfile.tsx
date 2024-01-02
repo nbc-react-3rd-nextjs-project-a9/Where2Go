@@ -69,11 +69,12 @@ const UserProfile = () => {
     queryKey: ["followingList", userId],
     queryFn: () => getFollowListByUserId(userId)
   });
+  console.log("followingList", followingList);
   const { data: followedList } = useQuery({
     queryKey: ["followedUser", userId],
     queryFn: () => getFollowedListByUserId(userId)
   });
-
+  console.log("followedList", followedList);
   console.log("followedUser", followedList?.length);
   useEffect(() => {
     if (!editMode) return;
