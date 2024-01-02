@@ -96,20 +96,12 @@ const UserAuthBtn = () => {
     };
   }, [openMenu]);
 
-  const avatarUrl = (): null | string => {
-    const imagePath = sessionStorage.getItem("avatar_url");
-    if (imagePath === null) return null;
-    const storage = supabase.storage.from("userProfileImg");
-    const imageUrl = storage.getPublicUrl(imagePath);
-    const publicUrl = imageUrl.data.publicUrl;
-    return publicUrl;
-  };
   return (
     <>
       <LoginModal />
       <div className="relative min-w-[10rem] flex justify-end">
         {logedIn ? (
-          <Avatar src={avatarUrl()} size="sm" onClick={() => setOpenMenu(true)} />
+          <Avatar src={sessionStorage.getItem("avatar_url")} size="sm" onClick={() => setOpenMenu(true)} />
         ) : (
           <Button
             onClick={() => {
