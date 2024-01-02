@@ -62,10 +62,10 @@ const SignUp = ({ login, setLogin, setOpen }: Props) => {
   }
 
   return (
-    <div className="absolute bg-white top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+    <div className="absolute bg-white top-24 left-1/2 -translate-x-1/2 translate-y-0.5">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm p-8 border-solid border-2 ">
         <div onClick={() => setOpen(false)} className="mb-2 cursor-pointer">
-          <VscChromeClose className="ml-[300px]" />
+          <VscChromeClose className="ml-[300px]" color="black" />
         </div>
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">회원가입</h2>

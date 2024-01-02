@@ -8,7 +8,6 @@ import { useUserInfoStore } from "@/store/userInfoStore";
 import useModalStore from "@/store/modalStore";
 
 import { signOut, checkAuth } from "@/components/auth/authService";
-import { MdSupportAgent } from "react-icons/md";
 
 const authPage = () => {
   const { uid, nickname, avatar_url, updateName, updateAvatar, resetUser, getUID } = useUserInfoStore();
@@ -21,20 +20,19 @@ const authPage = () => {
     console.log(user);
   };
 
-  const switchMode = () => {
-    return login ? (
-      <SignIn login={login} setLogin={setLogin} setOpen={setOpen} />
-    ) : (
-      <SignUp login={login} setLogin={setLogin} setOpen={setOpen} />
-    );
-  };
+  // const switchMode = () => {
+  //   return login ? (
+  //     <SignIn login={login} setLogin={setLogin} setOpen={setOpen} />
+  //   ) : (
+  //     <SignUp login={login} setLogin={setLogin} setOpen={setOpen} />
+  //   );
+  // };
 
   return (
     <div className="">
       <button onClick={() => setOpen(true)}>open</button>
       <br />
 
-      {open && switchMode()}
       <button
         onClick={() => {
           signOut();

@@ -37,19 +37,21 @@ const SignIn = ({ login, setLogin, setOpen }: Props) => {
 
     checkAuth();
     //로컬스토리지에 저장되는 user 정보에서 uid 가져오기
-    let userInfo = JSON.parse(localStorage.getItem("sb-fatcfzssyzoiskrplehv-auth-token") || "");
-    // console.log(userInfo.user.id);
+    // let userInfo = JSON.parse(localStorage.getItem("sb-fatcfzssyzoiskrplehv-auth-token") || "");
+    const {
+      data: { session }
+    } = await supabase.auth.getSession();
+    console.log(session?.user);
 
     //userInfoStore에 유저 정보 저장
-    getUserInfo(userInfo.user.id);
+    getUserInfo(session?.user.id || "");
   };
 
   return (
-    <div className="absolute bg-white top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-      {/* <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8 "> */}
+    <div className="absolute bg-white top-1/2 left-1/2 -translate-x-1/2 translate-y-1/4">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm p-8 border-solid border-2 ">
-        <div onClick={() => setOpen(false)} className="mb-2 cursor-pointer">
-          <VscChromeClose className="ml-[300px]" />
+        <div onClick={() => setOpen(false)} className="mb-2">
+          <VscChromeClose className="ml-[300px] cursor-pointer" color="black" />
         </div>
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
           <h2 className="text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
@@ -121,7 +123,6 @@ const SignIn = ({ login, setLogin, setOpen }: Props) => {
         </div>
       </div>
     </div>
-    // </div>
   );
 };
 
