@@ -1,8 +1,10 @@
 "use client";
 
+import { getFollowedListByUserId } from "@/api/places";
 import { getUserDataByUserId } from "@/api/users";
 import Avatar from "@/components/Avatar";
 import Button from "@/components/Button";
+import { useFollowQuery } from "@/hooks/useFollowQuery";
 import { supabase } from "@/lib/supabase";
 import { cleanObj } from "@/utils/cleanseData";
 import { useQuery } from "@tanstack/react-query";
@@ -39,7 +41,7 @@ const UserProfile = () => {
     팔로잉여부: false
   };
   console.log(userId);
-
+  const id = sessionStorage.getItem("uid");
   const { data: userData } = useQuery({
     queryKey: ["user"],
     queryFn: () => getUserDataByUserId(userId)
@@ -54,7 +56,15 @@ const UserProfile = () => {
   //   };
   //   fetchUserData();
   // }, []);
+  const { followingList, isFollowingListLoading } = useFollowQuery();
+  console.log("followingList", followingList?.length);
 
+  const { data: followedList } = useQuery({
+    queryKey: ["followedUser", userId],
+    queryFn: () => getFollowedListByUserId(userId)
+  });
+
+  console.log("followedUser", followedList?.length);
   useEffect(() => {
     if (!editMode) return;
     newNicknameInput.current?.focus();
@@ -124,8 +134,8 @@ const UserProfile = () => {
           </>
         )}
         <div className="flex gap-8">
-          <ProfileInfoRow title="팔로워">{mock.follower}</ProfileInfoRow>
-          <ProfileInfoRow title="팔로잉">{mock.following}</ProfileInfoRow>
+          <ProfileInfoRow title="팔로워">{followedList?.length}</ProfileInfoRow>
+          <ProfileInfoRow title="팔로잉">{followingList?.length}</ProfileInfoRow>
         </div>
         <ProfileInfoRow title="리뷰 수">{mock.reviews}</ProfileInfoRow>
         {userId !== mock.myUserId ? (
