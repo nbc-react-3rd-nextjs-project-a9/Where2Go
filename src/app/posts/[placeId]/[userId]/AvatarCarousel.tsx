@@ -56,7 +56,7 @@ const AvatarCarousel = ({ avatarList }: Props) => {
             <Link href={`/posts/${placeId}/${data.id}`}>
               <Avatar
                 size="md"
-                // src={data.avatar_url}
+                src={data.avatar_url}
                 className="hover:scale-110"
                 // onClick={() => onClickAvatar(n)}
                 onClick={() => console.log(1)}

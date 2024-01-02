@@ -126,20 +126,11 @@ const UserProfile = () => {
     // cancelEditMode();
   };
 
-  // const avatarUrl = (): null | string => {
-  //   const imagePath = userData?.avatar_url;
-  //   if (imagePath === null) return null;
-  //   const storage = supabase.storage.from("userProfileImg");
-  //   const imageUrl = storage.getPublicUrl(imagePath);
-  //   const publicUrl = imageUrl.data.publicUrl;
-  //   return publicUrl;
-  // };
-
   return (
     <div className="flex flex-row items-center gap-8">
       <div className="relative">
         {/* <Avatar size="lg" src={newProfileImage && URL.createObjectURL(newProfileImage)} /> */}
-        <Avatar size="lg" src={(newProfileImage && URL.createObjectURL(newProfileImage)) || userData.avatar_url} />
+        <Avatar size="lg" src={(newProfileImage && URL.createObjectURL(newProfileImage)) || userData?.avatar_url} />
 
         {editMode && (
           <>
