@@ -20,7 +20,7 @@ import Link from "next/link";
 const PostPage = () => {
   const [selectUserData, setSelectUserData] = useState<User>();
   const { placeId, userId } = useParams<{ placeId: string; userId: string }>();
-  console.log(placeId);
+  // console.log(placeId);
   // console.log("목유저데이터", mockUserData);
 
   const onClickAvatar = (data: User) => {
@@ -61,7 +61,7 @@ const PostPage = () => {
 
   // 같은 장소에 리뷰를 쓴 유저들 중 현재 페이지에 맞는 user 정보
   const selectedUser = userData?.find((user) => user.id === userId);
-  console.log("selected User", selectedUser);
+  // console.log("selected User", selectedUser);
 
   let publicUrls = [];
 
