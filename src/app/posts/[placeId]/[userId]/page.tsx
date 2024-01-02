@@ -15,6 +15,7 @@ import { useQuery } from "@tanstack/react-query";
 import { getPlaceDataByPlaceId, getPlaceReviewsDataByPlaceName, getUserDataByUserIds } from "@/api/places";
 import MapContainer from "@/components/map/MapContainer";
 import Follow from "@/components/Follow";
+import Link from "next/link";
 
 const PostPage = () => {
   const [selectUserData, setSelectUserData] = useState<User>();
@@ -60,7 +61,7 @@ const PostPage = () => {
 
   // 같은 장소에 리뷰를 쓴 유저들 중 현재 페이지에 맞는 user 정보
   const selectedUser = userData?.find((user) => user.id === userId);
-  // console.log("selected User", selectedUser);
+  console.log("selected User", selectedUser);
 
   let publicUrls = [];
 
@@ -102,7 +103,9 @@ const PostPage = () => {
           {!!selectUserData ? (
             <>
               <div className="flex flex-row items-center gap-4 mb-4">
-                <Avatar size="sm" src={selectedUser?.avatar_url} />
+                <Link href={`/user/${selectedUser?.id}`}>
+                  <Avatar size="sm" src={selectedUser?.avatar_url} />
+                </Link>
                 <p className="font-bold min-w-[5rem]">{selectedUser?.username}</p>
                 {/* TODO : 유저가 나인지 아닌지 확인하고 작업 ㄱㄱ */}
                 {true ? (

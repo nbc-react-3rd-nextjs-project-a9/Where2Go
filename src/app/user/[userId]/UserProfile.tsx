@@ -1,9 +1,10 @@
 "use client";
 
-import { getFollowedListByUserId } from "@/api/places";
+import { getFollowListByUserId, getFollowedListByUserId } from "@/api/places";
 import { getUserDataByUserId } from "@/api/users";
 import Avatar from "@/components/Avatar";
 import Button from "@/components/Button";
+import Follow from "@/components/Follow";
 import { useFollowQuery } from "@/hooks/useFollowQuery";
 import { supabase } from "@/lib/supabase";
 import useLogedInStore from "@/store/logedInStore";
@@ -38,7 +39,7 @@ const UserProfile = () => {
 
   const curUserId = logedIn ? sessionStorage.getItem("uid") : "";
   console.log(curUserId);
-
+  console.log("logedIn", logedIn);
   const mock = {
     nickname: "John Doe",
     myUserId: "123",
@@ -64,9 +65,10 @@ const UserProfile = () => {
   //   };
   //   fetchUserData();
   // }, []);
-  const { followingList, isFollowingListLoading } = useFollowQuery();
-  console.log("followingList", followingList?.length);
-
+  const { data: followingList } = useQuery({
+    queryKey: ["followingList", userId],
+    queryFn: () => getFollowListByUserId(userId)
+  });
   const { data: followedList } = useQuery({
     queryKey: ["followedUser", userId],
     queryFn: () => getFollowedListByUserId(userId)
@@ -192,7 +194,7 @@ const UserProfile = () => {
         {userId !== curUserId ? (
           <div>
             {/* TODO : Optimistic Updates 적용해서 팔로잉 여부 확인하기 */}
-            {mock.팔로잉여부 ? (
+            {/* {mock.팔로잉여부 ? (
               <Button size="sm">팔로잉 취소</Button>
             ) : (
               <Button
@@ -203,7 +205,8 @@ const UserProfile = () => {
               >
                 팔로잉
               </Button>
-            )}
+            )} */}
+            <Follow userId={userId} userNickname={userData?.username} />
           </div>
         ) : (
           <div className="flex flex-row gap-8">
