@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState } from "react";
 import Button from "./Button";
 import { supabase } from "@/lib/supabase";
 import { useUserInfoStore } from "@/store/userInfoStore";
@@ -6,6 +8,7 @@ import { getFollowListByUserId } from "@/api/places";
 import { useQuery } from "@tanstack/react-query";
 
 const Follow = ({ userId }: { userId: string | string[] }) => {
+  const [isFollowing, setIsFollowing] = useState<boolean>(false);
   // 디테일 페이지
   // 로그인 되어 있는 유저와 글을 작성한 유저 id 비교
   // 다르면 팔로우 버튼
@@ -16,7 +19,10 @@ const Follow = ({ userId }: { userId: string | string[] }) => {
     queryKey: ["followingUser", uid],
     queryFn: () => getFollowListByUserId(uid)
   });
-
+  // following 리스트에 userId가 있다면
+  if (followingList?.find((data) => data.to === userId)) {
+    // setIsFollowing(true);
+  }
   const followBtnHandler = async () => {
     // followinglist에 userid가 없을 때 추가 있으면 팔로우 중 버튼으로 변경
     if (!followingList?.find((data) => data.to === userId)) {
@@ -35,11 +41,20 @@ const Follow = ({ userId }: { userId: string | string[] }) => {
       //   setIsFollowing(false);
     }
   };
+  const deleteFollowBtnHandler = () => {};
 
   return (
-    <Button size="sm" onClick={() => followBtnHandler()}>
-      팔로우
-    </Button>
+    <>
+      {isFollowing ? (
+        <Button size="sm" onClick={() => followBtnHandler()}>
+          팔로잉
+        </Button>
+      ) : (
+        <Button size="sm" onClick={() => followBtnHandler()}>
+          팔로우
+        </Button>
+      )}
+    </>
   );
 };
 

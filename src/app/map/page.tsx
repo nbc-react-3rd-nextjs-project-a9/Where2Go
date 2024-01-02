@@ -33,7 +33,6 @@ const page = () => {
     <div className="">
       <MapContainer lat={geoLocation.latitude} lng={geoLocation.longitude} />
       <PlacesSearch />
-      <Follow />
     </div>
   );
 };
