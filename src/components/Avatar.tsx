@@ -24,6 +24,7 @@ const Avatar = ({ size, src, onClick, className }: Props) => {
         width={size === "sm" ? 60 : 150}
         height={size === "sm" ? 60 : 150}
         alt="Picture of the author"
+        priority={true}
         onClick={onClick}
       />
     </figure>

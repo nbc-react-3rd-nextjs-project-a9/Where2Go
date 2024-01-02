@@ -2,16 +2,14 @@
 import { supabase } from "@/lib/supabase";
 
 //로그인 상태 확인
-function checkAuth() {
+async function checkAuth() {
   supabase.auth.onAuthStateChange((event, session) => {
     if (event === "SIGNED_IN") {
       //로그인 시
       console.log("SIGNED_IN", session?.user.id);
-      // session ? sessionStorage.setItem("uid", session.user.id) : console.log("error");
     } else if (event === "SIGNED_OUT") {
       //로그아웃 시
       console.log("SIGNED_OUT", session);
-      // sessionStorage.removeItem("uid");
     }
   });
 }

@@ -18,14 +18,6 @@ const authPage = () => {
     console.log(user);
   };
 
-  // const switchMode = () => {
-  //   return login ? (
-  //     <SignIn login={login} setLogin={setLogin} setOpen={setOpen} />
-  //   ) : (
-  //     <SignUp login={login} setLogin={setLogin} setOpen={setOpen} />
-  //   );
-  // };
-
   return (
     <div className="">
       <button onClick={() => setOpen(true)}>open</button>
