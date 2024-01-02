@@ -61,7 +61,7 @@ const PlacesSearch = () => {
     <div className="flex flex-col gap-4 pb-6">
       <form onSubmit={submitHandler} className="flex gap-2">
         <input
-          className={" border-black border-2 rounded"}
+          className={"border-purple-900 border-2 rounded"}
           value={searchKeyword}
           onChange={(e) => setSearchKeyword(e.target.value)}
         />

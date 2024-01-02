@@ -28,10 +28,8 @@ const FormPage = () => {
   const id = uuidv4();
 
   const handleUpload = (files: File[]) => {
-    // console.log("업로드된 파일:", files);
     setImageFiles(files);
   };
-  console.log("업로드된 파일:", imageFiles);
   const handleTextChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setContent(e.target.value);
   };
@@ -44,11 +42,8 @@ const FormPage = () => {
         console.error("내용과 날짜와 이미지는 필수 필드입니다.");
         return;
       }
-      // 각 이미지 파일을 업로드하고 해당 URL을 기록할 배열
       const uploadedImageUrls: string[] = [];
-      // 각 이미지 파일을 Supabase Storage에 업로드
       for (const imageFile of imageFiles) {
-        // const encodedFileName = encodeURIComponent(imageFile.name);
         const { data: fileData, error: fileError } = await supabase.storage
           .from("placeReviewImg")
           .upload(`${imageFile.name}`, imageFile);
@@ -56,7 +51,6 @@ const FormPage = () => {
           console.error("이미지 업로드 중 오류 발생:", fileError.message);
           return;
         }
-        // 이미지 파일의 URL을 배열에 추가
         const imageUrl = fileData.path;
         uploadedImageUrls.push(imageUrl);
       }
@@ -115,13 +109,13 @@ const FormPage = () => {
           onChange={handleDateChange}
           dateFormat="yyyy/MM/dd"
           todayButton="오늘"
-          className="border-black border-2 rounded"
+          className="border-purple-900 border-2 rounded"
         />
       </Section>
       <Section title="설명">
         <textarea
           placeholder="경험이나 정보를 자세히 작성할수록 다른 사용자들에게 큰 도움이 됩니다."
-          className=" border-black border-2 rounded resize-none"
+          className="border-purple-900 border-2 rounded resize-none w-[530px] h-[120px]"
           onChange={handleTextChange}
         />
       </Section>
@@ -133,12 +127,14 @@ const FormPage = () => {
           <PlacesSearch />
         </div>
       </Section>
-      <Button
-        onClick={submitForm}
-        disabled={!imageFiles || !selectedDate || !content || !categoryValue || !info.address}
-      >
-        제출
-      </Button>
+      <div className="flex justify-center">
+        <Button
+          onClick={submitForm}
+          disabled={!imageFiles || !selectedDate || !content || !categoryValue || !info.address}
+        >
+          제출
+        </Button>
+      </div>
     </div>
   );
 };
