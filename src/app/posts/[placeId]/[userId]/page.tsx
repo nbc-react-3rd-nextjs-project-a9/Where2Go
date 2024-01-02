@@ -12,7 +12,12 @@ import { CiShare2 } from "react-icons/ci";
 import { supabase } from "@/lib/supabase";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { getPlaceDataByPlaceId, getPlaceReviewsDataByPlaceName, getUserDataByUserIds } from "@/api/places";
+import {
+  getPlaceDataByPlaceId,
+  getPlaceReviewsDataByPlaceName,
+  getPlaceReviewsDataByPlaceNameAndUserId,
+  getUserDataByUserIds
+} from "@/api/places";
 import MapContainer from "@/components/map/MapContainer";
 import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
