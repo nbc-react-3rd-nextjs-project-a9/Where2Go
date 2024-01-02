@@ -12,14 +12,8 @@ import { CiShare2 } from "react-icons/ci";
 import { supabase } from "@/lib/supabase";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import {
-  getFollowListByUserId,
-  getPlaceDataByPlaceId,
-  getPlaceReviewsDataByPlaceName,
-  getUserDataByUserIds
-} from "@/api/places";
+import { getPlaceDataByPlaceId, getPlaceReviewsDataByPlaceName, getUserDataByUserIds } from "@/api/places";
 import MapContainer from "@/components/map/MapContainer";
-import { useUserInfoStore } from "@/store/userInfoStore";
 import Follow from "@/components/Follow";
 
 const PostPage = () => {
@@ -27,11 +21,6 @@ const PostPage = () => {
   const { placeId, userId } = useParams();
   console.log(placeId);
   // console.log("목유저데이터", mockUserData);
-  const [loginUserId, setLoginUserId] = useState<string>("");
-  const [isFollowing, setIsFollowing] = useState<boolean>(false);
-  const { uid } = useUserInfoStore();
-
-  console.log("uid", uid);
 
   const onClickAvatar = (data: User) => {
     setSelectUserData(data);
@@ -39,15 +28,6 @@ const PostPage = () => {
 
   useEffect(() => {
     setSelectUserData(mockUserData[0]);
-    const fetchUser = async () => {
-      const {
-        data: { user }
-      } = await supabase.auth.getUser();
-      if (user) {
-        setLoginUserId(user.id);
-      }
-    };
-    fetchUser();
   }, []);
 
   const { data: placeData, isLoading: isPlaceDataLoading } = useQuery({
@@ -126,7 +106,7 @@ const PostPage = () => {
                 <p className="font-bold min-w-[5rem]">{selectedUser?.username}</p>
                 {/* TODO : 유저가 나인지 아닌지 확인하고 작업 ㄱㄱ */}
                 {true ? (
-                  <Follow userId={userId} />
+                  <Follow userId={userId} userNickname={selectedUser?.username} />
                 ) : (
                   <>
                     <Button size="sm" theme="success" onClick={() => console.log(1)}>
