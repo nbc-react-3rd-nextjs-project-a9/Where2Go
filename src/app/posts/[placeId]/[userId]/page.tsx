@@ -62,7 +62,7 @@ const PostPage = () => {
     queryFn: () => getUserDataByUserIds(userIds),
     enabled: !!userIds
   });
-
+  console.log("userData", userData);
   const firstUser = userData && userData[0]?.id;
   console.log("firstUser", firstUser);
 
