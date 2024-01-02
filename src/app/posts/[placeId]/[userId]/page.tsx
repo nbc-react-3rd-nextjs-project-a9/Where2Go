@@ -25,6 +25,7 @@ const PostPage = () => {
   const onClickAvatar = (data: User) => {
     setSelectUserData(data);
   };
+
   useEffect(() => {
     setSelectUserData(mockUserData[0]);
   }, []);
@@ -35,17 +36,20 @@ const PostPage = () => {
   });
   console.log("플레이스데이터 한개", placeData);
 
+  // queryKey 추가
   const { data: placeReviewData, isLoading: isPlaceReviewDataLoading } = useQuery({
-    queryKey: ["placeReview"],
+    queryKey: ["placeReview", placeData],
     queryFn: () => getPlaceReviewsDataByPlaceName(placeData.placeName),
     enabled: !!placeData
   });
   console.log("플레이스 리뷰 데이타!", placeReviewData);
+
   const userIds = placeReviewData?.map((data) => data.userId) || [];
   console.log("userIds", userIds);
 
-  const { data: userData } = useQuery({
-    queryKey: ["users"],
+  // isLoading 옵션 추가, queryKey 추가
+  const { data: userData, isLoading: isUserDataLoading } = useQuery({
+    queryKey: ["users", placeReviewData],
     queryFn: () => getUserDataByUserIds(userIds),
     enabled: !!userIds
   });
@@ -53,6 +57,11 @@ const PostPage = () => {
 
   const placeReviewDataByUserId = placeReviewData?.filter((data) => data.userId === userId);
   console.log("플레이스 리뷰데이터 바이 유저아이디", placeReviewDataByUserId);
+
+  // 같은 장소에 리뷰를 쓴 유저들 중 현재 페이지에 맞는 user 정보
+  const selectedUser = userData?.find((user) => user.id === userId);
+  console.log("selected User", selectedUser);
+
   let publicUrls = [];
 
   if (placeReviewDataByUserId !== undefined && placeReviewDataByUserId[0]?.imageUrlList) {
@@ -62,10 +71,12 @@ const PostPage = () => {
       publicUrls.push(data.publicUrl);
     }
   }
+  console.log("publicUrls", publicUrls);
 
-  if (isPlaceDataLoading || isPlaceReviewDataLoading) {
+  if (isPlaceDataLoading || isPlaceReviewDataLoading || isUserDataLoading) {
     return <div>로딩 중...</div>;
   }
+
   return (
     <>
       <div className="relative">
@@ -91,8 +102,8 @@ const PostPage = () => {
           {!!selectUserData ? (
             <>
               <div className="flex flex-row items-center gap-4 mb-4">
-                <Avatar size="md" src={selectUserData.imageUrl.url} />
-                <p className="font-bold min-w-[5rem]">{selectUserData.nickname}</p>
+                <Avatar size="sm" src={selectedUser.avatar_url} />
+                <p className="font-bold min-w-[5rem]">{selectedUser.username}</p>
                 {/* TODO : 유저가 나인지 아닌지 확인하고 작업 ㄱㄱ */}
                 {true ? (
                   <Button size="sm" onClick={() => console.log(1)}>

@@ -9,12 +9,10 @@ import Link from "next/link";
 
 interface PostCardProps {
   data: Place;
-  selectCaregory?: string | null;
 }
 
 interface PostCardListProps {
   placeList: Place[] | undefined | null;
-  selectCaregory?: string | null;
 }
 
 const PostCard = ({ data }: PostCardProps) => {
@@ -49,19 +47,13 @@ const PostCard = ({ data }: PostCardProps) => {
   );
 };
 
-const PostCardList = ({ placeList, selectCaregory }: PostCardListProps) => {
-  const filteredPlaceList = (): Place[] | undefined | null => {
-    if (selectCaregory === "전체" || selectCaregory === null) return placeList;
-    else {
-      return placeList?.filter((n) => n.category === selectCaregory);
-    }
-  };
+const PostCardList = ({ placeList }: PostCardListProps) => {
   return (
     <div>
       <ul className="grid xs:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6  grid-cols-2  gap-y-4 ">
-        {filteredPlaceList()?.map((n) => (
+        {placeList?.map((n) => (
           <li key={`postCard-${n.placeId}`} className={``}>
-            <PostCard data={n} selectCaregory={selectCaregory} />
+            <PostCard data={n} />
           </li>
         ))}
       </ul>
