@@ -12,7 +12,7 @@ const UserReview = () => {
     queryKey: ["userReview"],
     queryFn: () => getPlaceReviewsDataByUserId(userId)
   });
-  console.log("유저리뷰", placeReviewList);
+  // console.log("유저리뷰", placeReviewList);
   return <PostReviewCardList placeReviewList={placeReviewList} />;
 };
 
