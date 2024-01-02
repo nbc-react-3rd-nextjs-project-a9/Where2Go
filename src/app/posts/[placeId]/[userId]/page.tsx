@@ -24,14 +24,13 @@ import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 
 const PostPage = () => {
-  // const [selectUserData, setSelectUserData] = useState<User>();
   const { placeId, userId } = useParams();
   const [currentUserId, setCurrentUserId] = useState("");
   const router = useRouter();
   // const { uid } = useUserInfoStore();
   // console.log("uid", uid);
-  const uid = sessionStorage.getItem("uid");
-  console.log("uid", uid);
+  // const uid = sessionStorage.getItem("uid");
+  // console.log("uid", uid);
 
   // console.log("목유저데이터", mockUserData);
 
@@ -63,7 +62,9 @@ const PostPage = () => {
     queryFn: () => getUserDataByUserIds(userIds),
     enabled: !!userIds
   });
+
   const firstUser = userData && userData[0]?.id;
+  console.log("firstUser", firstUser);
 
   const placeReviewDataByUserId = placeReviewData?.filter((data) => data.userId === userId);
   console.log("플레이스리뷰데이터바이유저아이디", placeReviewDataByUserId);
@@ -82,7 +83,7 @@ const PostPage = () => {
       publicUrls.push(data.publicUrl);
     }
   }
-  /*
+
   useEffect(() => {
     const fetchUser = async () => {
       const {
@@ -95,7 +96,7 @@ const PostPage = () => {
     };
     fetchUser();
   }, []);
-*/
+
   console.log("현재유저", currentUserId);
   console.log("userId", userId);
 
@@ -131,6 +132,12 @@ const PostPage = () => {
     });
   };
 
+  const updatePost = () => {
+    // router.push({
+    //   pathname
+    // })
+  };
+
   if (isPlaceDataLoading || isPlaceReviewDataLoading || isUserDataLoading) {
     return <div>로딩 중...</div>;
   }
@@ -162,13 +169,13 @@ const PostPage = () => {
               <div className="flex flex-row items-center gap-4 mb-4">
                 <Avatar size="sm" src={selectedUser?.avatar_url} />
                 <p className="font-bold min-w-[5rem]">{selectedUser?.username}</p>
-                {uid !== userId ? (
+                {currentUserId !== userId ? (
                   <Button size="sm" onClick={() => console.log(1)}>
                     {true ? "팔로우" : "팔로우 중"}
                   </Button>
                 ) : (
                   <>
-                    <Button size="sm" theme="success" onClick={() => console.log(1)}>
+                    <Button size="sm" theme="success" onClick={updatePost}>
                       수정하기
                     </Button>
                     <Button size="sm" theme="warning" onClick={deletePost}>
@@ -182,10 +189,10 @@ const PostPage = () => {
           }
         </Section>
         <Section title="주소">
-          <p>{placeData.address}</p>
+          <p>{placeData?.address}</p>
         </Section>
         <Section title="지도">
-          <MapContainer lat={placeData.latlng.lat} lng={placeData.latlng.lng} />
+          <MapContainer lat={placeData?.latlng.lat} lng={placeData?.latlng.lng} />
         </Section>
       </div>
     </>
