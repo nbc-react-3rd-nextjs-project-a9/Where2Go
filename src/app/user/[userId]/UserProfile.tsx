@@ -9,7 +9,7 @@ import { useFollowQuery } from "@/hooks/useFollowQuery";
 import { supabase } from "@/lib/supabase";
 import useLogedInStore from "@/store/logedInStore";
 import { cleanObj } from "@/utils/cleanseData";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { MdPhotoCameraBack } from "react-icons/md";
@@ -49,12 +49,22 @@ const UserProfile = () => {
     팔로잉여부: false
   };
   console.log(userId);
+
   const id = sessionStorage.getItem("uid");
+
+  const queryClient = useQueryClient();
   const { data: userData } = useQuery({
     queryKey: ["user"],
     queryFn: () => getUserDataByUserId(userId)
   });
   console.log("유저데이터", userData);
+
+  const userDataMutation = useMutation({
+    mutationFn: () => updateProfile(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["user"] });
+    }
+  });
 
   // useEffect(() => {
   //   const fetchUserData = async () => {
@@ -96,7 +106,6 @@ const UserProfile = () => {
 
   const updateProfile = async () => {
     const data = cleanObj({
-      // const newData = cleanObj({
       image: newProfileImage,
       nickname: newNickname
     });
@@ -119,6 +128,7 @@ const UserProfile = () => {
       console.log(error);
       // 세션스토리지 업데이트
       sessionStorage.setItem("avatar_url", newAvatarUrl);
+
       setEditMode(false);
     }
 
@@ -133,7 +143,8 @@ const UserProfile = () => {
       sessionStorage.setItem("nickname", newNickname);
     }
 
-    // cancelEditMode();
+    // setEditMode(false);
+    cancelEditMode();
   };
 
   return (
