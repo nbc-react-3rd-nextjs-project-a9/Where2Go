@@ -35,11 +35,10 @@ const UserProfile = () => {
   const [newProfileImage, setNewProfileImage] = useState<File | null>(null);
   const [newNickname, setNewNickname] = useState<string>("");
 
-  const { logedIn, setLogedIn } = useLogedInStore();
+  const { logedIn } = useLogedInStore();
 
   const curUserId = logedIn ? sessionStorage.getItem("uid") : "";
-  console.log(curUserId);
-  console.log("logedIn", logedIn);
+
   const mock = {
     nickname: "John Doe",
     myUserId: "123",
@@ -48,8 +47,6 @@ const UserProfile = () => {
     reviews: 10,
     팔로잉여부: false
   };
-  console.log(userId);
-  const id = sessionStorage.getItem("uid") as string;
   const { data: userData } = useQuery({
     queryKey: ["user"],
     queryFn: () => getUserDataByUserId(userId)
@@ -69,12 +66,16 @@ const UserProfile = () => {
     queryKey: ["followingList", userId],
     queryFn: () => getFollowListByUserId(userId)
   });
+
+  console.log("followingList", followingList);
+
   const { data: followedList } = useQuery({
     queryKey: ["followedUser", userId],
     queryFn: () => getFollowedListByUserId(userId)
   });
 
-  console.log("followedUser", followedList?.length);
+  console.log("followedList", followedList);
+
   useEffect(() => {
     if (!editMode) return;
     newNicknameInput.current?.focus();

@@ -48,7 +48,6 @@ const AuthMenu = ({ logout }: Props) => {
       <li
         className={`${liClassName} block px-4 py-2 `}
         onClick={() => {
-          console.log("로그아웃 동작");
           logout();
           signOut();
         }}
@@ -61,7 +60,6 @@ const AuthMenu = ({ logout }: Props) => {
 
 const logedInCheck = async (setLogedIn: (state: boolean) => void) => {
   const { data, error } = await supabase.auth.getSession();
-  console.log(data.session === null);
   if (data.session !== null) setLogedIn(true);
 };
 

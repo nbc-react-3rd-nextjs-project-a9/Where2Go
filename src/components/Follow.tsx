@@ -15,6 +15,7 @@ const Follow = ({ userId, userNickname }: { userId: string; userNickname: string
 
   const { followingList, isFollowingListLoading, addFollowMutation, deleteFollowMutation } = useFollowQuery();
   const { logedIn, setLogedIn } = useLogedInStore();
+
   // following 리스트에 userId가 있다면
   const checkFollowingStatus = () => {
     if (!followingList?.find((data) => data.to === userId) || id === null) {
@@ -28,8 +29,8 @@ const Follow = ({ userId, userNickname }: { userId: string; userNickname: string
     addFollowMutation.mutate(newFollow);
   };
 
-  const deleteFollow = (id: string | string[]) => {
-    deleteFollowMutation.mutate(id);
+  const deleteFollow = (deleteFollow: Follow) => {
+    deleteFollowMutation.mutate(deleteFollow);
   };
 
   const followBtnHandler = async () => {
@@ -67,7 +68,7 @@ const Follow = ({ userId, userNickname }: { userId: string; userNickname: string
           title: "팔로우가 취소되었습니다!",
           icon: "success"
         });
-        deleteFollow(userId);
+        deleteFollow({ from: id, to: userId });
         setIsFollowing(false);
       }
     });

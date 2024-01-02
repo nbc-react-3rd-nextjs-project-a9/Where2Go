@@ -3,6 +3,7 @@ import PostCardList from "@/components/PostCardList";
 import Section from "@/components/layout/Section";
 import { categoryTagList } from "@/data/tagData";
 import HomeFilterTagList from "./HomeFilterTagList";
+import { supabase } from "@/lib/supabase";
 // import React, { useEffect, useState } from "react";
 
 interface Props {
@@ -43,7 +44,6 @@ const Home = async ({ searchParams }: Props) => {
 
   //   fetchData();
   // }, [category]);
-
   const urls = [
     "https://dummyimage.com/1700x400/616161/fff&text=image",
     "https://dummyimage.com/170x400/616161/fff&text=image,"
