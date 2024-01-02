@@ -37,10 +37,6 @@ const SignIn = ({ login, setLogin, setOpen }: Props) => {
     setLogedIn(true);
   };
 
-  const signInKakao = async () => {
-    signInWithKakao();
-  };
-
   return (
     <div className="absolute bg-white top-1/2 left-1/2 -translate-x-1/2 translate-y-1/4">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm p-8 border-solid border-2 ">
