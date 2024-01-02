@@ -38,13 +38,10 @@ const SignIn = ({ login, setLogin, setOpen }: Props) => {
     checkAuth();
     //로컬스토리지에 저장되는 user 정보에서 uid 가져오기
     // let userInfo = JSON.parse(localStorage.getItem("sb-fatcfzssyzoiskrplehv-auth-token") || "");
-    const {
-      data: { session }
-    } = await supabase.auth.getSession();
-    console.log(session?.user);
+    let userInfo = JSON.parse(localStorage.getItem("sb-cojgljiqpitvuwdvnmgf-auth-token") || "");
 
     //userInfoStore에 유저 정보 저장
-    getUserInfo(session?.user.id || "");
+    getUserInfo(userInfo.user.id || "");
   };
 
   return (

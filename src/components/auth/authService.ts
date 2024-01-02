@@ -27,6 +27,7 @@ async function signInWithKakao() {
 //로그아웃
 async function signOut() {
   const { error } = await supabase.auth.signOut();
+  sessionStorage.clear();
   checkAuth();
 }
 
