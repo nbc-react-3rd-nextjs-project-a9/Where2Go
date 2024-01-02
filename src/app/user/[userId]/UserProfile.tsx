@@ -1,6 +1,6 @@
 "use client";
 
-import { getFollowListByUserId, getFollowedListByUserId } from "@/api/places";
+import { getFollowListByUserId, getFollowedListByUserId, getPlaceReviewsDataByUserId } from "@/api/places";
 import { getUserDataByUserId } from "@/api/users";
 import Avatar from "@/components/Avatar";
 import Button from "@/components/Button";
@@ -9,7 +9,7 @@ import { useFollowQuery } from "@/hooks/useFollowQuery";
 import { supabase } from "@/lib/supabase";
 import useLogedInStore from "@/store/logedInStore";
 import { cleanObj } from "@/utils/cleanseData";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
 import React, { useEffect, useRef, useState } from "react";
 import { MdPhotoCameraBack } from "react-icons/md";
@@ -47,11 +47,10 @@ const UserProfile = () => {
     reviews: 10,
     팔로잉여부: false
   };
-  const { data: userData } = useQuery({
+  const { data: userData, refetch: userRefetch } = useQuery({
     queryKey: ["user"],
     queryFn: () => getUserDataByUserId(userId)
   });
-  console.log("유저데이터", userData);
 
   // useEffect(() => {
   //   const fetchUserData = async () => {
@@ -67,14 +66,15 @@ const UserProfile = () => {
     queryFn: () => getFollowListByUserId(userId)
   });
 
-  console.log("followingList", followingList);
-
   const { data: followedList } = useQuery({
     queryKey: ["followedUser", userId],
     queryFn: () => getFollowedListByUserId(userId)
   });
 
-  console.log("followedList", followedList);
+  const { data: placeReviewData } = useQuery({
+    queryKey: ["placeReview", userId],
+    queryFn: () => getPlaceReviewsDataByUserId(userId)
+  });
 
   useEffect(() => {
     if (!editMode) return;
@@ -97,13 +97,10 @@ const UserProfile = () => {
 
   const updateProfile = async () => {
     const data = cleanObj({
-      // const newData = cleanObj({
       image: newProfileImage,
       nickname: newNickname
     });
 
-    // TODO : supabase로 업로드하기
-    console.log("❗supabase로 업로드하기");
     //프로필 이미지 수정 시
     if (newProfileImage !== null) {
       //이미지 파일 스토리지(newProfileImage)에 업로드
@@ -122,6 +119,7 @@ const UserProfile = () => {
       console.log(error);
       // 세션스토리지 업데이트
       sessionStorage.setItem("avatar_url", newAvatarUrl);
+
       setEditMode(false);
     }
 
@@ -136,13 +134,13 @@ const UserProfile = () => {
       sessionStorage.setItem("nickname", newNickname);
     }
 
-    // cancelEditMode();
+    cancelEditMode();
+    userRefetch();
   };
 
   return (
     <div className="flex flex-row items-center gap-8">
       <div className="relative">
-        {/* <Avatar size="lg" src={newProfileImage && URL.createObjectURL(newProfileImage)} /> */}
         <Avatar size="lg" src={(newProfileImage && URL.createObjectURL(newProfileImage)) || userData?.avatar_url} />
 
         {editMode && (
@@ -183,7 +181,7 @@ const UserProfile = () => {
           <ProfileInfoRow title="팔로워">{followedList?.length}</ProfileInfoRow>
           <ProfileInfoRow title="팔로잉">{followingList?.length}</ProfileInfoRow>
         </div>
-        <ProfileInfoRow title="리뷰 수">{mock.reviews}</ProfileInfoRow>
+        <ProfileInfoRow title="리뷰 수">{placeReviewData?.length}</ProfileInfoRow>
         {userId !== curUserId ? (
           <div>
             {/* TODO : Optimistic Updates 적용해서 팔로잉 여부 확인하기 */}

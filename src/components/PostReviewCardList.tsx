@@ -28,6 +28,8 @@ const PostReviewCard = ({ placeData }: PostReviewCardProps) => {
     fetchPlaceId();
   }, []);
 
+  if (!publicUrl) return;
+
   return (
     <Link href={`/posts/${placeId}/${userId}`}>
       <div className="relative w-[12rem] h-[16rem]  mx-auto transition-all ring-2 ring-gray-100 rounded-lg  overflow-hidden shadow-md hover:ring-4 hover:ring-purple-500 ">

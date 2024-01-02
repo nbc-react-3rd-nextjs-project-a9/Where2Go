@@ -29,4 +29,23 @@ async function signOut() {
   checkAuth();
 }
 
-export { checkAuth, signInWithKakao, signOut };
+//supabase userinfo 테이블에서 정보 가져와서 userInfoStore에 저장
+async function getUserInfo(userId: string) {
+  const { data, error } = await supabase.from("userinfo").select().eq("id", userId);
+  const fetchData = data![0];
+  sessionStorage.setItem("uid", userId);
+  sessionStorage.setItem("nickname", fetchData.username);
+  sessionStorage.setItem("avatar_url", fetchData.avatar_url);
+}
+
+//이메일 형식 유효성 체크
+const emailValidChk = (id: string) => {
+  const pattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;
+  if (pattern.test(id) === false) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
+export { checkAuth, signInWithKakao, signOut, getUserInfo, emailValidChk };
