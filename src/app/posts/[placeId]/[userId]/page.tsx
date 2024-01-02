@@ -20,10 +20,10 @@ import {
 } from "@/api/places";
 import MapContainer from "@/components/map/MapContainer";
 import Swal from "sweetalert2";
-// import { useUserInfoStore } from "@/store/userInfoStore";
 import { useRouter } from "next/navigation";
 import Follow from "@/components/Follow";
 import Link from "next/link";
+import UpdatePostForm from "./UpdatePostForm";
 import useLogedInStore from "@/store/logedInStore";
 
 const PostPage = () => {
@@ -31,18 +31,19 @@ const PostPage = () => {
   const router = useRouter();
   const [selectUserData, setSelectUserData] = useState<User>();
   const { placeId, userId } = useParams<{ placeId: string; userId: string }>();
-  const uid = sessionStorage.getItem("uid");
+  const [isEditing, setIsEditing] = useState(false);
+  // const uid = sessionStorage.getItem("uid");
   const { logedIn } = useLogedInStore();
   // console.log(placeId);
   // console.log("목유저데이터", mockUserData);
 
-  // const onClickAvatar = (data: User) => {
-  //   setSelectUserData(data);
-  // };
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
 
-  // useEffect(() => {
-  //   setSelectUserData(mockUserData[0]);
-  // }, []);
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+  };
 
   const { data: placeData, isLoading: isPlaceDataLoading } = useQuery({
     queryKey: ["place"],
@@ -90,7 +91,7 @@ const PostPage = () => {
     }
   }
   console.log("publicUrls", publicUrls);
-  /*
+
   useEffect(() => {
     const fetchUser = async () => {
       const {
@@ -104,9 +105,6 @@ const PostPage = () => {
     fetchUser();
   }, []);
 
-  console.log("현재유저", currentUserId);
-  console.log("userId", userId);
-*/
   const deletePost = () => {
     Swal.fire({
       title: "정말 삭제하시겠습니까?",
@@ -138,12 +136,11 @@ const PostPage = () => {
       }
     });
   };
-
-  const updatePost = () => {
-    // router.push({
-    //   pathname
-    // })
-  };
+  if (isEditing) {
+    return (
+      <UpdatePostForm initialData={placeReviewDataByUserId && placeReviewDataByUserId[0]} onCancel={handleCancelEdit} />
+    );
+  }
 
   if (isPlaceDataLoading || isPlaceReviewDataLoading || isUserDataLoading) {
     return <div>로딩 중...</div>;
@@ -179,11 +176,11 @@ const PostPage = () => {
                 </Link>
                 <p className="font-bold min-w-[5rem]">{selectedUser?.username}</p>
                 {/* TODO : 유저가 나인지 아닌지 확인하고 작업 ㄱㄱ */}
-                {uid !== userId ? (
+                {currentUserId !== userId ? (
                   <Follow userId={userId} userNickname={selectedUser?.username} />
                 ) : (
                   <>
-                    <Button size="sm" theme="success" onClick={updatePost}>
+                    <Button size="sm" theme="success" onClick={handleEditClick}>
                       수정하기
                     </Button>
                     <Button size="sm" theme="warning" onClick={deletePost}>
