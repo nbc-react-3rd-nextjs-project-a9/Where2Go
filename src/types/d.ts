@@ -14,8 +14,8 @@ interface Image {
 }
 
 interface Follow {
-  follower: string;
-  following: string;
+  from: string | null;
+  to: string | string[];
 }
 
 interface Place {

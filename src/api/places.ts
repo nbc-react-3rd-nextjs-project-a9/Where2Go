@@ -31,3 +31,13 @@ export const getUserDataByUserIds = async (userIds: any[]): Promise<any[] | null
   const { data } = await supabase.from("userinfo").select().in("id", userIds);
   return data;
 };
+
+export const getFollowListByUserId = async (userId: string | null): Promise<any[] | null> => {
+  const { data } = await supabase.from("follow").select("to").eq("from", userId);
+  return data;
+};
+
+export const getFollowedListByUserId = async (userId: string | null): Promise<any[] | null> => {
+  const { data } = await supabase.from("follow").select("from").eq("to", userId);
+  return data;
+};
