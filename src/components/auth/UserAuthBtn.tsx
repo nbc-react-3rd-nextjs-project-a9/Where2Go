@@ -48,7 +48,6 @@ const AuthMenu = ({ logout }: Props) => {
       <li
         className={`${liClassName} block px-4 py-2 `}
         onClick={() => {
-          console.log("로그아웃 동작");
           logout();
           signOut();
         }}
