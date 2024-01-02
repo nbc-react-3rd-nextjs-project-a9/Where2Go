@@ -8,11 +8,13 @@ import Button from "@/components/Button";
 
 interface UpdatePostFormProps {
   initialData: {
+    // category: string;
     placeReviewId: string;
     content: string;
     placeId: string;
     userId: string;
-    // Add other necessary fields
+    visitedAt: string;
+    imageUrlList: string[];
   };
   onCancel: () => void;
 }
@@ -20,7 +22,7 @@ interface UpdatePostFormProps {
 const UpdatePostForm = ({ initialData, onCancel }: UpdatePostFormProps) => {
   const { register, handleSubmit, setValue } = useForm({
     defaultValues: {
-      content: initialData.content // 여기에 수정할 데이터의 기본값을 넣어줍니다.
+      content: initialData.content
     }
   });
   const router = useRouter();
