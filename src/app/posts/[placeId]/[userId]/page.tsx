@@ -30,6 +30,7 @@ const PostPage = () => {
   const router = useRouter();
   const [selectUserData, setSelectUserData] = useState<User>();
   const { placeId, userId } = useParams<{ placeId: string; userId: string }>();
+  const uid = sessionStorage.getItem("uid");
   // console.log(placeId);
   // console.log("목유저데이터", mockUserData);
 
@@ -86,7 +87,7 @@ const PostPage = () => {
       publicUrls.push(data.publicUrl);
     }
   }
-
+  /*
   useEffect(() => {
     const fetchUser = async () => {
       const {
@@ -102,7 +103,7 @@ const PostPage = () => {
 
   console.log("현재유저", currentUserId);
   console.log("userId", userId);
-
+*/
   const deletePost = () => {
     Swal.fire({
       title: "정말 삭제하시겠습니까?",
@@ -175,7 +176,7 @@ const PostPage = () => {
                 </Link>
                 <p className="font-bold min-w-[5rem]">{selectedUser?.username}</p>
                 {/* TODO : 유저가 나인지 아닌지 확인하고 작업 ㄱㄱ */}
-                {currentUserId !== userId ? (
+                {uid !== userId ? (
                   <Follow userId={userId} userNickname={selectedUser?.username} />
                 ) : (
                   <>
