@@ -5,13 +5,14 @@ import SignIn from "@/components/auth/SignIn";
 import { supabase } from "@/lib/supabase";
 
 import { useUserInfoStore } from "@/store/userInfoStore";
+import useModalStore from "@/store/modalStore";
 
 import { signOut, checkAuth } from "@/components/auth/authService";
 import { MdSupportAgent } from "react-icons/md";
 
 const authPage = () => {
   const { uid, nickname, avatar_url, updateName, updateAvatar, resetUser, getUID } = useUserInfoStore();
-
+  const { open, setOpen } = useModalStore();
   const [login, setLogin] = useState<boolean>(true);
   const check = async () => {
     const {
@@ -20,9 +21,20 @@ const authPage = () => {
     console.log(user);
   };
 
+  const switchMode = () => {
+    return login ? (
+      <SignIn login={login} setLogin={setLogin} setOpen={setOpen} />
+    ) : (
+      <SignUp login={login} setLogin={setLogin} setOpen={setOpen} />
+    );
+  };
+
   return (
-    <div>
-      {login ? <SignIn login={login} setLogin={setLogin} /> : <SignUp login={login} setLogin={setLogin} />}
+    <div className="">
+      <button onClick={() => setOpen(true)}>open</button>
+      <br />
+
+      {open && switchMode()}
       <button
         onClick={() => {
           signOut();

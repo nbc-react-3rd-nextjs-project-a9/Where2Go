@@ -2,16 +2,14 @@ import { create } from "zustand";
 
 interface ModalOpen {
   open: boolean;
-  modalType: string;
+
   setOpen: (state: boolean) => void;
-  setModalType: (state: string) => void;
 }
 
 const useModalStore = create<ModalOpen>((set) => ({
   open: false,
-  modalType: "login",
-  setOpen: (state) => set({ open: state }),
-  setModalType: (state) => set({ modalType: state })
+
+  setOpen: (state) => set({ open: state })
 }));
 
 export default useModalStore;
