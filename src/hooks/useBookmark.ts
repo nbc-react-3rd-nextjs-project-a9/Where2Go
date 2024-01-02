@@ -1,6 +1,7 @@
 import { bookmarkAPI } from "@/api/bookmark";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 
 interface Props {
   placeId: string;
@@ -29,10 +30,12 @@ const useBookmark = ({ placeId, userId }: Props) => {
 
   const addBookmark = () => {
     addBookmarkMutation.mutate();
+    toast.success("북마크 추가 완료");
   };
 
   const deleteBookmark = () => {
     deleteBookmarkMutation.mutate();
+    toast.error("북마크 삭제");
   };
 
   useEffect(() => {

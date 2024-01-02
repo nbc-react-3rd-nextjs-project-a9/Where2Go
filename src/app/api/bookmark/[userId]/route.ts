@@ -34,6 +34,7 @@ export const GET = async (request: NextRequest, { params }: any) => {
 
       return data;
     });
+
     return NextResponse.json(placeIdList);
   } catch (error) {
     return NextResponse.json({ error }, { status: 500 });
