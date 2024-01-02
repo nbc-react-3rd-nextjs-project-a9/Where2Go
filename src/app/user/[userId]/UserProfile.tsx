@@ -1,6 +1,6 @@
 "use client";
 
-import { getFollowListByUserId, getFollowedListByUserId } from "@/api/places";
+import { getFollowListByUserId, getFollowedListByUserId, getPlaceReviewsDataByUserId } from "@/api/places";
 import { getUserDataByUserId } from "@/api/users";
 import Avatar from "@/components/Avatar";
 import Button from "@/components/Button";
@@ -52,7 +52,6 @@ const UserProfile = () => {
     queryKey: ["user"],
     queryFn: () => getUserDataByUserId(userId)
   });
-  console.log("유저데이터", userData);
 
   // useEffect(() => {
   //   const fetchUserData = async () => {
@@ -68,14 +67,15 @@ const UserProfile = () => {
     queryFn: () => getFollowListByUserId(userId)
   });
 
-  console.log("followingList", followingList);
-
   const { data: followedList } = useQuery({
     queryKey: ["followedUser", userId],
     queryFn: () => getFollowedListByUserId(userId)
   });
 
-  console.log("followedList", followedList);
+  const { data: placeReviewData } = useQuery({
+    queryKey: ["placeReview", userId],
+    queryFn: () => getPlaceReviewsDataByUserId(userId)
+  });
 
   useEffect(() => {
     if (!editMode) return;
@@ -184,7 +184,7 @@ const UserProfile = () => {
           <ProfileInfoRow title="팔로워">{followedList?.length}</ProfileInfoRow>
           <ProfileInfoRow title="팔로잉">{followingList?.length}</ProfileInfoRow>
         </div>
-        <ProfileInfoRow title="리뷰 수">{mock.reviews}</ProfileInfoRow>
+        <ProfileInfoRow title="리뷰 수">{placeReviewData?.length}</ProfileInfoRow>
         {userId !== curUserId ? (
           <div>
             {/* TODO : Optimistic Updates 적용해서 팔로잉 여부 확인하기 */}
