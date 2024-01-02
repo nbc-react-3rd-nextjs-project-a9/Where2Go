@@ -32,7 +32,7 @@ export const getUserDataByUserIds = async (userIds: any[]): Promise<any[] | null
   return data;
 };
 
-export const getFollowListByUserId = async (userId: string) => {
-  const { data } = await supabase.from("follow").select("following").eq("follower", userId);
+export const getFollowListByUserId = async (userId: string): Promise<any[] | null> => {
+  const { data } = await supabase.from("follow").select("to").eq("from", userId);
   return data;
 };

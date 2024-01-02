@@ -20,6 +20,7 @@ import {
 } from "@/api/places";
 import MapContainer from "@/components/map/MapContainer";
 import { useUserInfoStore } from "@/store/userInfoStore";
+import Follow from "@/components/Follow";
 
 const PostPage = () => {
   const [selectUserData, setSelectUserData] = useState<User>();
@@ -92,27 +93,7 @@ const PostPage = () => {
   }
   // console.log("publicUrls", publicUrls);
 
-  const { data: followingList, isLoading: isFollowingListLoading } = useQuery({
-    queryKey: ["followingUser"],
-    queryFn: () => getFollowListByUserId(loginUserId)
-  });
-
-  console.log("user", loginUserId);
-  console.log("followinglist", followingList);
-
-  const followBtnHandler = async () => {
-    const { error: followError } = await supabase.from("follow").insert([
-      {
-        follower: loginUserId,
-        following: userId
-      }
-    ]);
-    if (followError) {
-      alert("follow error");
-    }
-  };
-
-  if (isPlaceDataLoading || isPlaceReviewDataLoading || isUserDataLoading || isFollowingListLoading) {
+  if (isPlaceDataLoading || isPlaceReviewDataLoading || isUserDataLoading) {
     return <div>로딩 중...</div>;
   }
 
@@ -145,9 +126,7 @@ const PostPage = () => {
                 <p className="font-bold min-w-[5rem]">{selectedUser?.username}</p>
                 {/* TODO : 유저가 나인지 아닌지 확인하고 작업 ㄱㄱ */}
                 {true ? (
-                  <Button size="sm" onClick={() => followBtnHandler()}>
-                    {true ? "팔로우" : "팔로우 중"}
-                  </Button>
+                  <Follow userId={userId} />
                 ) : (
                   <>
                     <Button size="sm" theme="success" onClick={() => console.log(1)}>
