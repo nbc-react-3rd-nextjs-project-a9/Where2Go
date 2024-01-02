@@ -16,6 +16,11 @@ export const getPlaceReviewsDataByPlaceName = async (placeName: string): Promise
   const { data } = await supabase.from("placeReview").select().eq("placeName", placeName);
   return data;
 };
+// test
+export const getPlaceReviewsDataByPlaceNameAndUserId = async (placeName: string, userId: string | string[]) => {
+  const { data } = await supabase.from("placeReview").select().eq("placeName", placeName).eq("userId", userId).single();
+  return data;
+};
 
 export const getPlaceReviewsDataByUserId = async (userId: string | string[]) => {
   const { data } = await supabase.from("placeReview").select().eq("userId", userId);
@@ -23,11 +28,21 @@ export const getPlaceReviewsDataByUserId = async (userId: string | string[]) => 
 };
 
 export const getUserIdInPlaceReviewsDataByPlaceName = async (placeName: string) => {
-  const { data } = await supabase.from("placeReview").select("userId").eq("plcaeName", placeName);
+  const { data } = await supabase.from("placeReview").select("userId").eq("placeName", placeName);
   return data;
 };
 
 export const getUserDataByUserIds = async (userIds: any[]): Promise<any[] | null> => {
   const { data } = await supabase.from("userinfo").select().in("id", userIds);
+  return data;
+};
+
+export const getFollowListByUserId = async (userId: string | null): Promise<any[] | null> => {
+  const { data } = await supabase.from("follow").select("to").eq("from", userId);
+  return data;
+};
+
+export const getFollowedListByUserId = async (userId: string | null): Promise<any[] | null> => {
+  const { data } = await supabase.from("follow").select("from").eq("to", userId);
   return data;
 };

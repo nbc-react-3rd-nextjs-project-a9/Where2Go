@@ -1,6 +1,7 @@
 import React from "react";
 import UserAuthBtn from "../auth/UserAuthBtn";
 import Link from "next/link";
+import Image from "next/image";
 
 const Header = () => {
   return (
@@ -8,7 +9,7 @@ const Header = () => {
       <div className="container m-auto flex flex-row items-center max-w-[1200px] min-h-[48px] w-[90%]">
         <nav className="flex flex-row gap-2">
           <Link href={"/"} className="mr-8">
-            로고
+            <Image src="/images/where2go_logo.jpeg" width={180} height={100} alt="logo" />
           </Link>
           <Link href={"/map"}>지도</Link>
           <Link href={"/auth"}>로그인</Link>

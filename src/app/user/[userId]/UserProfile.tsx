@@ -1,8 +1,11 @@
 "use client";
 
+import { getFollowListByUserId, getFollowedListByUserId } from "@/api/places";
 import { getUserDataByUserId } from "@/api/users";
 import Avatar from "@/components/Avatar";
 import Button from "@/components/Button";
+import Follow from "@/components/Follow";
+import { useFollowQuery } from "@/hooks/useFollowQuery";
 import { supabase } from "@/lib/supabase";
 import useLogedInStore from "@/store/logedInStore";
 import { cleanObj } from "@/utils/cleanseData";
@@ -36,7 +39,7 @@ const UserProfile = () => {
 
   const curUserId = logedIn ? sessionStorage.getItem("uid") : "";
   console.log(curUserId);
-
+  console.log("logedIn", logedIn);
   const mock = {
     nickname: "John Doe",
     myUserId: "123",
@@ -46,7 +49,7 @@ const UserProfile = () => {
     팔로잉여부: false
   };
   console.log(userId);
-
+  const id = sessionStorage.getItem("uid");
   const { data: userData } = useQuery({
     queryKey: ["user"],
     queryFn: () => getUserDataByUserId(userId)
@@ -62,7 +65,16 @@ const UserProfile = () => {
   //   };
   //   fetchUserData();
   // }, []);
+  const { data: followingList } = useQuery({
+    queryKey: ["followingList", userId],
+    queryFn: () => getFollowListByUserId(userId)
+  });
+  const { data: followedList } = useQuery({
+    queryKey: ["followedUser", userId],
+    queryFn: () => getFollowedListByUserId(userId)
+  });
 
+  console.log("followedUser", followedList?.length);
   useEffect(() => {
     if (!editMode) return;
     newNicknameInput.current?.focus();
@@ -102,9 +114,10 @@ const UserProfile = () => {
         return;
       }
       const newAvatarUrl = fileData.path;
+      const { data: publicUrl } = supabase.storage.from("userProfileImg").getPublicUrl(fileData.path);
       console.log(newAvatarUrl);
       // userInfo 테이블 업데이트
-      const { error } = await supabase.from("userinfo").update({ avatar_url: newAvatarUrl }).eq("id", curUserId);
+      const { error } = await supabase.from("userinfo").update({ avatar_url: publicUrl.publicUrl }).eq("id", curUserId);
       console.log(error);
       // 세션스토리지 업데이트
       sessionStorage.setItem("avatar_url", newAvatarUrl);
@@ -125,19 +138,11 @@ const UserProfile = () => {
     // cancelEditMode();
   };
 
-  const avatarUrl = (): null | string => {
-    const imagePath = userData?.avatar_url;
-    if (imagePath === null) return null;
-    const storage = supabase.storage.from("userProfileImg");
-    const imageUrl = storage.getPublicUrl(imagePath);
-    const publicUrl = imageUrl.data.publicUrl;
-    return publicUrl;
-  };
-
   return (
     <div className="flex flex-row items-center gap-8">
       <div className="relative">
-        <Avatar size="lg" src={(newProfileImage && URL.createObjectURL(newProfileImage)) || avatarUrl()} />
+        {/* <Avatar size="lg" src={newProfileImage && URL.createObjectURL(newProfileImage)} /> */}
+        <Avatar size="lg" src={(newProfileImage && URL.createObjectURL(newProfileImage)) || userData?.avatar_url} />
 
         {editMode && (
           <>
@@ -174,14 +179,14 @@ const UserProfile = () => {
           </>
         )}
         <div className="flex gap-8">
-          <ProfileInfoRow title="팔로워">{mock.follower}</ProfileInfoRow>
-          <ProfileInfoRow title="팔로잉">{mock.following}</ProfileInfoRow>
+          <ProfileInfoRow title="팔로워">{followedList?.length}</ProfileInfoRow>
+          <ProfileInfoRow title="팔로잉">{followingList?.length}</ProfileInfoRow>
         </div>
         <ProfileInfoRow title="리뷰 수">{mock.reviews}</ProfileInfoRow>
         {userId !== curUserId ? (
           <div>
             {/* TODO : Optimistic Updates 적용해서 팔로잉 여부 확인하기 */}
-            {mock.팔로잉여부 ? (
+            {/* {mock.팔로잉여부 ? (
               <Button size="sm">팔로잉 취소</Button>
             ) : (
               <Button
@@ -192,7 +197,8 @@ const UserProfile = () => {
               >
                 팔로잉
               </Button>
-            )}
+            )} */}
+            <Follow userId={userId} userNickname={userData?.username} />
           </div>
         ) : (
           <div className="flex flex-row gap-8">
