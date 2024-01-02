@@ -115,9 +115,10 @@ const UserProfile = () => {
         return;
       }
       const newAvatarUrl = fileData.path;
+      const { data: publicUrl } = supabase.storage.from("userProfileImg").getPublicUrl(fileData.path);
       console.log(newAvatarUrl);
       // userInfo 테이블 업데이트
-      const { error } = await supabase.from("userinfo").update({ avatar_url: newAvatarUrl }).eq("id", curUserId);
+      const { error } = await supabase.from("userinfo").update({ avatar_url: publicUrl.publicUrl }).eq("id", curUserId);
       console.log(error);
       // 세션스토리지 업데이트
       sessionStorage.setItem("avatar_url", newAvatarUrl);
@@ -138,20 +139,11 @@ const UserProfile = () => {
     // cancelEditMode();
   };
 
-  const avatarUrl = (): null | string => {
-    const imagePath = userData?.avatar_url;
-    if (imagePath === null) return null;
-    const storage = supabase.storage.from("userProfileImg");
-    const imageUrl = storage.getPublicUrl(imagePath);
-    const publicUrl = imageUrl.data.publicUrl;
-    return publicUrl;
-  };
-
   return (
     <div className="flex flex-row items-center gap-8">
       <div className="relative">
         {/* <Avatar size="lg" src={newProfileImage && URL.createObjectURL(newProfileImage)} /> */}
-        <Avatar size="lg" src={(newProfileImage && URL.createObjectURL(newProfileImage)) || avatarUrl()} />
+        <Avatar size="lg" src={(newProfileImage && URL.createObjectURL(newProfileImage)) || userData?.avatar_url} />
 
         {editMode && (
           <>

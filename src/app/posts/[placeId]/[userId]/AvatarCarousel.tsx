@@ -33,6 +33,9 @@ const AvatarCarousel = ({ avatarList }: Props) => {
       slideTo(Number(userId));
     }
   }, [swiperRef]);
+
+  console.log("avatarList", avatarList);
+
   return (
     <>
       <Swiper
@@ -53,7 +56,7 @@ const AvatarCarousel = ({ avatarList }: Props) => {
             <Link href={`/posts/${placeId}/${data.id}`}>
               <Avatar
                 size="md"
-                // src={data.imageUrl.url}
+                src={data.avatar_url}
                 className="hover:scale-110"
                 // onClick={() => onClickAvatar(n)}
                 onClick={() => console.log(1)}

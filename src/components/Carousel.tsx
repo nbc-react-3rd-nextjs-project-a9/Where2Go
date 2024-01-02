@@ -11,7 +11,6 @@ type Props = {
 };
 const Carousel = ({ urls }: Props) => {
   // TODO : 이미지 넣기
-  // console.log("캐러셀유알엘", urls);
   const testArr = [1, 2, 3, 4, 5];
   return (
     <Swiper

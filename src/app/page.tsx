@@ -3,6 +3,7 @@ import PostCardList from "@/components/PostCardList";
 import Section from "@/components/layout/Section";
 import { categoryTagList } from "@/data/tagData";
 import HomeFilterTagList from "./HomeFilterTagList";
+// import React, { useEffect, useState } from "react";
 
 interface Props {
   searchParams: {
@@ -25,20 +26,29 @@ const getPlaceData = async (category: string | null = null) => {
   if (checkCategory(category)) {
     api += `?category=${category}`;
   }
-  const res = await fetch(api);
+  const res = await fetch(api, { cache: "no-store" });
   const data = await res.json();
   return data;
 };
 
 const Home = async ({ searchParams }: Props) => {
   const { category } = searchParams;
+  // const [placesData, setPlacesData] = useState<Place[]>([]);
   const placesData: Place[] = await getPlaceData(category);
-  // const filteredData = data?.filter((item) => item.category === categoryValue);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     const data = await getPlaceData(category);
+  //     setPlacesData(data);
+  //   };
+
+  //   fetchData();
+  // }, [category]);
 
   const urls = [
     "https://dummyimage.com/1700x400/616161/fff&text=image",
     "https://dummyimage.com/170x400/616161/fff&text=image,"
   ];
+
   return (
     <>
       <Section title="Editor's Pick">
