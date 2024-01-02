@@ -17,7 +17,7 @@ import MapContainer from "@/components/map/MapContainer";
 
 const PostPage = () => {
   const [selectUserData, setSelectUserData] = useState<User>();
-  const { placeId, userId } = useParams();
+  const { placeId, userId }: { placeId: string; userId: string } = useParams();
 
   console.log(placeId);
   // console.log("목유저데이터", mockUserData);
@@ -80,7 +80,7 @@ const PostPage = () => {
   return (
     <>
       <div className="relative">
-        <Bookmark />
+        <Bookmark placeId={placeId} />
         <Carousel urls={publicUrls} />
         <div className="flex w-full px-4 py-4 text-white justify-between items-center absolute bottom-0 z-10 backdrop-blur-sm  backdrop-contrast-75">
           <h1 className="font-bold text-2xl">{placeData?.placeName}</h1>

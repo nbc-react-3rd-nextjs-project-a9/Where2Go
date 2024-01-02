@@ -2,7 +2,6 @@ import Section from "@/components/layout/Section";
 import UserReview from "./UserReview";
 import UserProfile from "./UserProfile";
 import UserBookmarkList from "./UserBookmarkList";
-import Button from "@/components/Button";
 
 const UserPage = () => {
   return (
@@ -13,9 +12,9 @@ const UserPage = () => {
       <Section title="북마크">
         <UserBookmarkList />
       </Section>
-      {/* <Section title="작성한 리뷰">
+      <Section title="작성한 리뷰">
         <UserReview />
-      </Section> */}
+      </Section>
     </>
   );
 };

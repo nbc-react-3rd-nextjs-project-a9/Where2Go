@@ -1,7 +1,7 @@
 const addBookmark = async (userId: string, placeId: string) => {
   const submitData = { userId, placeId };
   try {
-    const res = await fetch(`http://localhost:3000/api/bookmark/${userId}/${placeId}`, {
+    const res = await fetch(`/api/bookmark/${userId}/${placeId}`, {
       method: "POST",
       body: JSON.stringify(submitData),
       headers: {
@@ -10,35 +10,46 @@ const addBookmark = async (userId: string, placeId: string) => {
     });
 
     if (res.ok) {
-      console.log("업로드");
     } else {
-      console.log("업로드 실패");
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
+  }
+};
+
+const deleteBookmark = async (userId: string, placeId: string) => {
+  const submitData = { userId, placeId };
+  try {
+    const res = await fetch(`/api/bookmark/${userId}/${placeId}`, {
+      method: "DELETE",
+      headers: {
+        "content-type": "application/json"
+      }
+    });
+    if (res.ok) return true;
+  } catch (error) {
+    console.error(error);
   }
 };
 
 const getBookmarkList = async (userId: string) => {
-  const res = await fetch(`http://localhost:3000/api/bookmark/${userId}`);
+  const res = await fetch(`/api/bookmark/${userId}`);
   const data = await res.json();
-  console.log(data);
   return data;
 };
 
 const checkBookmark = async (userId: string, placeId: string) => {
   try {
-    const res = await fetch(`http://localhost:3000/api/bookmark/${userId}/${placeId}`);
+    const res = await fetch(`/api/bookmark/${userId}/${placeId}`);
     const data = await res.json();
+
     return data;
   } catch (error) {
     console.error(error);
   }
 };
 
-const deleteBookmark = () => {};
-
-export const bookmark = {
+export const bookmarkAPI = {
   addBookmark,
   deleteBookmark,
   checkBookmark,
