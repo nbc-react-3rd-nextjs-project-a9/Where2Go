@@ -4,6 +4,7 @@ import { supabase } from "@/lib/supabase";
 import Button from "@/components/Button";
 import { VscChromeClose } from "react-icons/vsc";
 import useLogedInStore from "@/store/logedInStore";
+import { emailValidChk } from "./authService";
 
 interface Props {
   login: boolean;
@@ -20,15 +21,8 @@ const SignUp = ({ login, setLogin, setOpen }: Props) => {
 
   const { setLogedIn } = useLogedInStore();
 
-  //이메일 형식 유효성 체크
-  const pattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;
-  const emailValidChk = () => {
-    if (pattern.test(id) === false) {
-      return false;
-    } else {
-      return true;
-    }
-  };
+  const pwValid = pwCheck !== "" && pw === pwCheck ? true : false;
+  const isValid = pwValid && emailValidChk(id) && pw.length > 5 && name !== "" ? false : true;
 
   async function getUserInfo(userId: string, nickname: string, avatar_url: string) {
     sessionStorage.setItem("uid", userId);
@@ -72,7 +66,7 @@ const SignUp = ({ login, setLogin, setOpen }: Props) => {
             <div>
               <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                 Email address{" "}
-                {emailValidChk() ? (
+                {emailValidChk(id) ? (
                   <span>✅</span>
                 ) : (
                   <span className="text-xs text-red-600"> 이메일 형식이 유효하지 않습니다.</span>
@@ -119,7 +113,7 @@ const SignUp = ({ login, setLogin, setOpen }: Props) => {
               <div className="flex items-center justify-between">
                 <label htmlFor="pwConfirm" className="block text-sm font-medium leading-6 text-gray-900">
                   Password 확인{" "}
-                  {pw !== pwCheck ? (
+                  {!pwValid ? (
                     <span className="text-xs text-red-600">비밀번호가 일치하지 않습니다.</span>
                   ) : (
                     <span>✅</span>
@@ -159,7 +153,7 @@ const SignUp = ({ login, setLogin, setOpen }: Props) => {
             </div>
 
             <div>
-              <Button type="submit" size="md" className="sm:mx-auto sm:w-full sm:max-w-sm mb-8 mt-2">
+              <Button type="submit" size="md" disabled={isValid} className="sm:mx-auto sm:w-full sm:max-w-sm mb-8 mt-2">
                 SignUp & Login
               </Button>
             </div>

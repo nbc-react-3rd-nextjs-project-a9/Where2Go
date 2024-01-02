@@ -9,7 +9,7 @@ import LoginModal from "./LoginModal";
 
 import useModalStore from "@/store/modalStore";
 import useLogedInStore from "@/store/logedInStore";
-import { signOut } from "./authService";
+import { getUserInfo, signOut } from "./authService";
 
 interface Props {
   logout: () => void;
@@ -60,7 +60,10 @@ const AuthMenu = ({ logout }: Props) => {
 
 const logedInCheck = async (setLogedIn: (state: boolean) => void) => {
   const { data, error } = await supabase.auth.getSession();
-  if (data.session !== null) setLogedIn(true);
+  if (data.session !== null) {
+    setLogedIn(true);
+    getUserInfo(data.session.user.id);
+  }
 };
 
 const UserAuthBtn = () => {
@@ -71,6 +74,7 @@ const UserAuthBtn = () => {
   const { open, setOpen } = useModalStore();
 
   const { logedIn, setLogedIn } = useLogedInStore();
+
   const handleLogOut = () => {
     setLogedIn(false);
   };
@@ -89,12 +93,19 @@ const UserAuthBtn = () => {
       window.removeEventListener("click", closeMenu);
     };
   }, [openMenu]);
+
+  // const avatar = sessionStorage.getItem("avatar_url");
+
   return (
     <>
       <LoginModal />
       <div className="relative min-w-[10rem] flex justify-end">
         {logedIn ? (
-          <Avatar size="sm" onClick={() => setOpenMenu(true)} />
+          sessionStorage.getItem("avatar_url") === "null" ? (
+            <Avatar size="sm" onClick={() => setOpenMenu(true)} />
+          ) : (
+            <Avatar src={sessionStorage.getItem("avatar_url")} size="sm" onClick={() => setOpenMenu(true)} />
+          )
         ) : (
           <Button
             onClick={() => {
