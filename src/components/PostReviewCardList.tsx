@@ -20,9 +20,7 @@ const PostReviewCard = ({ placeData }: PostReviewCardProps) => {
     const fetchPlaceId = async () => {
       const { data } = await supabase.from("places").select().eq("placeName", placeData.placeName).single();
       const { data: publicUrl } = supabase.storage.from("placeReviewImg").getPublicUrl(placeData.imageUrlList[0]);
-      console.log("placeId", data?.placeId);
-      console.log("address", data?.address);
-      console.log("publicUrl", publicUrl);
+
       setPlaceId(data?.placeId);
       setAddress(data?.address);
       setPublicUrl(publicUrl.publicUrl);
