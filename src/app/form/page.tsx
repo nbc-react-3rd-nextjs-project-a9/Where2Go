@@ -16,7 +16,6 @@ import useMapStore from "@/store/store";
 import { v4 as uuidv4 } from "uuid";
 import { useRouter } from "next/navigation";
 import { toast } from "react-toastify";
-import { toast } from "react-toastify";
 
 const FormPage = () => {
   const [content, setContent] = useState("");
@@ -92,8 +91,6 @@ const FormPage = () => {
       } else {
         console.log("placeReview 데이터가 성공적으로 삽입되었습니다:", placeReviewData);
       }
-      toast.success("업로드 성공!");
-      router.push("/");
       toast.success("업로드 성공!");
       router.push("/");
     } catch (error) {
