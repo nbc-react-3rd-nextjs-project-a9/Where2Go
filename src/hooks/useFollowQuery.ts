@@ -4,7 +4,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useFollowQuery = () => {
   const queryClient = useQueryClient();
-  const id = sessionStorage.getItem("uid");
+  const id = sessionStorage.getItem("uid") as string;
 
   const { data: followingList, isLoading: isFollowingListLoading } = useQuery({
     queryKey: ["followingUser", id],

@@ -49,7 +49,7 @@ const UserProfile = () => {
     팔로잉여부: false
   };
   console.log(userId);
-  const id = sessionStorage.getItem("uid");
+  const id = sessionStorage.getItem("uid") as string;
   const { data: userData } = useQuery({
     queryKey: ["user"],
     queryFn: () => getUserDataByUserId(userId)
