@@ -101,8 +101,6 @@ const UserProfile = () => {
       nickname: newNickname
     });
 
-    // TODO : supabase로 업로드하기
-    console.log("❗supabase로 업로드하기");
     //프로필 이미지 수정 시
     if (newProfileImage !== null) {
       //이미지 파일 스토리지(newProfileImage)에 업로드
