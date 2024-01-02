@@ -12,37 +12,28 @@ import { CiShare2 } from "react-icons/ci";
 import { supabase } from "@/lib/supabase";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import {
-  getPlaceDataByPlaceId,
-  getPlaceReviewsDataByPlaceName,
-  getPlaceReviewsDataByPlaceNameAndUserId,
-  getUserDataByUserIds
-} from "@/api/places";
+import { getPlaceDataByPlaceId, getPlaceReviewsDataByPlaceName, getUserDataByUserIds } from "@/api/places";
 import MapContainer from "@/components/map/MapContainer";
 import Swal from "sweetalert2";
-// import { useUserInfoStore } from "@/store/userInfoStore";
 import { useRouter } from "next/navigation";
 import Follow from "@/components/Follow";
 import Link from "next/link";
+import UpdatePostForm from "./UpdatePostForm";
 
 const PostPage = () => {
   const [currentUserId, setCurrentUserId] = useState("");
   const router = useRouter();
   const [selectUserData, setSelectUserData] = useState<User>();
   const { placeId, userId } = useParams<{ placeId: string; userId: string }>();
+  const [isEditing, setIsEditing] = useState(false);
 
-  // const uid = sessionStorage.getItem("uid") as string;
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
 
-  // console.log(placeId);
-  // console.log("목유저데이터", mockUserData);
-
-  // const onClickAvatar = (data: User) => {
-  //   setSelectUserData(data);
-  // };
-
-  // useEffect(() => {
-  //   setSelectUserData(mockUserData[0]);
-  // }, []);
+  const handleCancelEdit = () => {
+    setIsEditing(false);
+  };
 
   const { data: placeData, isLoading: isPlaceDataLoading } = useQuery({
     queryKey: ["place"],
@@ -134,12 +125,11 @@ const PostPage = () => {
       }
     });
   };
-
-  const updatePost = () => {
-    // router.push({
-    //   pathname
-    // })
-  };
+  if (isEditing) {
+    return (
+      <UpdatePostForm initialData={placeReviewDataByUserId && placeReviewDataByUserId[0]} onCancel={handleCancelEdit} />
+    );
+  }
 
   if (isPlaceDataLoading || isPlaceReviewDataLoading || isUserDataLoading) {
     return <div>로딩 중...</div>;
@@ -179,7 +169,7 @@ const PostPage = () => {
                   <Follow userId={userId} userNickname={selectedUser?.username} />
                 ) : (
                   <>
-                    <Button size="sm" theme="success" onClick={updatePost}>
+                    <Button size="sm" theme="success" onClick={handleEditClick}>
                       수정하기
                     </Button>
                     <Button size="sm" theme="warning" onClick={deletePost}>
