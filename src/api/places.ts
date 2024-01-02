@@ -37,6 +37,9 @@ export const getUserDataByUserIds = async (userIds: any[]): Promise<any[] | null
   return data;
 };
 
+// export const getFollowId = async() => {
+//   const {data} = await supabase.from('follow').select()
+// }
 export const getFollowListByUserId = async (userId: string | null): Promise<any[] | null> => {
   const { data } = await supabase.from("follow").select("to").eq("from", userId);
   return data;

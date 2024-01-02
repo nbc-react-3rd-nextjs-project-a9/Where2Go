@@ -6,6 +6,7 @@ export const useFollowQuery = () => {
   const queryClient = useQueryClient();
   const id = sessionStorage.getItem("uid");
 
+  // const { data: followId, isLoading: isFollwIdLoading } = useQuery({});
   const { data: followingList, isLoading: isFollowingListLoading } = useQuery({
     queryKey: ["followingUser", id],
     queryFn: () => getFollowListByUserId(id)
