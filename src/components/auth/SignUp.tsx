@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import Button from "@/components/Button";
 import { VscChromeClose } from "react-icons/vsc";
+import useLogedInStore from "@/store/logedInStore";
 
 interface Props {
   login: boolean;
@@ -16,6 +17,8 @@ const SignUp = ({ login, setLogin, setOpen }: Props) => {
   const [pw, setPw] = useState<string>("");
   const [pwCheck, setPwCheck] = useState<string>("");
   const [name, setName] = useState<string>("");
+
+  const { setLogedIn } = useLogedInStore();
 
   //이메일 형식 유효성 체크
   const pattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;
@@ -49,6 +52,9 @@ const SignUp = ({ login, setLogin, setOpen }: Props) => {
     console.log(data.user || error);
     const uid = data.user?.id;
     getUserInfo(uid || "", name, "");
+    setOpen(false);
+    setLogedIn(true);
+    setLogin(!login);
   }
 
   return (

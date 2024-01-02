@@ -4,6 +4,7 @@ import { getUserDataByUserId } from "@/api/users";
 import Avatar from "@/components/Avatar";
 import Button from "@/components/Button";
 import { supabase } from "@/lib/supabase";
+import useLogedInStore from "@/store/logedInStore";
 import { cleanObj } from "@/utils/cleanseData";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "next/navigation";
@@ -30,6 +31,12 @@ const UserProfile = () => {
   const [editMode, setEditMode] = useState(false);
   const [newProfileImage, setNewProfileImage] = useState<File | null>(null);
   const [newNickname, setNewNickname] = useState<string>("");
+
+  const { logedIn, setLogedIn } = useLogedInStore();
+
+  const curUserId = logedIn ? sessionStorage.getItem("uid") : "";
+  console.log(curUserId);
+
   const mock = {
     nickname: "John Doe",
     myUserId: "123",
@@ -82,6 +89,9 @@ const UserProfile = () => {
 
     // TODO : supabase로 업로드하기
     console.log("❗supabase로 업로드하기");
+    // const { data, error } = await supabase.auth.updateUser({
+    //   data: { hello: "world" }
+    // });
     console.log(data);
   };
 
@@ -128,7 +138,7 @@ const UserProfile = () => {
           <ProfileInfoRow title="팔로잉">{mock.following}</ProfileInfoRow>
         </div>
         <ProfileInfoRow title="리뷰 수">{mock.reviews}</ProfileInfoRow>
-        {userId !== mock.myUserId ? (
+        {userId !== curUserId ? (
           <div>
             {/* TODO : Optimistic Updates 적용해서 팔로잉 여부 확인하기 */}
             {mock.팔로잉여부 ? (
