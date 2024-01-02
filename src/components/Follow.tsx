@@ -6,6 +6,7 @@ import { getFollowListByUserId } from "@/api/places";
 import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import { useFollowQuery } from "@/hooks/useFollowQuery";
+import useLogedInStore from "@/store/logedInStore";
 
 const Follow = ({ userId, userNickname }: { userId: string; userNickname: string }) => {
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
@@ -13,7 +14,7 @@ const Follow = ({ userId, userNickname }: { userId: string; userNickname: string
   const id = sessionStorage.getItem("uid");
 
   const { followingList, isFollowingListLoading, addFollowMutation, deleteFollowMutation } = useFollowQuery();
-
+  const { logedIn, setLogedIn } = useLogedInStore();
   // following 리스트에 userId가 있다면
   const checkFollowingStatus = () => {
     if (!followingList?.find((data) => data.to === userId) || id === null) {
@@ -80,14 +81,18 @@ const Follow = ({ userId, userNickname }: { userId: string; userNickname: string
   }
   return (
     <>
-      {isFollowing ? (
-        <Button size="sm" onClick={() => deleteFollowBtnHandler()}>
-          팔로잉
-        </Button>
+      {logedIn ? (
+        isFollowing ? (
+          <Button size="sm" onClick={() => deleteFollowBtnHandler()}>
+            팔로잉
+          </Button>
+        ) : (
+          <Button size="sm" onClick={() => followBtnHandler()}>
+            팔로우
+          </Button>
+        )
       ) : (
-        <Button size="sm" onClick={() => followBtnHandler()}>
-          팔로우
-        </Button>
+        <div></div>
       )}
     </>
   );
