@@ -8,6 +8,7 @@ import { supabase } from "@/lib/supabase";
 import LoginModal from "./LoginModal";
 
 import useModalStore from "@/store/modalStore";
+import { signOut } from "./authService";
 
 interface Props {
   logout: () => void;
@@ -48,6 +49,7 @@ const AuthMenu = ({ logout }: Props) => {
         onClick={() => {
           console.log("로그아웃 동작");
           logout();
+          signOut();
         }}
       >
         로그아웃

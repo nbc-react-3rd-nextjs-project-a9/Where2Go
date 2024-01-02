@@ -5,8 +5,6 @@ import { signInWithKakao, checkAuth } from "./authService";
 import Button from "@/components/Button";
 import { VscChromeClose } from "react-icons/vsc";
 
-import { useUserInfoStore } from "@/store/userInfoStore";
-
 interface Props {
   login: boolean;
   setLogin: React.Dispatch<React.SetStateAction<boolean>>;
@@ -14,8 +12,6 @@ interface Props {
 }
 
 const SignIn = ({ login, setLogin, setOpen }: Props) => {
-  const { nickname, avatar_url, uid, getUID, updateName, updateAvatar } = useUserInfoStore();
-
   const [id, setId] = useState<string>("");
   const [pw, setPw] = useState<string>("");
 
@@ -23,9 +19,9 @@ const SignIn = ({ login, setLogin, setOpen }: Props) => {
   async function getUserInfo(userId: string) {
     const { data, error } = await supabase.from("userinfo").select().eq("id", userId);
     const fetchData = data![0];
-    getUID(userId);
-    updateAvatar(fetchData.avatar_url);
-    updateName(fetchData.username);
+    sessionStorage.setItem("uid", userId);
+    sessionStorage.setItem("nickname", fetchData.username);
+    sessionStorage.setItem("avatar_url", fetchData.avatar_url);
   }
 
   const signInWithEmail = async (e: React.FormEvent) => {
@@ -36,6 +32,7 @@ const SignIn = ({ login, setLogin, setOpen }: Props) => {
     });
 
     checkAuth();
+
     //로컬스토리지에 저장되는 user 정보에서 uid 가져오기
     // let userInfo = JSON.parse(localStorage.getItem("sb-fatcfzssyzoiskrplehv-auth-token") || "");
     let userInfo = JSON.parse(localStorage.getItem("sb-cojgljiqpitvuwdvnmgf-auth-token") || "");
