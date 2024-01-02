@@ -5,6 +5,9 @@ import Avatar from "../Avatar";
 import Button from "../Button";
 import Link from "next/link";
 import { supabase } from "@/lib/supabase";
+import LoginModal from "./LoginModal";
+
+import useModalStore from "@/store/modalStore";
 
 interface Props {
   logout: () => void;
@@ -57,6 +60,9 @@ const UserAuthBtn = () => {
   const [login, setLogin] = useState(false);
   const [openMenu, setOpenMenu] = useState(false);
 
+  //모달상태 store
+  const { open, setOpen } = useModalStore();
+
   const handleLogOut = () => {
     setLogin(false);
   };
@@ -75,6 +81,7 @@ const UserAuthBtn = () => {
   }, [openMenu]);
   return (
     <>
+      <LoginModal />
       <div className="relative min-w-[10rem] flex justify-end">
         {login ? (
           <Avatar size="sm" onClick={() => setOpenMenu(true)} />
@@ -82,6 +89,7 @@ const UserAuthBtn = () => {
           <Button
             onClick={() => {
               setLogin(true);
+              setOpen(true);
             }}
           >
             로그인
