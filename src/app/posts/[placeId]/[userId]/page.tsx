@@ -12,29 +12,33 @@ import { CiShare2 } from "react-icons/ci";
 import { supabase } from "@/lib/supabase";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { getPlaceDataByPlaceId, getPlaceReviewsDataByPlaceName, getUserDataByUserIds } from "@/api/places";
+import {
+  getPlaceDataByPlaceId,
+  getPlaceReviewsDataByPlaceName,
+  getPlaceReviewsDataByPlaceNameAndUserId,
+  getUserDataByUserIds
+} from "@/api/places";
 import MapContainer from "@/components/map/MapContainer";
+import Swal from "sweetalert2";
 
 const PostPage = () => {
-  const [selectUserData, setSelectUserData] = useState<User>();
+  // const [selectUserData, setSelectUserData] = useState<User>();
   const { placeId, userId } = useParams();
-
-  console.log(placeId);
+  const [currentUserId, setCurrentUserId] = useState("");
   // console.log("목유저데이터", mockUserData);
 
-  const onClickAvatar = (data: User) => {
-    setSelectUserData(data);
-  };
+  // const onClickAvatar = (data: User) => {
+  //   setSelectUserData(data);
+  // };
 
-  useEffect(() => {
-    setSelectUserData(mockUserData[0]);
-  }, []);
+  // useEffect(() => {
+  //   setSelectUserData(mockUserData[0]);
+  // }, []);
 
   const { data: placeData, isLoading: isPlaceDataLoading } = useQuery({
     queryKey: ["place"],
     queryFn: () => getPlaceDataByPlaceId(placeId)
   });
-  console.log("플레이스데이터 한개", placeData);
 
   // queryKey 추가
   const { data: placeReviewData, isLoading: isPlaceReviewDataLoading } = useQuery({
@@ -42,37 +46,66 @@ const PostPage = () => {
     queryFn: () => getPlaceReviewsDataByPlaceName(placeData.placeName),
     enabled: !!placeData
   });
-  console.log("플레이스 리뷰 데이타!", placeReviewData);
 
   const userIds = placeReviewData?.map((data) => data.userId) || [];
-  console.log("userIds", userIds);
-
   // isLoading 옵션 추가, queryKey 추가
+
   const { data: userData, isLoading: isUserDataLoading } = useQuery({
     queryKey: ["users", placeReviewData],
     queryFn: () => getUserDataByUserIds(userIds),
     enabled: !!userIds
   });
-  console.log("유저데이터에용", userData);
 
+  const { data: placeReviewDataByUserIdD } = useQuery({
+    queryKey: ["placeReviewData", placeReviewData],
+    queryFn: () => getPlaceReviewsDataByPlaceNameAndUserId(placeData.placeName, userId)
+  });
+  console.log("플로에스리뷰데이터바이유저아이디@", placeReviewDataByUserIdD);
   const placeReviewDataByUserId = placeReviewData?.filter((data) => data.userId === userId);
-  console.log("플레이스 리뷰데이터 바이 유저아이디", placeReviewDataByUserId);
-
+  console.log("플레이스리뷰데이터바이유저아이디", placeReviewDataByUserId);
+  // const placeReviewId = placeReviewDataByUserId[0].placeReviewId
   // 같은 장소에 리뷰를 쓴 유저들 중 현재 페이지에 맞는 user 정보
   const selectedUser = userData?.find((user) => user.id === userId);
-  console.log("selected User", selectedUser);
 
   let publicUrls = [];
 
   if (placeReviewDataByUserId !== undefined && placeReviewDataByUserId[0]?.imageUrlList) {
     for (const url of placeReviewDataByUserId[0]?.imageUrlList) {
-      console.log("url", url);
       const { data } = supabase.storage.from("placeReviewImg").getPublicUrl(url);
       publicUrls.push(data.publicUrl);
     }
   }
-  console.log("publicUrls", publicUrls);
 
+  useEffect(() => {
+    const fetchUser = async () => {
+      const {
+        data: { session }
+      } = await supabase.auth.getSession();
+      if (session) {
+        console.log("세션", session.user);
+        setCurrentUserId(session.user.id);
+      }
+    };
+    fetchUser();
+  }, []);
+
+  console.log("현재유저", currentUserId);
+  console.log("userId", userId);
+
+  const deletePost = async () => {
+    Swal.fire({
+      title: "정말 삭제하시겠습니까?",
+      text: "한 번 삭제하면 되돌릴 수 없습니다.",
+      icon: "info",
+      showCancelButton: true,
+      confirmButtonText: "삭제",
+      cancelButtonText: "취소"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        // const { error } = await supabase.from("placeReview").delete().eq("placeReviewId", d);
+      }
+    });
+  };
   if (isPlaceDataLoading || isPlaceReviewDataLoading || isUserDataLoading) {
     return <div>로딩 중...</div>;
   }
@@ -99,13 +132,13 @@ const PostPage = () => {
           <AvatarCarousel avatarList={userData} />
         </Section>
         <Section title="리뷰">
-          {!!selectUserData ? (
+          {
             <>
               <div className="flex flex-row items-center gap-4 mb-4">
                 <Avatar size="sm" src={selectedUser?.avatar_url} />
                 <p className="font-bold min-w-[5rem]">{selectedUser?.username}</p>
                 {/* TODO : 유저가 나인지 아닌지 확인하고 작업 ㄱㄱ */}
-                {true ? (
+                {currentUserId !== userId ? (
                   <Button size="sm" onClick={() => console.log(1)}>
                     {true ? "팔로우" : "팔로우 중"}
                   </Button>
@@ -114,7 +147,7 @@ const PostPage = () => {
                     <Button size="sm" theme="success" onClick={() => console.log(1)}>
                       수정하기
                     </Button>
-                    <Button size="sm" theme="warning" onClick={() => console.log(1)}>
+                    <Button size="sm" theme="warning" onClick={deletePost}>
                       삭제하기
                     </Button>
                   </>
@@ -122,9 +155,7 @@ const PostPage = () => {
               </div>
               <p className="">{placeReviewDataByUserId && placeReviewDataByUserId[0]?.content}</p>
             </>
-          ) : (
-            <></>
-          )}
+          }
         </Section>
         <Section title="주소">
           <p>{placeData.address}</p>
