@@ -125,10 +125,10 @@ const PostPage = () => {
           )}
         </Section>
         <Section title="주소">
-          <p>{placeData.address}</p>
+          <p>{placeData?.address}</p>
         </Section>
         <Section title="지도">
-          <MapContainer lat={placeData.latlng.lat} lng={placeData.latlng.lng} />
+          <MapContainer lat={placeData?.latlng.lat} lng={placeData?.latlng.lng} />
         </Section>
       </div>
     </>
