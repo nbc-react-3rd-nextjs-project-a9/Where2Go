@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import Button from "@/components/Button";
 import { VscChromeClose } from "react-icons/vsc";
-import { useUserInfoStore } from "@/store/userInfoStore";
 
 interface Props {
   login: boolean;
@@ -18,8 +17,6 @@ const SignUp = ({ login, setLogin, setOpen }: Props) => {
   const [pwCheck, setPwCheck] = useState<string>("");
   const [name, setName] = useState<string>("");
 
-  const { nickname, avatar_url, uid, getUID, updateName, updateAvatar } = useUserInfoStore();
-
   //이메일 형식 유효성 체크
   const pattern = /^[A-Za-z0-9_\.\-]+@[A-Za-z0-9\-]+\.[A-za-z0-9\-]+/;
   const emailValidChk = () => {
@@ -30,14 +27,10 @@ const SignUp = ({ login, setLogin, setOpen }: Props) => {
     }
   };
 
-  //supabase userinfo 테이블에서 정보 가져와서 userInfoStore에 저장
-  async function getUserInfo(userId: string) {
-    const { data, error } = await supabase.from("userinfo").select().eq("id", userId);
-    console.log(data);
-    const fetchData = data![0];
-    getUID(userId);
-    updateAvatar(fetchData.avatar_url);
-    updateName(fetchData.username);
+  async function getUserInfo(userId: string, nickname: string, avatar_url: string) {
+    sessionStorage.setItem("uid", userId);
+    sessionStorage.setItem("nickname", nickname);
+    sessionStorage.setItem("avatar_url", avatar_url);
   }
 
   async function signUpNewUser(e: React.FormEvent) {
@@ -54,13 +47,8 @@ const SignUp = ({ login, setLogin, setOpen }: Props) => {
     });
 
     console.log(data.user || error);
-    // setLogin(!login);
-    // let userInfo = JSON.parse(localStorage.getItem("sb-fatcfzssyzoiskrplehv-auth-token") || "");
-    // // console.log(userInfo.user.id);
-
-    // //userInfoStore에 유저 정보 저장
-    console.log(data.user?.id);
-    getUserInfo(data.user?.id || "");
+    const uid = data.user?.id;
+    getUserInfo(uid || "", name, "");
   }
 
   return (
