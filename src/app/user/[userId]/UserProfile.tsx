@@ -52,20 +52,12 @@ const UserProfile = () => {
 
   const id = sessionStorage.getItem("uid");
 
-  const queryClient = useQueryClient();
-  const { data: userData } = useQuery({
+  // const queryClient = useQueryClient();
+  const { data: userData, refetch: userRefetch } = useQuery({
     queryKey: ["user"],
     queryFn: () => getUserDataByUserId(userId)
   });
   console.log("유저데이터", userData);
-
-  const userDataMutation = useMutation({
-    mutationFn: () => updateProfile(),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["user"] });
-    }
-  });
-
   // useEffect(() => {
   //   const fetchUserData = async () => {
   //     const {
@@ -145,6 +137,7 @@ const UserProfile = () => {
 
     // setEditMode(false);
     cancelEditMode();
+    userRefetch();
   };
 
   return (

@@ -61,7 +61,6 @@ const AuthMenu = ({ logout }: Props) => {
 
 const logedInCheck = async (setLogedIn: (state: boolean) => void) => {
   const { data, error } = await supabase.auth.getSession();
-  console.log(data.session === null);
   if (data.session !== null) {
     setLogedIn(true);
     getUserInfo(data.session.user.id);
@@ -96,12 +95,18 @@ const UserAuthBtn = () => {
     };
   }, [openMenu]);
 
+  const avatar = sessionStorage.getItem("avatar_url");
+
   return (
     <>
       <LoginModal />
       <div className="relative min-w-[10rem] flex justify-end">
         {logedIn ? (
-          <Avatar src={sessionStorage.getItem("avatar_url")} size="sm" onClick={() => setOpenMenu(true)} />
+          avatar === "null" ? (
+            <Avatar size="sm" onClick={() => setOpenMenu(true)} />
+          ) : (
+            <Avatar src={avatar} size="sm" onClick={() => setOpenMenu(true)} />
+          )
         ) : (
           <Button
             onClick={() => {
