@@ -18,7 +18,6 @@ const addBookmark = async (userId: string, placeId: string) => {
 };
 
 const deleteBookmark = async (userId: string, placeId: string) => {
-  const submitData = { userId, placeId };
   try {
     const res = await fetch(`/api/bookmark/${userId}/${placeId}`, {
       method: "DELETE",

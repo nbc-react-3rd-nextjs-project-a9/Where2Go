@@ -24,6 +24,7 @@ import Swal from "sweetalert2";
 import { useRouter } from "next/navigation";
 import Follow from "@/components/Follow";
 import Link from "next/link";
+import useLogedInStore from "@/store/logedInStore";
 
 const PostPage = () => {
   const [currentUserId, setCurrentUserId] = useState("");
@@ -31,6 +32,7 @@ const PostPage = () => {
   const [selectUserData, setSelectUserData] = useState<User>();
   const { placeId, userId } = useParams<{ placeId: string; userId: string }>();
   const uid = sessionStorage.getItem("uid");
+  const { logedIn } = useLogedInStore();
   // console.log(placeId);
   // console.log("목유저데이터", mockUserData);
 
@@ -149,7 +151,7 @@ const PostPage = () => {
   return (
     <>
       <div className="relative">
-        <Bookmark placeId={placeId} />
+        {logedIn && <Bookmark placeId={placeId} />}
         <Carousel urls={publicUrls} />
         <div className="flex w-full px-4 py-4 text-white justify-between items-center absolute bottom-0 z-10 backdrop-blur-sm  backdrop-contrast-75">
           <h1 className="font-bold text-2xl">{placeData?.placeName}</h1>
