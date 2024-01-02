@@ -18,7 +18,7 @@ import Follow from "@/components/Follow";
 
 const PostPage = () => {
   const [selectUserData, setSelectUserData] = useState<User>();
-  const { placeId, userId } = useParams();
+  const { placeId, userId } = useParams<{ placeId: string; userId: string }>();
   console.log(placeId);
   // console.log("목유저데이터", mockUserData);
 

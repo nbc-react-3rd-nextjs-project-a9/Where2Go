@@ -7,16 +7,12 @@ import { useQuery } from "@tanstack/react-query";
 import Swal from "sweetalert2";
 import { useFollowQuery } from "@/hooks/useFollowQuery";
 
-const Follow = ({ userId, userNickname }: { userId: string | string[]; userNickname: string }) => {
+const Follow = ({ userId, userNickname }: { userId: string; userNickname: string }) => {
   const [isFollowing, setIsFollowing] = useState<boolean>(false);
 
   const id = sessionStorage.getItem("uid");
 
-  const { addFollowMutation, deleteFollowMutation } = useFollowQuery();
-  const { data: followingList, isLoading: isFollowingListLoading } = useQuery({
-    queryKey: ["followingUser", id],
-    queryFn: () => getFollowListByUserId(id)
-  });
+  const { followingList, isFollowingListLoading, addFollowMutation, deleteFollowMutation } = useFollowQuery();
 
   // following 리스트에 userId가 있다면
   const checkFollowingStatus = () => {

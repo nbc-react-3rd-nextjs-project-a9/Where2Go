@@ -1,9 +1,16 @@
 import { addFollow, deleteFollow } from "@/api/follow";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { getFollowListByUserId } from "@/api/places";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 export const useFollowQuery = () => {
   const queryClient = useQueryClient();
   const id = sessionStorage.getItem("uid");
+
+  const { data: followingList, isLoading: isFollowingListLoading } = useQuery({
+    queryKey: ["followingUser", id],
+    queryFn: () => getFollowListByUserId(id)
+  });
+
   const addFollowMutation = useMutation({
     mutationFn: addFollow,
     onSuccess: () => {
@@ -17,5 +24,5 @@ export const useFollowQuery = () => {
     }
   });
 
-  return { addFollowMutation, deleteFollowMutation };
+  return { followingList, isFollowingListLoading, addFollowMutation, deleteFollowMutation };
 };
