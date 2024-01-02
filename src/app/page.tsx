@@ -25,7 +25,7 @@ const getPlaceData = async (category: string | null = null) => {
   if (checkCategory(category)) {
     api += `?category=${category}`;
   }
-  const res = await fetch(api);
+  const res = await fetch(api, { cache: "no-store" });
   const data = await res.json();
   return data;
 };
