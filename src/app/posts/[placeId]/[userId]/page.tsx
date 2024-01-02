@@ -22,16 +22,15 @@ import MapContainer from "@/components/map/MapContainer";
 import Swal from "sweetalert2";
 // import { useUserInfoStore } from "@/store/userInfoStore";
 import { useRouter } from "next/navigation";
+import Follow from "@/components/Follow";
+import Link from "next/link";
 
 const PostPage = () => {
-  const { placeId, userId } = useParams();
   const [currentUserId, setCurrentUserId] = useState("");
   const router = useRouter();
-  // const { uid } = useUserInfoStore();
-  // console.log("uid", uid);
-  // const uid = sessionStorage.getItem("uid");
-  // console.log("uid", uid);
-
+  const [selectUserData, setSelectUserData] = useState<User>();
+  const { placeId, userId } = useParams<{ placeId: string; userId: string }>();
+  // console.log(placeId);
   // console.log("목유저데이터", mockUserData);
 
   // const onClickAvatar = (data: User) => {
@@ -46,6 +45,7 @@ const PostPage = () => {
     queryKey: ["place"],
     queryFn: () => getPlaceDataByPlaceId(placeId)
   });
+  // console.log("플레이스데이터 한개", placeData);
 
   // queryKey 추가
   const { data: placeReviewData, isLoading: isPlaceReviewDataLoading } = useQuery({
@@ -53,8 +53,11 @@ const PostPage = () => {
     queryFn: () => getPlaceReviewsDataByPlaceName(placeData.placeName),
     enabled: !!placeData
   });
-  console.log("플레이스리뷰데이터", placeReviewData);
+  // console.log("플레이스 리뷰 데이타!", placeReviewData);
+
   const userIds = placeReviewData?.map((data) => data.userId) || [];
+  // console.log("userIds", userIds);
+
   // isLoading 옵션 추가, queryKey 추가
 
   const { data: userData, isLoading: isUserDataLoading } = useQuery({
@@ -167,12 +170,13 @@ const PostPage = () => {
           {
             <>
               <div className="flex flex-row items-center gap-4 mb-4">
-                <Avatar size="sm" src={selectedUser?.avatar_url} />
+                <Link href={`/user/${selectedUser?.id}`}>
+                  <Avatar size="sm" src={selectedUser?.avatar_url} />
+                </Link>
                 <p className="font-bold min-w-[5rem]">{selectedUser?.username}</p>
+                {/* TODO : 유저가 나인지 아닌지 확인하고 작업 ㄱㄱ */}
                 {currentUserId !== userId ? (
-                  <Button size="sm" onClick={() => console.log(1)}>
-                    {true ? "팔로우" : "팔로우 중"}
-                  </Button>
+                  <Follow userId={userId} userNickname={selectedUser?.username} />
                 ) : (
                   <>
                     <Button size="sm" theme="success" onClick={updatePost}>
