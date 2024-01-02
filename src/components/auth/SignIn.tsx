@@ -4,6 +4,7 @@ import { supabase } from "@/lib/supabase";
 import { signInWithKakao, checkAuth } from "./authService";
 import Button from "@/components/Button";
 import { VscChromeClose } from "react-icons/vsc";
+import useLogedInStore from "@/store/logedInStore";
 
 interface Props {
   login: boolean;
@@ -15,13 +16,15 @@ const SignIn = ({ login, setLogin, setOpen }: Props) => {
   const [id, setId] = useState<string>("");
   const [pw, setPw] = useState<string>("");
 
+  const { setLogedIn } = useLogedInStore();
+
   //supabase userinfo 테이블에서 정보 가져와서 userInfoStore에 저장
   async function getUserInfo(userId: string) {
     const { data, error } = await supabase.from("userinfo").select().eq("id", userId);
     const fetchData = data![0];
     sessionStorage.setItem("uid", userId);
-    sessionStorage.setItem("nickname", fetchData.username);
-    sessionStorage.setItem("avatar_url", fetchData.avatar_url);
+    sessionStorage.setItem("username", fetchData.username);
+    sessionStorage.setItem("nickname", fetchData.avatar_url);
   }
 
   const signInWithEmail = async (e: React.FormEvent) => {
@@ -39,6 +42,8 @@ const SignIn = ({ login, setLogin, setOpen }: Props) => {
 
     //userInfoStore에 유저 정보 저장
     getUserInfo(userInfo.user.id || "");
+    setOpen(false);
+    setLogedIn(true);
   };
 
   return (
