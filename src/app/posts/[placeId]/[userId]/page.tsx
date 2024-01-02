@@ -87,6 +87,7 @@ const PostPage = () => {
       publicUrls.push(data.publicUrl);
     }
   }
+  console.log("publicUrls", publicUrls);
   /*
   useEffect(() => {
     const fetchUser = async () => {
