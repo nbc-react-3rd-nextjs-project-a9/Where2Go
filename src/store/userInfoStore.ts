@@ -13,6 +13,7 @@ interface UpdateFunctions {
   getUID: (id: string) => void;
 }
 
+// let rawData = localStorage.getItem("sb-fatcfzssyzoiskrplehv-auth-token") || "";
 let rawData = localStorage.getItem("sb-cojgljiqpitvuwdvnmgf-auth-token") || "";
 
 let userInfo = rawData.length ? JSON.parse(rawData) : "";
