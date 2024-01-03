@@ -5,7 +5,6 @@ import { getUserDataByUserId } from "@/api/users";
 import Avatar from "@/components/Avatar";
 import Button from "@/components/Button";
 import Follow from "@/components/Follow";
-import { useFollowQuery } from "@/hooks/useFollowQuery";
 import { supabase } from "@/lib/supabase";
 import useLogedInStore from "@/store/logedInStore";
 import { cleanObj } from "@/utils/cleanseData";
@@ -39,14 +38,6 @@ const UserProfile = () => {
 
   const curUserId = logedIn ? sessionStorage.getItem("uid") : "";
 
-  const mock = {
-    nickname: "John Doe",
-    myUserId: "123",
-    follower: 10,
-    following: 10,
-    reviews: 10,
-    팔로잉여부: false
-  };
   const { data: userData, refetch: userRefetch } = useQuery({
     queryKey: ["user"],
     queryFn: () => getUserDataByUserId(userId)
@@ -184,19 +175,6 @@ const UserProfile = () => {
         <ProfileInfoRow title="리뷰 수">{placeReviewData?.length}</ProfileInfoRow>
         {userId !== curUserId ? (
           <div>
-            {/* TODO : Optimistic Updates 적용해서 팔로잉 여부 확인하기 */}
-            {/* {mock.팔로잉여부 ? (
-              <Button size="sm">팔로잉 취소</Button>
-            ) : (
-              <Button
-                size="sm"
-                onClick={() => {
-                  console.log("Optimistic Updates 적용해서 팔로잉 여부 확인하기");
-                }}
-              >
-                팔로잉
-              </Button>
-            )} */}
             <Follow userId={userId} userNickname={userData?.username} />
           </div>
         ) : (

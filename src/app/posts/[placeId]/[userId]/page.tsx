@@ -4,7 +4,6 @@ import Avatar from "@/components/Avatar";
 import Button from "@/components/Button";
 import Carousel from "@/components/Carousel";
 import Section from "@/components/layout/Section";
-import { mockUserData } from "@/data/mockUser";
 import React, { useEffect, useState } from "react";
 import AvatarCarousel from "./AvatarCarousel";
 import Bookmark from "@/app/posts/[placeId]/[userId]/Bookmark";

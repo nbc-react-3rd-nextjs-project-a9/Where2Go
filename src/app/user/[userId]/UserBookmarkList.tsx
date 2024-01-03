@@ -7,7 +7,7 @@ interface Props {
 }
 
 const getBookmarkList = async (userId: string) => {
-  const res = await fetch(`http://localhost:3000/api/bookmark/${userId}`, { cache: "no-store" });
+  const res = await fetch(`https://where2-go.vercel.app/api/bookmark/${userId}`, { cache: "no-store" });
   const data = await res.json();
   return data;
 };
