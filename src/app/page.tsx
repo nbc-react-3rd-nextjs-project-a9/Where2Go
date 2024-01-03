@@ -23,7 +23,7 @@ const getPlaceData = async (category: string | null = null) => {
     return categories.includes(value as CategoryType);
   };
 
-  let api = "http://localhost:3000/api/places";
+  let api = "https://where2-go.vercel.app/api/places";
   if (checkCategory(category)) {
     api += `?category=${category}`;
   }
