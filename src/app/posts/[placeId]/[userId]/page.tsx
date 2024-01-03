@@ -8,7 +8,6 @@ import { mockUserData } from "@/data/mockUser";
 import React, { useEffect, useState } from "react";
 import AvatarCarousel from "./AvatarCarousel";
 import Bookmark from "@/app/posts/[placeId]/[userId]/Bookmark";
-import { CiShare2 } from "react-icons/ci";
 import { supabase } from "@/lib/supabase";
 import { useParams } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
@@ -25,6 +24,7 @@ import Follow from "@/components/Follow";
 import Link from "next/link";
 import UpdatePostForm from "./UpdatePostForm";
 import useLogedInStore from "@/store/logedInStore";
+import CopyLinkButton from "./CopyLinkButton";
 
 const PostPage = () => {
   const [currentUserId, setCurrentUserId] = useState("");
@@ -154,12 +154,7 @@ const PostPage = () => {
         <div className="flex w-full px-4 py-4 text-white justify-between items-center absolute bottom-0 z-10 backdrop-blur-sm  backdrop-contrast-75">
           <h1 className="font-bold text-2xl">{placeData?.placeName}</h1>
           <div>
-            <Button size="md">
-              <div className="flex items-center">
-                <CiShare2 className="mr-2 ml-[-0.5rem] font-bold text-2xl" />
-                공유하기
-              </div>
-            </Button>
+            <CopyLinkButton />
           </div>
         </div>
       </div>
