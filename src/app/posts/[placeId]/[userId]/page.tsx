@@ -24,6 +24,7 @@ import Link from "next/link";
 import UpdatePostForm from "./UpdatePostForm";
 import useLogedInStore from "@/store/logedInStore";
 import CopyLinkButton from "./CopyLinkButton";
+import { BarLoader } from "react-spinners";
 
 const PostPage = () => {
   const [currentUserId, setCurrentUserId] = useState("");
@@ -138,7 +139,11 @@ const PostPage = () => {
   }
 
   if (isPlaceDataLoading || isPlaceReviewDataLoading || isUserDataLoading) {
-    return <div>로딩 중...</div>;
+    return (
+      <div className="flex justify-center items-center w-full min-h-screen">
+        <BarLoader color="#4C1D95" height={10} width={300} className="" />
+      </div>
+    );
   }
 
   return (
