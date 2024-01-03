@@ -81,7 +81,7 @@ const UpdatePostForm = ({ initialData, onCancel, placeId, setIsEditing }: Update
           className="border-purple-900 border-2 rounded"
         />
       </Section>
-      <div className="my-[100px] flex gap-2 justify-center">
+      <div className="mt-[100px] flex gap-6 justify-center">
         <Button type="submit">수정하기</Button>
         <Button onClick={onCancel}>취소</Button>
       </div>
