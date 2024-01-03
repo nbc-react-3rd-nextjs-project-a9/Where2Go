@@ -2,6 +2,11 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import Script from "next/script";
+import ReactQueryProvider from "./ReactQueryProvider";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 export const metadata: Metadata = {
   title: "어디가지🍆",
@@ -10,12 +15,20 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="ko">
-      <body>
-        <Header />
-        <main className="container m-auto">{children}</main>
-        <Footer />
-      </body>
-    </html>
+    <ReactQueryProvider>
+      <html lang="ko">
+        <body>
+          <Header />
+          <main className="max-w-[1200px] container m-auto w-[90%]">{children}</main>
+          <Footer />
+          <Script
+            src={`//dapi.kakao.com/v2/maps/sdk.js?appkey=${process.env.NEXT_PUBLIC_KAKAO_MAP_API_KEY}&libraries=services,clusterer&autoload=false`}
+            strategy="beforeInteractive"
+          />
+          <ToastContainer />
+          <ReactQueryDevtools initialIsOpen={false} />
+        </body>
+      </html>
+    </ReactQueryProvider>
   );
 }
