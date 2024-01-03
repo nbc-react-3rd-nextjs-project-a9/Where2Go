@@ -34,16 +34,9 @@ const getPlaceData = async (category: string | null = null) => {
 
 const Home = async ({ searchParams }: Props) => {
   const { category } = searchParams;
-  // const [placesData, setPlacesData] = useState<Place[]>([]);
-  const placesData: Place[] = await getPlaceData(category);
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const data = await getPlaceData(category);
-  //     setPlacesData(data);
-  //   };
 
-  //   fetchData();
-  // }, [category]);
+  const placesData: Place[] = await getPlaceData(category);
+
   const urls = ["/images/1.jpg", "/images/2.jpg", "/images/3.jpg", "/images/4.jpg"];
 
   return (
