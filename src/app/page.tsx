@@ -44,14 +44,11 @@ const Home = async ({ searchParams }: Props) => {
 
   //   fetchData();
   // }, [category]);
-  const urls = [
-    "https://dummyimage.com/1700x400/616161/fff&text=image",
-    "https://dummyimage.com/170x400/616161/fff&text=image,"
-  ];
+  const urls = ["/images/1.jpg", "/images/2.jpg", "/images/3.jpg", "/images/4.jpg"];
 
   return (
     <>
-      <Section title="Editor's Pick">
+      <Section title="Where to Go">
         <Carousel urls={urls} />
       </Section>
       <Section title="내 근처 핫플">

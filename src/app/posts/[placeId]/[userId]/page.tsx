@@ -34,8 +34,6 @@ const PostPage = () => {
   const [isEditing, setIsEditing] = useState(false);
   // const uid = sessionStorage.getItem("uid");
   const { logedIn } = useLogedInStore();
-  // console.log(placeId);
-  // console.log("목유저데이터", mockUserData);
 
   const handleEditClick = () => {
     setIsEditing(true);
@@ -49,20 +47,14 @@ const PostPage = () => {
     queryKey: ["place"],
     queryFn: () => getPlaceDataByPlaceId(placeId)
   });
-  // console.log("플레이스데이터 한개", placeData);
-
-  // queryKey 추가
   const { data: placeReviewData, isLoading: isPlaceReviewDataLoading } = useQuery({
-    queryKey: ["placeReview", placeData],
+    queryKey: ["placeReview", placeData?.placeId],
     queryFn: () => getPlaceReviewsDataByPlaceName(placeData.placeName),
     enabled: !!placeData
   });
   // console.log("플레이스 리뷰 데이타!", placeReviewData);
 
   const userIds = placeReviewData?.map((data) => data.userId) || [];
-  // console.log("userIds", userIds);
-
-  // isLoading 옵션 추가, queryKey 추가
 
   const { data: userData, isLoading: isUserDataLoading } = useQuery({
     queryKey: ["users", placeReviewData],
@@ -76,9 +68,9 @@ const PostPage = () => {
   const placeReviewDataByUserId = placeReviewData?.filter((data) => data.userId === userId);
   console.log("플레이스리뷰데이터바이유저아이디", placeReviewDataByUserId);
   const placeReviewId = placeReviewDataByUserId && placeReviewDataByUserId[0]?.placeReviewId;
-  console.log("placeReviewId", placeReviewId);
+
   const imageUrlList = placeReviewDataByUserId && placeReviewDataByUserId[0]?.imageUrlList;
-  console.log("imageUrlList", imageUrlList);
+
   // 같은 장소에 리뷰를 쓴 유저들 중 현재 페이지에 맞는 user 정보
   const selectedUser = userData?.find((user) => user.id === userId);
 
@@ -90,7 +82,6 @@ const PostPage = () => {
       publicUrls.push(data.publicUrl);
     }
   }
-  console.log("publicUrls", publicUrls);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -138,7 +129,12 @@ const PostPage = () => {
   };
   if (isEditing) {
     return (
-      <UpdatePostForm initialData={placeReviewDataByUserId && placeReviewDataByUserId[0]} onCancel={handleCancelEdit} />
+      <UpdatePostForm
+        initialData={placeReviewDataByUserId && placeReviewDataByUserId[0]}
+        onCancel={handleCancelEdit}
+        placeId={placeId}
+        setIsEditing={setIsEditing}
+      />
     );
   }
 
@@ -187,6 +183,9 @@ const PostPage = () => {
               <p className="">{placeReviewDataByUserId && placeReviewDataByUserId[0]?.content}</p>
             </>
           }
+        </Section>
+        <Section title="방문 날짜">
+          <p className="">{placeReviewDataByUserId && placeReviewDataByUserId[0]?.visitedAt}</p>
         </Section>
         <Section title="주소">
           <p>{placeData?.address}</p>
